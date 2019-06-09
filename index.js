@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 const config = require('./config.json');
-const prefix = "+";
+const prefix = "?";
 let xp = require('./xp.json');
 
 
