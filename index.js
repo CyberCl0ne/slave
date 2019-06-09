@@ -34,15 +34,15 @@ bot.on('guildMemberUpdate',(oldMember, newMember) =>{
 
     if(oldMember.roles.has(0)) return;
 
-    if(oldMember.nickName !== newMember.nickName) return;
+    
 
-    if(newMember.roles.has(myRole.id)){
+    if(newMember.roles.has(myRole.id) && oldMember.nickname == newMember.nickname){
         channel.send(`${newMember.user.username} has joined ${myRole.name} squad!`)
     };
         
     
 
-    if(newMember.roles.has(sgRole.id)){
+    if(newMember.roles.has(sgRole.id) && oldMember.nickname == newMember.nickname){
         channel.send(`${newMember.user.username} has joined ${sgRole.name} squad!`)
     };
         
