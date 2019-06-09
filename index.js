@@ -25,13 +25,14 @@ bot.on('guildMemberUpdate',(oldMember, newMember) =>{
     const channel = newMember.guild.channels.find(channel => channel.name === "announcements");
     if(!channel) return;
 
+
     let myRole = newMember.guild.roles.find(role => role.name === "Malaysia");
     let sgRole = newMember.guild.roles.find(role => role.name === "Singapore");
-  
-   
-    if(oldMember.roles.has(0)) return;
-
     
+    if(oldMember.nickName !== newMember.nickName) return;
+   
+
+    if(oldMember.roles.has(0)) return;
 
     if(newMember.roles.has(myRole.id)){
         channel.send(`${newMember.user.username} has joined ${myRole.name} squad!`)
