@@ -84,22 +84,22 @@ bot.on('message', msg =>{
             if (roleInfo.id == myRole.id){
             const embed = new Discord.RichEmbed()
             .setTitle('Team Information')
-            .addField('Team', roleInfo)
+            .addField('Region', roleInfo)
             .setTimestamp()
             .setThumbnail('https://i.imgur.com/0ZK52WE.png')
             .setColor('4286f4')
-            .addField('Team member', myRole.members.size)
+            .addField('Member', myRole.members.size)
             msg.channel.send(embed);
              }
 
             if (roleInfo.id == sgRole.id){
             const embed = new Discord.RichEmbed()
             .setTitle('Team Information')
-            .addField('Team', roleInfo)
+            .addField('Region', roleInfo)
             .setTimestamp()
             .setThumbnail('https://i.imgur.com/x3KTH7M.png')
             .setColor('ff2121')
-            .addField('Team member', sgRole.members.size)
+            .addField('Member', sgRole.members.size)
             msg.channel.send(embed);
             };
         
