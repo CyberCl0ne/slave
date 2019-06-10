@@ -18,7 +18,6 @@ bot.on('guildMemberAdd', member =>{
 
     channel.send(`Welcome to our server, ${member.user} , have a casual chat with people here! `)
 
-
 });
 
 bot.on('guildMemberUpdate',(oldMember, newMember) =>{
@@ -51,7 +50,7 @@ bot.on('guildMemberUpdate',(oldMember, newMember) =>{
 });
 
 
-bot.on('message', msg=>{
+bot.on('message', msg, member=>{
 
     let myRole = member.guild.roles.find(role => role.name === "Malaysia");
     let sgRole = member.guild.roles.find(role => role.name === "Singapore");
