@@ -84,20 +84,21 @@ bot.on('message', msg=>{
             const embed = new Discord.RichEmbed()
             .setTitle('Team Information')
             .addField('Team', msg.guild.role.name)
+            .setTimestamp()
             
             if(args[1] === myRole){
                 const embed = new Discord.RichEmbed()
                 .setThumbnail({files: ["https://www.google.com/imgres?imgurl=https%3A%2F%2Fwww.affsuzukicup.com%2F2018%2Fimages%2Fflags%2Fmalaysia.png&imgrefurl=https%3A%2F%2Fwww.affsuzukicup.com%2F&docid=6IeO630wmweBWM&tbnid=uJB99oPzMZ12CM%3A&vet=10ahUKEwjbsv_OxN7iAhXMfSsKHadbDs8QMwhHKAAwAA..i&w=239&h=319&bih=959&biw=851&q=malaysia%20aff%20logo&ved=0ahUKEwjbsv_OxN7iAhXMfSsKHadbDs8QMwhHKAAwAA&iact=mrc&uact=8"]})
                 .setColor('4286f4')
-                .addField('Team member', myRole.members)
+                .addField('Team member', myRole.members.size)
             }
             else if(args[1] === sgRole){
                 const embed = new Discord.RichEmbed()
                 .setThumbnail({files: ["https://www.google.com/imgres?imgurl=https%3A%2F%2Fwww.affsuzukicup.com%2F2018%2Fimages%2Fflags%2Fsingapore.png&imgrefurl=https%3A%2F%2Fwww.affsuzukicup.com%2F2018%2Fteams%2Fsingapore&docid=siyTMers73MlgM&tbnid=G14U1ObFqNFAnM%3A&vet=10ahUKEwiCs-XBxt7iAhVFP48KHfRyCDQQMwhYKBEwEQ..i&w=239&h=319&bih=959&biw=851&q=singapore%20aff%20logo&ved=0ahUKEwiCs-XBxt7iAhVFP48KHfRyCDQQMwhYKBEwEQ&iact=mrc&uact=8"]})
                 .setColor('ff2121')
-                .addField('Team member', sgRole.members)
+                .addField('Team member', sgRole.members.size)
             };
-
+            
             
 
             msg.channel.sendEmbed(embed);
