@@ -53,7 +53,8 @@ bot.on('guildMemberUpdate',(oldMember, newMember) =>{
 
 bot.on('message', msg=>{
 
-
+    let myRole = member.guild.roles.find(role => role.name === "Malaysia");
+    let sgRole = member.guild.roles.find(role => role.name === "Singapore");
 
     let args = msg.content.substring(prefix.length).split(" ");
 
@@ -68,18 +69,46 @@ bot.on('message', msg=>{
             msg.channel.sendMessage('youtube.com')
         break;
         case 'info':
+            
+            args[1] = msg.content.role
+            if (args[1] == 0){
+                return msg.reply('You need to specify which team')
+            }
+
+            else if (args[1] !== myRole || sgRole){
+                return msg.reply("That's an invalid role")
+            }
+
+            else if (args[1] === myRole || sgRole){
+            
             const embed = new Discord.RichEmbed()
-            .setTitle('User Information')
-            .addField('Player Name', msg.author.username)
-            .setColor('2d6fd8')
-            .setThumbnail(msg.author.avatarURL)
+            .setTitle('Team Information')
+            .addField('Team', msg.guild.role.name)
+            
+            if(args[1] === myRole){
+                const embed = new Discord.RichEmbed()
+                .setThumbnail({files: ["https://www.google.com/imgres?imgurl=https%3A%2F%2Fwww.affsuzukicup.com%2F2018%2Fimages%2Fflags%2Fmalaysia.png&imgrefurl=https%3A%2F%2Fwww.affsuzukicup.com%2F&docid=6IeO630wmweBWM&tbnid=uJB99oPzMZ12CM%3A&vet=10ahUKEwjbsv_OxN7iAhXMfSsKHadbDs8QMwhHKAAwAA..i&w=239&h=319&bih=959&biw=851&q=malaysia%20aff%20logo&ved=0ahUKEwjbsv_OxN7iAhXMfSsKHadbDs8QMwhHKAAwAA&iact=mrc&uact=8"]})
+                .setColor('4286f4')
+                .addField('Team member', myRole.members)
+            }
+            else if(args[1] === sgRole){
+                const embed = new Discord.RichEmbed()
+                .setThumbnail({files: ["https://www.google.com/imgres?imgurl=https%3A%2F%2Fwww.affsuzukicup.com%2F2018%2Fimages%2Fflags%2Fsingapore.png&imgrefurl=https%3A%2F%2Fwww.affsuzukicup.com%2F2018%2Fteams%2Fsingapore&docid=siyTMers73MlgM&tbnid=G14U1ObFqNFAnM%3A&vet=10ahUKEwiCs-XBxt7iAhVFP48KHfRyCDQQMwhYKBEwEQ..i&w=239&h=319&bih=959&biw=851&q=singapore%20aff%20logo&ved=0ahUKEwiCs-XBxt7iAhVFP48KHfRyCDQQMwhYKBEwEQ&iact=mrc&uact=8"]})
+                .setColor('ff2121')
+                .addField('Team member', sgRole.members)
+            };
+
+            
 
             msg.channel.sendEmbed(embed);
+            };
+            
         break;
         case 'clear':
             if(!args[1]) return msg.reply('Error please define second arg')
             msg.channel.bulkDelete(args[1]);
         break;
+    
 
     }   
     
