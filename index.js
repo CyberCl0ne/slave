@@ -4,11 +4,13 @@ const config = require('./config.json');
 const prefix = "?";
 let xp = require('./xp.json');
 var data = require('./data.json');
+const fs = require('fs');
 
 
+bot.data = require('./data.json');
 
 bot.on('ready', () =>{
-    console.log('This bot is online!');
+    console.log('This bot is alive!');
     bot.user.setActivity('Habbo');
     
 })
@@ -58,23 +60,25 @@ bot.on('message', msg =>{
 
     const thisChannel = msg.guild.channels.find(channel => channel.name === "🤖bot-commands");
     let args = msg.content.substring(prefix.length).split(" ");
-    let reaction = msg.content;
-
-    switch(reaction){
-        case 'wow':
-            msg.react('585848100933992448')
-        break;
-        case 'oof':
-            msg.react('585420623161982987')
-        break;
-        case 'lmao':
-            msg.react('585422744347475968')
-        break;
-        case 'lol':
-            msg.react(':joy:')
-        break;
     
-    }
+
+   
+
+    if(msg.content.includes('wow')){
+        msg.react('585848100933992448')
+    }; 
+    if(msg.content.includes('oof')){
+        msg.react('585420623161982987')
+    };
+    if(msg.content.includes('lmao')){
+        msg.react('585422744347475968')
+    };
+    if(msg.content.includes('lol')){
+        msg.react(':joy:')
+    };
+
+
+
 
     if (!msg.content.startsWith(prefix) || msg.author.bot) return;
 
@@ -99,6 +103,8 @@ bot.on('message', msg =>{
 
                 let memberInfo = msg.mentions.members.first();
                 let avatarInfo = msg.mentions.users.first();
+
+                let getMood = bot.data[msg.author.id].mood
                 
          
             
@@ -114,7 +120,7 @@ bot.on('message', msg =>{
                     .setColor('4286f4')
                     .addField('Name', `${memberInfo.displayName}`)
                     .addField('Team', `${myRole}`, true)
-                    .addField('Mood', `${obj.currMood}`, true)
+                    .addField('Mood', `${getMood}`, true)
                     .addField('Joined since', `${memberInfo.joinedAt}`)
                     .setThumbnail(`${avatarInfo.avatarURL}`)
                     return msg.channel.send(embed);
@@ -123,11 +129,12 @@ bot.on('message', msg =>{
                 if (memberInfo.roles.has(sgRole.id)){
                     const embed = new Discord.RichEmbed()
                     
+                    
                     .setTitle('Member Information')
                     .setColor('ff2121')
                     .addField('Name', `${memberInfo.displayName}`)
                     .addField('Team', `${sgRole}`)
-                    .addField('Mood', `${obj.currMood}`, true)
+                    .addField('Mood', `${getMood}`, true)
                     .addField('Joined since', `${memberInfo.joinedAt}`)
                     .setThumbnail(`${avatarInfo.avatarURL}`)
                     return msg.channel.send(embed);
@@ -162,6 +169,16 @@ bot.on('message', msg =>{
             break;
             case 'wow':
                 msg.react('585848100933992448');
+            break;
+            case 'mood':
+                bot.data [msg.author.id]= {
+                    mood: args[1]
+                };
+                fs.writeFile ("./data.json", JSON.stringify(bot.data, null, 4), err => {
+                    if (err) throw (err);
+                    msg.channel.send(`Your current mood is updated to ${args[1]}`);
+                });
+                
             break;
            
         }
