@@ -53,67 +53,67 @@ bot.on('guildMemberUpdate',(oldMember, newMember) =>{
 
 bot.on('message', msg =>{
 
-    
-
+    const thisChannel = msg.guild.channels.find(channel => channel.name === "bot-commands");
     let args = msg.content.substring(prefix.length).split(" ");
     
+  
 
     if (!msg.content.startsWith(prefix) || msg.author.bot) return;
 
-    switch(args[0]){
-        case 'ping':
+    if(msg.channel.name !== thisChannel.name){
+    return msg.reply(`Please use #bot-commands channel :poop:`);
+    }
 
-            msg.channel.send('pong!')
-        break;
-        case 'website':
-            msg.channel.send('youtube.com')
-        break;
-        case 'info':
-            let myRole = msg.guild.roles.find(role => role.name === "Malaysia");
-            let sgRole = msg.guild.roles.find(role => role.name === "Singapore");
+    if(msg.channel.name == thisChannel.name){
+        switch(args[0]){
+            case 'ping':
 
-            let roleInfo = msg.mentions.roles.first();
+                msg.channel.send('pong!')
+            break;
+            case 'website':
+                msg.channel.send('youtube.com')
+            break;
+            case 'info':
+                let myRole = msg.guild.roles.find(role => role.name === "Malaysia");
+                let sgRole = msg.guild.roles.find(role => role.name === "Singapore");
+
+                let roleInfo = msg.mentions.roles.first();
             
-            if (!args[1]){
-                return msg.reply('You need to specify which team')
-            }
+                if (!args[1]){
+                    return msg.reply('You need to specify which team')
+                }
 
         
+                if (args[1] == myRole.name){
+                    const embed = new Discord.RichEmbed()
+                    .setTitle('Team Information')
+                    .addField('Region', roleInfo)
+                    .setTimestamp()
+                    .setThumbnail('https://i.imgur.com/0ZK52WE.png')
+                    .setColor('4286f4')
+                    .addField('Member', myRole.members.size)
+                    return msg.channel.send(embed);
+                };
 
+                if (args[1] == sgRole.name){
+                    const embed = new Discord.RichEmbed()
+                    .setTitle('Team Information')
+                    .addField('Region', roleInfo)
+                    .setTimestamp()
+                    .setThumbnail('https://i.imgur.com/x3KTH7M.png')
+                    .setColor('ff2121')
+                    .addField('Member', sgRole.members.size)
+                    return msg.channel.send(embed);
+                };
             
-            if (roleInfo.id == myRole.id){
-            const embed = new Discord.RichEmbed()
-            .setTitle('Team Information')
-            .addField('Region', roleInfo)
-            .setTimestamp()
-            .setThumbnail('https://i.imgur.com/0ZK52WE.png')
-            .setColor('4286f4')
-            .addField('Member', myRole.members.size)
-            msg.channel.send(embed);
-             }
-
-            if (roleInfo.id == sgRole.id){
-            const embed = new Discord.RichEmbed()
-            .setTitle('Team Information')
-            .addField('Region', roleInfo)
-            .setTimestamp()
-            .setThumbnail('https://i.imgur.com/x3KTH7M.png')
-            .setColor('ff2121')
-            .addField('Member', sgRole.members.size)
-            msg.channel.send(embed);
-            };
-        
-            
-            
-            
-        break;
-        case 'clear':
-            if(!args[1]) return msg.reply('Error please define second arg')
-            msg.channel.bulkDelete(args[1]);
-        break;
-    
-
-    }   
+            break;
+            case 'clear':
+                if(!args[1]) return msg.reply('Error please define second arg')
+                msg.channel.bulkDelete(args[1]);
+            break;
+        }
+    }
+       
     
 })
 
