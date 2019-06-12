@@ -7,7 +7,7 @@ var data = require('./data.json');
 const fs = require('fs');
 
 
-bot.data = require('./data.json');
+
 
 bot.on('ready', () =>{
     console.log('This bot is alive!');
@@ -46,7 +46,7 @@ bot.on('guildMemberUpdate',(oldMember, newMember) =>{
     
 
     if(newMember.roles.has(sgRole.id) && oldMember.nickname && oldMember.colorRole == newMember.nickname && newMember.colorRole){
-        channel.send(`${newMember.user.username} has joined ${sgRole.name} squad!`)
+        channel.send(`${newMember.user} has joined ${sgRole.name} squad!`)
     };
         
     
@@ -63,20 +63,30 @@ bot.on('message', msg =>{
     
 
    
-
-    if(msg.content.includes('wow')){
-        msg.react('585848100933992448')
-    }; 
-    if(msg.content.includes('oof')){
-        msg.react('585420623161982987')
-    };
-    if(msg.content.includes('lmao')){
-        msg.react('585422744347475968')
-    };
-    if(msg.content.includes('lol')){
-        msg.react(':joy:')
-    };
-
+    try {
+        if(msg.content.includes('wow')){
+            msg.react('585848100933992448')
+        }; 
+        if(msg.content.includes('oof')){
+            msg.react('585420623161982987')
+        };
+        if(msg.content.includes('lmao')){
+            msg.react('585422744347475968')
+        };
+        if(msg.content.includes('lol')){
+            msg.react('😂')
+        };
+        if(msg.content.includes('wtf')){
+            msg.react('585422238702895104')
+        };
+        if(msg.content.includes('haha')){
+            msg.react('585422744347475968')
+            msg.react('😂')
+        };
+    }
+    catch(err){
+        console.log(err)
+    }
 
 
 
@@ -103,8 +113,8 @@ bot.on('message', msg =>{
 
                 let memberInfo = msg.mentions.members.first();
                 let avatarInfo = msg.mentions.users.first();
-
-                let getMood = bot.data[msg.author.id].mood
+               
+                
                 
          
             
@@ -117,10 +127,10 @@ bot.on('message', msg =>{
                     
 
                     .setTitle('Member Information')
-                    .setColor('4286f4')
+                    .setColor(`${memberInfo.displayHexColor}`)
                     .addField('Name', `${memberInfo.displayName}`)
                     .addField('Team', `${myRole}`, true)
-                    .addField('Mood', `${getMood}`, true)
+                    .addField('Roles', `${memberInfo.roles.map(r => r.name)}`)
                     .addField('Joined since', `${memberInfo.joinedAt}`)
                     .setThumbnail(`${avatarInfo.avatarURL}`)
                     return msg.channel.send(embed);
@@ -131,10 +141,10 @@ bot.on('message', msg =>{
                     
                     
                     .setTitle('Member Information')
-                    .setColor('ff2121')
+                    .setColor(`${memberInfo.displayHexColor}`)
                     .addField('Name', `${memberInfo.displayName}`)
-                    .addField('Team', `${sgRole}`)
-                    .addField('Mood', `${getMood}`, true)
+                    .addField('Team', `${sgRole}`, true)
+                    .addField('Roles', `${memberInfo.roles.map(r => r.name)}`)
                     .addField('Joined since', `${memberInfo.joinedAt}`)
                     .setThumbnail(`${avatarInfo.avatarURL}`)
                     return msg.channel.send(embed);
@@ -170,16 +180,7 @@ bot.on('message', msg =>{
             case 'wow':
                 msg.react('585848100933992448');
             break;
-            case 'mood':
-                bot.data [msg.author.id]= {
-                    mood: args[1]
-                };
-                fs.writeFile ("./data.json", JSON.stringify(bot.data, null, 4), err => {
-                    if (err) throw (err);
-                    msg.channel.send(`Your current mood is updated to ${args[1]}`);
-                });
-                
-            break;
+           
            
         }
     }
