@@ -9,6 +9,7 @@ const fs = require('fs');
 
 
 
+
 bot.on('ready', () =>{
     console.log('This bot is alive!');
     bot.user.setActivity('Habbo');
@@ -88,7 +89,7 @@ bot.on('message', msg =>{
         console.log(err)
     }
 
-
+    
 
     if (!msg.content.startsWith(prefix) || msg.author.bot) return;
 
@@ -101,8 +102,11 @@ bot.on('message', msg =>{
     if(msg.channel.name == thisChannel.name){
         switch(args[0]){
             case 'ping':
-
-                msg.channel.send('pong!')
+                msg.channel.send("Pinging ...") // Placeholder for pinging ... 
+			    .then((msg) => { // Resolve promise
+				msg.edit("Ping: " + (Date.now() - msg.createdTimestamp)) // Edits message with current timestamp minus timestamp of message
+			});
+                
             break;
             case 'website':
                 msg.channel.send('youtube.com')
@@ -122,16 +126,47 @@ bot.on('message', msg =>{
                     return msg.reply('You need to specify which team')
                 }
 
+                if(!memberInfo){
+
+                    if (args[1] == myRole.name){
+                        const embed = new Discord.RichEmbed()
+                        .setTitle('Team Information')
+                        .addField('Region', 'Malaysia')
+                        .setTimestamp()
+                        .setThumbnail('https://i.imgur.com/0ZK52WE.png')
+                        .setColor('4286f4')
+                        .addField('Member', myRole.members.size)
+                        return msg.channel.send(embed);
+                    };
+    
+                    if (args[1] == sgRole.name){
+                        const embed = new Discord.RichEmbed()
+                        .setTitle('Team Information')
+                        .addField('Region', 'Singapore')
+                        .setTimestamp()
+                        .setThumbnail('https://i.imgur.com/x3KTH7M.png')
+                        .setColor('ff2121')
+                        .addField('Member', sgRole.members.size)
+                        return msg.channel.send(embed);
+                    };
+
+                }
+
+                var d = new Date(memberInfo.joinedAt),
+                dformat = [d.getDate(),
+                            d.getMonth()+1,
+                            d.getFullYear()].join('/');
+
                 if (memberInfo.roles.has(myRole.id)){
                     const embed = new Discord.RichEmbed()
                     
 
                     .setTitle('Member Information')
                     .setColor(`${memberInfo.displayHexColor}`)
-                    .addField('Name', `${memberInfo.displayName}`)
+                    .addField('Name', `${memberInfo.displayName}`, true)
                     .addField('Team', `${myRole}`, true)
                     .addField('Roles', `${memberInfo.roles.map(r => r.name)}`)
-                    .addField('Joined since', `${memberInfo.joinedAt}`)
+                    .addField('Joined since', `${dformat}`)
                     .setThumbnail(`${avatarInfo.avatarURL}`)
                     return msg.channel.send(embed);
                 }
@@ -142,35 +177,15 @@ bot.on('message', msg =>{
                     
                     .setTitle('Member Information')
                     .setColor(`${memberInfo.displayHexColor}`)
-                    .addField('Name', `${memberInfo.displayName}`)
+                    .addField('Name', `${memberInfo.displayName}`, true)
                     .addField('Team', `${sgRole}`, true)
                     .addField('Roles', `${memberInfo.roles.map(r => r.name)}`)
-                    .addField('Joined since', `${memberInfo.joinedAt}`)
+                    .addField('Joined since', `${dformat}`)
                     .setThumbnail(`${avatarInfo.avatarURL}`)
                     return msg.channel.send(embed);
                 }
         
-                if (args[1] == myRole.name){
-                    const embed = new Discord.RichEmbed()
-                    .setTitle('Team Information')
-                    .addField('Region', 'Malaysia')
-                    .setTimestamp()
-                    .setThumbnail('https://i.imgur.com/0ZK52WE.png')
-                    .setColor('4286f4')
-                    .addField('Member', myRole.members.size)
-                    return msg.channel.send(embed);
-                };
-
-                if (args[1] == sgRole.name){
-                    const embed = new Discord.RichEmbed()
-                    .setTitle('Team Information')
-                    .addField('Region', 'Singapore')
-                    .setTimestamp()
-                    .setThumbnail('https://i.imgur.com/x3KTH7M.png')
-                    .setColor('ff2121')
-                    .addField('Member', sgRole.members.size)
-                    return msg.channel.send(embed);
-                };
+               
             
             break;
             case 'clear':
