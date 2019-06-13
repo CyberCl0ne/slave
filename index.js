@@ -38,29 +38,19 @@ bot.on('guildMemberUpdate',(oldMember, newMember) =>{
     let sgRole = newMember.guild.roles.find(role => role.name === "Singapore");
     let myEmoji = bot.emojis.find(emoji => emoji.name === "malaysia");
     let sgEmoji = bot.emojis.find(emoji => emoji.name === "singapore");
-
-    if (oldMember.colorRole !== newMember.colorRole) return;
-    if (oldMember.nickname !== newMember.nickname) return;
-    if (oldMember.roles.size > 0) return;
+ 
+    if(oldMember.colorRole == null){
+        if(newMember.roles.has(myRole.id) ){
+            channel.send(`${newMember.user} has joined ${myRole.name} squad! ${myEmoji}`)
+        };
+        
     
+        if(newMember.roles.has(sgRole.id) ){
+            channel.send(`${newMember.user} has joined ${sgRole.name} squad! ${sgEmoji}`)
+        };
+    }
+        
    
-    try{
-        if(oldMember.roles !== newMember.roles){
-
-            if(newMember.roles.has(myRole.id) ){
-                channel.send(`${newMember.user} has joined ${myRole.name} squad! ${myEmoji}`)
-            };
-        
-    
-
-            if(newMember.roles.has(sgRole.id) ){
-                channel.send(`${newMember.user} has joined ${sgRole.name} squad! ${sgEmoji}`)
-            };
-        }
-        
-    }catch(err){
-        console.log(err)
-    }  
     
 
 });
