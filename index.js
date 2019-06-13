@@ -40,13 +40,13 @@ bot.on('guildMemberUpdate',(oldMember, newMember) =>{
 
     
 
-    if(newMember.roles.has(myRole.id) && oldMember.nickname && oldMember.colorRole == newMember.nickname && newMember.colorRole){
+    if(newMember.roles.has(myRole.id) && oldMember.nickname == newMember.nickname ){
         channel.send(`${newMember.user} has joined ${myRole.name} squad!`)
     };
         
     
 
-    if(newMember.roles.has(sgRole.id) && oldMember.nickname && oldMember.colorRole == newMember.nickname && newMember.colorRole){
+    if(newMember.roles.has(sgRole.id) && oldMember.nickname  == newMember.nickname ){
         channel.send(`${newMember.user} has joined ${sgRole.name} squad!`)
     };
         
@@ -98,6 +98,8 @@ bot.on('message', msg =>{
     if(msg.channel.name !== thisChannel.name){
     return msg.reply(`Please use #bot-commands channel :poop:`);
     }
+
+   
 
     if(msg.channel.name == thisChannel.name){
         switch(args[0]){
@@ -153,9 +155,9 @@ bot.on('message', msg =>{
                 }
 
                 var d = new Date(memberInfo.joinedAt),
-                dformat = [d.getDate(),
-                            d.getMonth()+1,
-                            d.getFullYear()].join('/');
+                dformat = [d.getDate(),d.getMonth()+1,d.getFullYear()].join('/');
+
+               
 
                 if (memberInfo.roles.has(myRole.id)){
                     const embed = new Discord.RichEmbed()
