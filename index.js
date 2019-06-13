@@ -9,10 +9,14 @@ const fs = require('fs');
 
 
 
-
 bot.on('ready', () =>{
+
+    
+
     console.log('This bot is alive!');
     bot.user.setActivity('Habbo');
+    
+
     
 })
 
@@ -32,26 +36,31 @@ bot.on('guildMemberUpdate',(oldMember, newMember) =>{
 
     let myRole = newMember.guild.roles.find(role => role.name === "Malaysia");
     let sgRole = newMember.guild.roles.find(role => role.name === "Singapore");
-    
+    let myEmoji = bot.emojis.find(emoji => emoji.name === "malaysia");
+    let sgEmoji = bot.emojis.find(emoji => emoji.name === "singapore");
+
+    if (oldMember.colorRole !== newMember.colorRole) return;
+    if (oldMember.nickname !== newMember.nickname) return;
+    if (oldMember.roles.size > 0) return;
     
    
+    try{
+        if(oldMember.roles !== newMember.roles){
 
-    if(oldMember.roles.has(0)) return;
-
-    
-
-    
-
-    if(newMember.roles.has(myRole.id) && oldMember.nickname == newMember.nickname && oldMember.colorRole == newMember.colorRole ){
-        channel.send(`${newMember.user} has joined ${myRole.name} squad!`)
-    };
+            if(newMember.roles.has(myRole.id) ){
+                channel.send(`${newMember.user} has joined ${myRole.name} squad! ${myEmoji}`)
+            };
         
     
 
-    if(newMember.roles.has(sgRole.id) && oldMember.nickname  == newMember.nickname && oldMember.colorRole == newMember.colorRole ){
-        channel.send(`${newMember.user} has joined ${sgRole.name} squad!`)
-    };
+            if(newMember.roles.has(sgRole.id) ){
+                channel.send(`${newMember.user} has joined ${sgRole.name} squad! ${sgEmoji}`)
+            };
+        }
         
+    }catch(err){
+        console.log(err)
+    }  
     
 
 });
@@ -63,6 +72,7 @@ bot.on('message', msg =>{
 
     const thisChannel = msg.guild.channels.find(channel => channel.name === "🤖bot-commands");
     let args = msg.content.substring(prefix.length).split(" ");
+    
     
 
    
