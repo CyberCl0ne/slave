@@ -252,6 +252,10 @@ bot.on('message', msg =>{
                     birthday : 0
                 };
                 let userData = birthday[msg.author.id];
+                if(typeof args[1] !== "number" || typeof args[2] !== "number" || typeof args[3] !== "number") return  msg.reply('Please input valid value! example: 18 05 2000');
+                   
+    
+
                 bDay = args[1] + "/" + args[2] + "/" + args[3];
                 userData.birthday = (bDay);
                 fs.writeFile('./data.json', JSON.stringify(birthday), (err) =>{
