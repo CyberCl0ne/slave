@@ -182,14 +182,14 @@ bot.on('message', msg =>{
 
                 if (memberInfo.roles.has(myRole.id)){
                    
-                    if(!birthday[msg.author.id]) birthday[msg.author.id] = {
+                    if(!birthday[memberInfo.id]) birthday[memberInfo.id] = {
                         birthday : 0
                     };
-                    if(!mood[msg.author.id]) mood[msg.author.id] = {
+                    if(!mood[memberInfo.id]) mood[memberInfo.id] = {
                         mood : 0
                     };
-                    let userData = birthday[msg.author.id];
-                    let userData2 = mood[msg.author.id];
+                    let userData = birthday[memberInfo.id];
+                    let userData2 = mood[memberInfo.id];
                     fs.writeFile('./data.json', JSON.stringify(birthday), (err) =>{
                         if(err) console.log(err)
                     });
@@ -212,14 +212,14 @@ bot.on('message', msg =>{
 
                 if (memberInfo.roles.has(sgRole.id)){
                    
-                    if(!birthday[msg.author.id]) birthday[msg.author.id] = {
+                    if(!birthday[memberInfo.id]) birthday[memberInfo.id] = {
                         birthday : 0
                     };
-                    if(!mood[msg.author.id]) mood[msg.author.id] = {
+                    if(!mood[memberInfo.id]) mood[memberInfo.id] = {
                         mood : 0
                     };
-                    let userData = birthday[msg.author.id];
-                    let userData2 = mood[msg.author.id];
+                    let userData = birthday[memberInfo.id];
+                    let userData2 = mood[memberInfo.id];
                     fs.writeFile('./data.json', JSON.stringify(birthday), (err) =>{
                         if(err) console.log(err)
                     });
