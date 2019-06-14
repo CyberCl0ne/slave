@@ -38,6 +38,8 @@ bot.on('guildMemberUpdate',(oldMember, newMember) =>{
     let sgRole = newMember.guild.roles.find(role => role.name === "Singapore");
     let myEmoji = bot.emojis.find(emoji => emoji.name === "malaysia");
     let sgEmoji = bot.emojis.find(emoji => emoji.name === "singapore");
+
+    if(oldMember.nickname !== newMember.nickname) return;
  
     if(oldMember.colorRole == null){
         if(newMember.roles.has(myRole.id) ){
@@ -94,6 +96,8 @@ bot.on('message', msg =>{
     
 
     if (!msg.content.startsWith(prefix) || msg.author.bot) return;
+
+    if(args[0] == " ") return;
 
     
 
