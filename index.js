@@ -6,7 +6,8 @@ let xp = require('./xp.json');
 var data = require('./data.json');
 const fs = require('fs');
 
-
+let birthday = JSON.parse(fs.readFileSync('./data.json', 'utf8'));
+let mood = JSON.parse(fs.readFileSync('./mood.json', 'utf8'));
 
 
 bot.on('ready', () =>{
@@ -170,19 +171,39 @@ bot.on('message', msg =>{
 
                 }
 
+                if(memberInfo.joinedAt == undefined) return;
+
                 var d = new Date(memberInfo.joinedAt),
                 dformat = [d.getDate(),d.getMonth()+1,d.getFullYear()].join('/');
+
+              
 
                
 
                 if (memberInfo.roles.has(myRole.id)){
-                    const embed = new Discord.RichEmbed()
-                    
+                   
+                    if(!birthday[msg.author.id]) birthday[msg.author.id] = {
+                        birthday : 0
+                    };
+                    if(!mood[msg.author.id]) mood[msg.author.id] = {
+                        mood : 0
+                    };
+                    let userData = birthday[msg.author.id];
+                    let userData2 = mood[msg.author.id];
+                    fs.writeFile('./data.json', JSON.stringify(birthday), (err) =>{
+                        if(err) console.log(err)
+                    });
+                    fs.writeFile('./mood.json', JSON.stringify(mood), (err) =>{
+                        if(err) console.log(err)
+                    });
 
+                    const embed = new Discord.RichEmbed()
                     .setTitle('Member Information')
                     .setColor(`${memberInfo.displayHexColor}`)
                     .addField('Name', `${memberInfo.displayName}`, true)
                     .addField('Team', `${myRole}`, true)
+                    .addField('Birthday', `${userData.birthday}`, true)
+                    .addField('Mood', `${userData2.mood}`, true)
                     .addField('Roles', `${memberInfo.roles.map(r => r.name)}`)
                     .addField('Joined since', `${dformat}`)
                     .setThumbnail(`${avatarInfo.avatarURL}`)
@@ -190,13 +211,29 @@ bot.on('message', msg =>{
                 }
 
                 if (memberInfo.roles.has(sgRole.id)){
-                    const embed = new Discord.RichEmbed()
-                    
-                    
+                   
+                    if(!birthday[msg.author.id]) birthday[msg.author.id] = {
+                        birthday : 0
+                    };
+                    if(!mood[msg.author.id]) mood[msg.author.id] = {
+                        mood : 0
+                    };
+                    let userData = birthday[msg.author.id];
+                    let userData2 = mood[msg.author.id];
+                    fs.writeFile('./data.json', JSON.stringify(birthday), (err) =>{
+                        if(err) console.log(err)
+                    });
+                    fs.writeFile('./mood.json', JSON.stringify(mood), (err) =>{
+                        if(err) console.log(err)
+                    });
+
+                    const embed = new Discord.RichEmbed()                   
                     .setTitle('Member Information')
                     .setColor(`${memberInfo.displayHexColor}`)
                     .addField('Name', `${memberInfo.displayName}`, true)
                     .addField('Team', `${sgRole}`, true)
+                    .addField('Birthday', `${userData.birthday}`, true)
+                    .addField('Mood', `${userData2.mood}`, true)
                     .addField('Roles', `${memberInfo.roles.map(r => r.name)}`)
                     .addField('Joined since', `${dformat}`)
                     .setThumbnail(`${avatarInfo.avatarURL}`)
@@ -210,8 +247,29 @@ bot.on('message', msg =>{
                 if(!args[1]) return msg.reply('Error please define second arg')
                 msg.channel.bulkDelete(args[1]);
             break;
-            case 'wow':
-                msg.react('585848100933992448');
+            case 'birthday':
+                if(!birthday[msg.author.id]) birthday[msg.author.id] = {
+                    birthday : 0
+                };
+                let userData = birthday[msg.author.id];
+                bDay = args[1] + "/" + args[2] + "/" + args[3];
+                userData.birthday = (bDay);
+                fs.writeFile('./data.json', JSON.stringify(birthday), (err) =>{
+                    if(err) console.log(err)
+                });
+                
+            break;
+            case 'mood':
+                if(!mood[msg.author.id]) mood[msg.author.id] = {
+                    mood : 0
+                };
+                let userData1 = mood[msg.author.id];
+                newMood = args[1];
+                userData1.mood = (newMood);
+                fs.writeFile('./mood.json', JSON.stringify(mood), (err) =>{
+                    if(err) console.log(err)
+                });
+
             break;
            
            
