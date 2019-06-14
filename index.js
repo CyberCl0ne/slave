@@ -72,7 +72,13 @@ bot.on('message', msg =>{
         if(msg.content.includes('wow')){
             msg.react('585848100933992448')
         }; 
+        if(msg.content.includes('WOW')){
+            msg.react('585848100933992448')
+        }; 
         if(msg.content.includes('oof')){
+            msg.react('585420623161982987')
+        };
+        if(msg.content.includes('OOF')){
             msg.react('585420623161982987')
         };
         if(msg.content.includes('lmao')){
@@ -88,6 +94,10 @@ bot.on('message', msg =>{
             msg.react('585422744347475968')
             msg.react('😂')
         };
+        if(msg.content.includes('HAHA')){
+            msg.react('585422744347475968')
+            msg.react('😂')
+        };
     }
     catch(err){
         console.log(err)
@@ -97,11 +107,11 @@ bot.on('message', msg =>{
 
     if (!msg.content.startsWith(prefix) || msg.author.bot) return;
 
-    if(args[0] == " ") return;
-
+  
+    if(!args[0]) return;
     
 
-    if(msg.channel.name !== thisChannel.name){
+    if(msg.channel.name !== thisChannel.name ){
     return msg.reply(`Please use #bot-commands channel :poop:`);
     }
 
