@@ -225,7 +225,7 @@ bot.on('message', msg =>{
                     .addField('Team', `${myRole}`, true)
                     .addField('Birthday', `${userData.birthday}`, true)
                     .addField('Mood', `${userData2.mood}`, true)
-                    .addField('Roles', `${memberInfo.roles}`)
+                    .addField('Roles', `${memberInfo.roles.map(r => r.name)}`)
                     .addField('Joined since', `${dformat}`)
                     .setThumbnail(`${avatarInfo.avatarURL}`)
                     return msg.channel.send(embed);
@@ -255,12 +255,11 @@ bot.on('message', msg =>{
                     .addField('Team', `${sgRole}`, true)
                     .addField('Birthday', `${userData.birthday}`, true)
                     .addField('Mood', `${userData2.mood}`, true)
-                    .addField('Roles', `${memberInfo.roles}`)
+                    .addField('Roles', `${memberInfo.roles.map(r => r.name)}`)
                     .addField('Joined since', `${dformat}`)
                     .setThumbnail(`${avatarInfo.avatarURL}`)
-                    return msg.channel.send(embed);
-                }
-        
+                    return msg.channel.send(embed);      
+                }  
                
             
             break;
