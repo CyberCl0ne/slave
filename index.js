@@ -118,12 +118,12 @@ bot.on('message', msg =>{
     
         const embed = new Discord.RichEmbed()
         .setTitle('Bot Commands')
-        .addField('+info Malaysia', `Displays info about Malaysia team ${myEmoji}`, true )
-        .addField('+info Singapore', `Displays info about Singapore team ${sgEmoji}`)
-        .addField('+birthday', 'Sets your birthday', true)
-        .addField('+info @user', 'Displays info about mentioned user', true)      
-        .addField('+mood', 'Sets your current mood', true)
-        .addField('+ping', 'Gives you ping result for the bot', true)
+        .addField('?info Malaysia', `Displays info about Malaysia team ${myEmoji}`, true )
+        .addField('?info Singapore', `Displays info about Singapore team ${sgEmoji}`)
+        .addField('?birthday', 'Sets your birthday', true)
+        .addField('?info @user', 'Displays info about mentioned user', true)      
+        .addField('?mood', 'Sets your current mood', true)
+        .addField('?ping', 'Gives you ping result for the bot', true)
         .setThumbnail('https://i.imgur.com/iwewYsx.png')
         .setTimestamp()
         .setColor('24E2E7')
@@ -176,6 +176,7 @@ bot.on('message', msg =>{
                         .setThumbnail('https://i.imgur.com/0ZK52WE.png')
                         .setColor('4286f4')
                         .addField('Member', myRole.members.size)
+                        .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
                         return msg.channel.send(embed);
                     };
     
@@ -187,6 +188,7 @@ bot.on('message', msg =>{
                         .setThumbnail('https://i.imgur.com/x3KTH7M.png')
                         .setColor('ff2121')
                         .addField('Member', sgRole.members.size)
+                        .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
                         return msg.channel.send(embed);
                     };
 
@@ -228,6 +230,7 @@ bot.on('message', msg =>{
                     .addField('Roles', `${memberInfo.roles.map(r => r.name)}`)
                     .addField('Joined since', `${dformat}`)
                     .setThumbnail(`${avatarInfo.avatarURL}`)
+                    .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
                     return msg.channel.send(embed);
                 }
 
@@ -258,6 +261,7 @@ bot.on('message', msg =>{
                     .addField('Roles', `${memberInfo.roles.map(r => r.name)}`)
                     .addField('Joined since', `${dformat}`)
                     .setThumbnail(`${avatarInfo.avatarURL}`)
+                    .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
                     return msg.channel.send(embed);      
                 }  
                
