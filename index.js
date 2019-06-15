@@ -127,7 +127,7 @@ bot.on('message', msg =>{
         .setThumbnail('https://i.imgur.com/iwewYsx.png')
         .setTimestamp()
         .setColor('24E2E7')
-        .setFooter('I am a loyal slave for this server', 'https://i.imgur.com/iwewYsx.png')
+        .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
         return msg.channel.send(embed);
 
     }
