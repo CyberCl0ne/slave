@@ -164,7 +164,7 @@ bot.on('message', msg =>{
          
             
                 if (!args[1]){
-                    return msg.reply('You need to specify which team')
+                    return msg.reply('You need to specify which team or user')
                 }
 
                 if(!memberInfo){
@@ -178,6 +178,7 @@ bot.on('message', msg =>{
                         .setColor('4286f4')
                         .addField('Member', myRole.members.size)
                         .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
+                        .setTimestamp()
                         return msg.channel.send(embed);
                     };
     
@@ -190,6 +191,7 @@ bot.on('message', msg =>{
                         .setColor('ff2121')
                         .addField('Member', sgRole.members.size)
                         .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
+                        .setTimestamp()
                         return msg.channel.send(embed);
                     };
 
@@ -232,6 +234,7 @@ bot.on('message', msg =>{
                     .addField('Joined since', `${dformat}`)
                     .setThumbnail(`${avatarInfo.avatarURL}`)
                     .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
+                    .setTimestamp()
                     return msg.channel.send(embed);
                 }
 
@@ -263,6 +266,7 @@ bot.on('message', msg =>{
                     .addField('Joined since', `${dformat}`)
                     .setThumbnail(`${avatarInfo.avatarURL}`)
                     .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
+                    .setTimestamp()
                     return msg.channel.send(embed);      
                 }  
                
