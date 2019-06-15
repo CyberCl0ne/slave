@@ -119,7 +119,7 @@ bot.on('message', msg =>{
         const embed = new Discord.RichEmbed()
         .setTitle('Bot Commands')
         .addField('+info Malaysia', `Displays info about Malaysia team ${myEmoji}`, true )
-        .addField('+info Singapore', `Displays info about Singapore team ${sgEmoji}`, true)
+        .addField('+info Singapore', `Displays info about Singapore team ${sgEmoji}`)
         .addField('+birthday', 'Sets your birthday', true)
         .addField('+info @user', 'Displays info about mentioned user', true)      
         .addField('+mood', 'Sets your current mood', true)
@@ -127,6 +127,7 @@ bot.on('message', msg =>{
         .setThumbnail('https://i.imgur.com/iwewYsx.png')
         .setTimestamp()
         .setColor('24E2E7')
+        .setFooter('I am a loyal slave for this server', 'https://i.imgur.com/iwewYsx.png')
         return msg.channel.send(embed);
 
     }
