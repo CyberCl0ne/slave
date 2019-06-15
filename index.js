@@ -110,6 +110,26 @@ bot.on('message', msg =>{
 
   
     if(!args[0]) return;
+
+    if(args[0] == 'help'){
+        let myEmoji = bot.emojis.find(emoji => emoji.name === "malaysia");
+        let sgEmoji = bot.emojis.find(emoji => emoji.name === "singapore");
+    
+    
+        const embed = new Discord.RichEmbed()
+        .setTitle('Bot Commands')
+        .addField('+info Malaysia', `Displays info about Malaysia team ${myEmoji}`, true )
+        .addField('+info Singapore', `Displays info about Singapore team ${sgEmoji}`, true)
+        .addField('+birthday', 'Sets your birthday', true)
+        .addField('+info @user', 'Displays info about mentioned user', true)      
+        .addField('+mood', 'Sets your current mood', true)
+        .addField('+ping', 'Gives you ping result for the bot', true)
+        .setThumbnail('https://i.imgur.com/iwewYsx.png')
+        .setTimestamp()
+        .setColor('24E2E7')
+        return msg.channel.send(embed);
+
+    }
     
 
     if(msg.channel.name !== thisChannel.name ){
@@ -123,7 +143,7 @@ bot.on('message', msg =>{
             case 'ping':
                 msg.channel.send("Pinging ...") // Placeholder for pinging ... 
 			    .then((msg) => { // Resolve promise
-				msg.edit("Ping: " + (Date.now() - msg.createdTimestamp)) // Edits message with current timestamp minus timestamp of message
+				msg.edit("Ping: " + (Date.now() - msg.createdTimestamp) + "ms") // Edits message with current timestamp minus timestamp of message
 			});
                 
             break;
@@ -263,12 +283,14 @@ bot.on('message', msg =>{
                 fs.writeFile('./data.json', JSON.stringify(birthday), (err) =>{
                     if(err) console.log(err)
                 });
+                msg.reply(`Your birthday has been updated to "${bDay}"`)
                 
             break;
             case 'mood':
                 if(!mood[msg.author.id]) mood[msg.author.id] = {
                     mood : 0
                 };
+                if(!args[1]) return  msg.reply(`What? You're telling me you don't have any mood right now? :eyes: `);
                 let userData1 = mood[msg.author.id];
                 newMood = args[1];
                 userData1.mood = (newMood);
