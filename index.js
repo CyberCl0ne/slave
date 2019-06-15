@@ -248,15 +248,17 @@ bot.on('message', msg =>{
                 msg.channel.bulkDelete(args[1]);
             break;
             case 'birthday':
+                
                 if(!birthday[msg.author.id]) birthday[msg.author.id] = {
                     birthday : 0
                 };
+                if(!args[1] || !args[2] || !args[3]) return msg.reply("Invalid input! Please use dd mm yyyy format ")
+                    
+                
+               
                 let userData = birthday[msg.author.id];
-                if(typeof args[1] !== "number" || typeof args[2] !== "number" || typeof args[3] !== "number") return  msg.reply('Please input valid value! example: 18 05 2000');
-                   
     
-
-                bDay = args[1] + "/" + args[2] + "/" + args[3];
+                bDay = args[1] + "/" + args[2] + "/" + args[3];                
                 userData.birthday = (bDay);
                 fs.writeFile('./data.json', JSON.stringify(birthday), (err) =>{
                     if(err) console.log(err)
@@ -273,6 +275,7 @@ bot.on('message', msg =>{
                 fs.writeFile('./mood.json', JSON.stringify(mood), (err) =>{
                     if(err) console.log(err)
                 });
+                msg.reply(`Your mood has been updated to "${newMood}"`)
 
             break;
            
