@@ -10,6 +10,7 @@ let birthday = JSON.parse(fs.readFileSync('./data.json', 'utf8'));
 let mood = JSON.parse(fs.readFileSync('./mood.json', 'utf8'));
 
 
+
 bot.on('ready', () =>{
 
     
