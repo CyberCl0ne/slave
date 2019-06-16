@@ -199,12 +199,14 @@ bot.on('message', msg =>{
 
                 if(memberInfo.joinedAt == undefined) return;
 
+                var pfp = avatarInfo.avatarURL
                 var d = new Date(memberInfo.joinedAt),
                 dformat = [d.getDate(),d.getMonth()+1,d.getFullYear()].join('/');
-
+                
+                if(pfp == undefined){
+                    var pfp = avatarInfo.defaultAvatarURL
+                }
               
-
-               
 
                 if (memberInfo.roles.has(myRole.id)){
                    
@@ -222,6 +224,7 @@ bot.on('message', msg =>{
                     fs.writeFile('./mood.json', JSON.stringify(mood), (err) =>{
                         if(err) console.log(err)
                     });
+                  
 
                     const embed = new Discord.RichEmbed()
                     .setTitle('Member Information')
@@ -232,7 +235,7 @@ bot.on('message', msg =>{
                     .addField('Mood', `${userData2.mood}`, true)
                     .addField('Roles', `${memberInfo.roles.map(r => r.name)}`)
                     .addField('Joined since', `${dformat}`)
-                    .setThumbnail(`${avatarInfo.avatarURL}`)
+                    .setThumbnail(`${pfp}`)
                     .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
                     .setTimestamp()
                     return msg.channel.send(embed);
@@ -254,7 +257,7 @@ bot.on('message', msg =>{
                     fs.writeFile('./mood.json', JSON.stringify(mood), (err) =>{
                         if(err) console.log(err)
                     });
-
+          
                     const embed = new Discord.RichEmbed()                   
                     .setTitle('Member Information')
                     .setColor(`${memberInfo.displayHexColor}`)
@@ -264,7 +267,7 @@ bot.on('message', msg =>{
                     .addField('Mood', `${userData2.mood}`, true)
                     .addField('Roles', `${memberInfo.roles.map(r => r.name)}`)
                     .addField('Joined since', `${dformat}`)
-                    .setThumbnail(`${avatarInfo.avatarURL}`)
+                    .setThumbnail(`${pfp}`)
                     .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
                     .setTimestamp()
                     return msg.channel.send(embed);      
