@@ -133,6 +133,10 @@ bot.on('message', msg =>{
 
     }
     
+    if(args[0] == "clear"){
+        if(!args[1]) return msg.reply('Error please define second arg')
+        msg.channel.bulkDelete(args[1]);
+    }
 
     if(msg.channel.name !== thisChannel.name ){
     return msg.reply(`Please use #bot-commands channel :poop:`);
@@ -275,10 +279,7 @@ bot.on('message', msg =>{
                
             
             break;
-            case 'clear':
-                if(!args[1]) return msg.reply('Error please define second arg')
-                msg.channel.bulkDelete(args[1]);
-            break;
+           
             case 'birthday':
                 
                 if(!birthday[msg.author.id]) birthday[msg.author.id] = {
