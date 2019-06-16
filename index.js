@@ -135,7 +135,7 @@ bot.on('message', msg =>{
     
     if(args[0] == "clear"){
         if(!args[1]) return msg.reply('Error please define second arg')
-        msg.channel.bulkDelete(args[1]);
+        return msg.channel.bulkDelete(args[1]);
     }
 
     if(msg.channel.name !== thisChannel.name ){
