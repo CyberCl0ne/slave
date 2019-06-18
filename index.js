@@ -224,7 +224,7 @@ bot.on('message', msg =>{
                     if(!mood[memberInfo.id]) mood[memberInfo.id] = {
                         mood : 0
                     };
-                    if(!respects[memberInfo.id]) birthday[memberInfo.id] = {
+                    if(!respects[memberInfo.id]) respects[memberInfo.id] = {
                         respects : 0
                     };
                     let userData = birthday[memberInfo.id];
@@ -248,7 +248,7 @@ bot.on('message', msg =>{
                     .addField('Team', `${myRole}`, true)
                     .addField('Birthday', `${userData.birthday}`, true)
                     .addField('Mood', `${userData2.mood}`, true)
-                    .addField('Respects', `${userData3.respects}`)
+                    .addField('Respects', `${userData3.respects} 🥇`)
                     .addField('Roles', memberInfo.roles.map(r => `${r}`).join('|'))
                     .addField('Joined since', `${dformat}`)
                     .setThumbnail(`${pfp}`)
@@ -265,7 +265,7 @@ bot.on('message', msg =>{
                     if(!mood[memberInfo.id]) mood[memberInfo.id] = {
                         mood : 0
                     };
-                    if(!respects[memberInfo.id]) birthday[memberInfo.id] = {
+                    if(!respects[memberInfo.id]) respects[memberInfo.id] = {
                         respects : 0
                     };
                     let userData = birthday[memberInfo.id];
@@ -288,7 +288,7 @@ bot.on('message', msg =>{
                     .addField('Team', `${sgRole}`, true)
                     .addField('Birthday', `${userData.birthday}`, true)
                     .addField('Mood', `${userData2.mood}`, true)
-                    .addField('Respects', `${userData3.respects}`)
+                    .addField('Respects', `${userData3.respects} 🥇`)
                     .addField('Roles', memberInfo.roles.map(r => `${r}`).join('|'))
                     .addField('Joined since', `${dformat}`)
                     .setThumbnail(`${pfp}`)
@@ -334,27 +334,32 @@ bot.on('message', msg =>{
 
             break;
             case 'respect':
+                let memberInfo1 = msg.mentions.members.first();
+                
                 let author = msg.author;
+                if(!respects[memberInfo1.id]) respects[memberInfo1.id] = {
+                    respects : 0
+                };
+                let userData3 = respects[memberInfo1.id];
+                fs.writeFile('./reputation.json', JSON.stringify(respects), (err) =>{
+                    if(err) console.log(err)
+                });
                 if(talkedRecently.has(author.id)){
                     msg.reply('You can only give one respect per day')
                 } else {
-                    if(!reputation[memberInfo.id]) reputation[memberInfo.id] = {
-                        respects : 0
-                    };
-                
-                    let memberInfo = msg.mentions.members.first();
-                    let userData3 = reputation[memberInfo.id];
+                   
+                   
                     
-                    nRespects = 1++;
-                    userData3.respects = (nRespects);
+                    let a = userData3.respects;
+                    userData3.respects = (++a);
                     fs.writeFile('./reputation.json', JSON.stringify(respects), (err) =>{
                         if(err) console.log(err)
                     });
-                    msg.reply(`${memberInfo} has been respected by ${author}!`)
+                    msg.channel.send(`${memberInfo1} has been respected by ${author}!`)
                     talkedRecently.add(author.id);
                     setTimeout(() => {
                         talkedRecently.delete(author.id);
-                    }, 8.64*10^7);
+                    }, 86400000);
                 }
                 
 
