@@ -5,6 +5,10 @@ const prefix = "?";
 let xp = require('./xp.json');
 var data = require('./data.json');
 const fs = require('fs');
+const snekfetch = require('snekfetch');
+const {fetchsubreddit} = require('fetch-subreddit');
+
+
 
 let birthday = JSON.parse(fs.readFileSync('./data.json', 'utf8'));
 let mood = JSON.parse(fs.readFileSync('./mood.json', 'utf8'));
@@ -212,7 +216,7 @@ bot.on('message', msg =>{
                 }
               
 
-                if (memberInfo.roles.has(myRole.id)){
+                if (memberInfo.roles.has(myRole.id)){                 //initiates member info
                    
                     if(!birthday[memberInfo.id]) birthday[memberInfo.id] = {
                         birthday : 0
@@ -245,7 +249,7 @@ bot.on('message', msg =>{
                     return msg.channel.send(embed);
                 }
 
-                if (memberInfo.roles.has(sgRole.id)){
+                if (memberInfo.roles.has(sgRole.id)){        //initiates member info
                    
                     if(!birthday[memberInfo.id]) birthday[memberInfo.id] = {
                         birthday : 0
@@ -313,6 +317,7 @@ bot.on('message', msg =>{
                 msg.reply(`Your mood has been updated to "${newMood}"`)
 
             break;
+           
            
            
         }
