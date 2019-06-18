@@ -154,15 +154,20 @@ bot.on('message', msg =>{
         if(talkedRecently.has(author.id)){
             msg.reply('You can only give one respect per day')
         } else {
-           
-           
-            
             let a = userData3.respects;
             userData3.respects = (++a);
             fs.writeFile('./reputation.json', JSON.stringify(respects), (err) =>{
                 if(err) console.log(err)
             });
-            msg.channel.send(`${memberInfo1} has been respected by ${author}!`)
+            const embed = new Discord.RichEmbed()
+            .setTitle('Respect Award')
+            .addField(`${memberInfo1} has been respected by ${author}!🔱`)
+            .setColor('FFD700')
+            .setThumbnail('https://i.redd.it/06hdr24vpiuy.png')
+            .setTimestamp()
+            .setFooter(`Respected by ${author.nickname}`)
+            msg.channel.send(embed);
+           
             talkedRecently.add(author.id);
             setTimeout(() => {
                 talkedRecently.delete(author.id);
