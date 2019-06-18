@@ -168,7 +168,7 @@ bot.on('message', msg =>{
                 talkedRecently.delete(author.id);
             }, 86400000);
         }
-        
+        return
     }
     
     if(args[0] == "clear"){
