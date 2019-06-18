@@ -339,7 +339,7 @@ bot.on('message', msg =>{
                 let memberInfo1 = msg.mentions.members.first();
                 
                 let author = msg.author;
-                if(author.id === memberInfo1){
+                if(author.id === memberInfo1.id){
                     return msg.reply("You can't give respect to yourself 😜");
                 };
                 if(!respects[memberInfo1.id]) respects[memberInfo1.id] = {
