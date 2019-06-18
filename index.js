@@ -129,6 +129,7 @@ bot.on('message', msg =>{
         .addField('?info @user', 'Displays info about mentioned user', true)      
         .addField('?mood', 'Sets your current mood', true)
         .addField('?ping', 'Gives you ping result for the bot', true)
+        .addField('?respect @user', 'You can give respect to other user per day')
         .setThumbnail('https://i.imgur.com/iwewYsx.png')
         .setTimestamp()
         .setColor('24E2E7')
@@ -334,9 +335,13 @@ bot.on('message', msg =>{
 
             break;
             case 'respect':
+                
                 let memberInfo1 = msg.mentions.members.first();
                 
                 let author = msg.author;
+                if(author.id === memberInfo1){
+                    return msg.reply("You can't give respect to yourself 😜");
+                };
                 if(!respects[memberInfo1.id]) respects[memberInfo1.id] = {
                     respects : 0
                 };
