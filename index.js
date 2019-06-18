@@ -161,11 +161,11 @@ bot.on('message', msg =>{
             });
             const embed = new Discord.RichEmbed()
             .setTitle('Respect Award')
-            .addField(`${memberInfo1} has been respected by ${author}!🔱`)
+            .addField(`${memberInfo1.displayName} has been respected by ${author.username}!🔱`)
             .setColor('FFD700')
             .setThumbnail('https://i.redd.it/06hdr24vpiuy.png')
             .setTimestamp()
-            .setFooter(`Respected by ${author.nickname}`)
+            .setFooter(`Respected by ${author.username}`)
             msg.channel.send(embed);
            
             talkedRecently.add(author.id);
