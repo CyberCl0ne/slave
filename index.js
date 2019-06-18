@@ -137,6 +137,39 @@ bot.on('message', msg =>{
         return msg.channel.send(embed);
 
     }
+    if(args[0] == 'respect'){
+        let memberInfo1 = msg.mentions.members.first();
+                
+        let author = msg.author;
+        if(author.id === memberInfo1.id){
+            return msg.reply("You can't give respect to yourself 😜");
+        };
+        if(!respects[memberInfo1.id]) respects[memberInfo1.id] = {
+            respects : 0
+        };
+        let userData3 = respects[memberInfo1.id];
+        fs.writeFile('./reputation.json', JSON.stringify(respects), (err) =>{
+            if(err) console.log(err)
+        });
+        if(talkedRecently.has(author.id)){
+            msg.reply('You can only give one respect per day')
+        } else {
+           
+           
+            
+            let a = userData3.respects;
+            userData3.respects = (++a);
+            fs.writeFile('./reputation.json', JSON.stringify(respects), (err) =>{
+                if(err) console.log(err)
+            });
+            msg.channel.send(`${memberInfo1} has been respected by ${author}!`)
+            talkedRecently.add(author.id);
+            setTimeout(() => {
+                talkedRecently.delete(author.id);
+            }, 86400000);
+        }
+        
+    }
     
     if(args[0] == "clear"){
         if(!args[1]) return msg.reply('Error please define second arg')
@@ -334,43 +367,7 @@ bot.on('message', msg =>{
                 msg.reply(`Your mood has been updated to "${newMood}"`)
 
             break;
-            case 'respect':
-                
-                let memberInfo1 = msg.mentions.members.first();
-                
-                let author = msg.author;
-                if(author.id === memberInfo1.id){
-                    return msg.reply("You can't give respect to yourself 😜");
-                };
-                if(!respects[memberInfo1.id]) respects[memberInfo1.id] = {
-                    respects : 0
-                };
-                let userData3 = respects[memberInfo1.id];
-                fs.writeFile('./reputation.json', JSON.stringify(respects), (err) =>{
-                    if(err) console.log(err)
-                });
-                if(talkedRecently.has(author.id)){
-                    msg.reply('You can only give one respect per day')
-                } else {
-                   
-                   
-                    
-                    let a = userData3.respects;
-                    userData3.respects = (++a);
-                    fs.writeFile('./reputation.json', JSON.stringify(respects), (err) =>{
-                        if(err) console.log(err)
-                    });
-                    msg.channel.send(`${memberInfo1} has been respected by ${author}!`)
-                    talkedRecently.add(author.id);
-                    setTimeout(() => {
-                        talkedRecently.delete(author.id);
-                    }, 86400000);
-                }
-                
-
-               
-
-            break;
+          
            
            
            
