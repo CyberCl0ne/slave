@@ -161,7 +161,7 @@ bot.on('message', msg =>{
             });
             const embed = new Discord.RichEmbed()
             .setTitle('Respect Award')
-            .addField(`${memberInfo1.displayName} has been respected by ${author.username}!🔱`, `Hereby,${author.username} is unable to give any respect for today`)
+            .addField(`${memberInfo1.displayName} has been respected by ${author.username}!🔱`, "You've proved your worthiness")
             .setColor('FFD700')
             .setThumbnail('https://i.redd.it/06hdr24vpiuy.png')
             .setTimestamp()
