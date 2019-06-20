@@ -134,6 +134,8 @@ bot.on('message', msg =>{
         .addField('?mood', 'Sets your current mood', true)
         .addField('?ping', 'Gives you ping result for the bot', true)
         .addField('?respect @user', 'You can give respect to other user per day')
+        .addField('?kill @user', 'If you can only kill them', true)
+        .addField('?hug @user', 'Hug a person', true)
         .setThumbnail('https://i.imgur.com/iwewYsx.png')
         .setTimestamp()
         .setColor('24E2E7')
@@ -192,6 +194,7 @@ bot.on('message', msg =>{
     }
     
     if(args[0] == 'shoot'){
+       
         if(!memberInfo){
             return msg.channel.send('You need to mention which user you want to kill 😈');
         }
@@ -203,14 +206,37 @@ bot.on('message', msg =>{
         let thumbnail = 'https://i.pinimg.com/originals/5e/59/f6/5e59f6475951584c42ff751e8d748f66.gif'
         let footer = `Fired by ${msg.author.username}`
         return emotes(title, field, detail, color, thumbnail, footer);
-    } 
+    }
+       
+    if(args[0] == 'hug'){
+        if(!memberInfo){
+            return msg.channel.send('You need to mention which user you want to hug️ ❤️');
+        }
+        
+        let title = 'Giving you a big hug!'
+        let field = ` ${memberInfo.displayName}, you were just hugged by ${msg.author.username} ❤️`
+        let detail = '😍'
+        let color = 'ff69b4'
+        let thumbnail = 'https://i.pinimg.com/originals/42/94/de/4294deb5ec97086243174b085d609695.gif'
+        let footer = `Hugged by ${msg.author.username}`
+        return emotes(title, field, detail, color, thumbnail, footer);
+    }
+
+
+
+
+    
+
+
 
     if(args[0] == "clear"){
         if(!args[1]) return msg.reply('Error please define second arg')
         return msg.channel.bulkDelete(args[1]);
     }
 
-    if(msg.channel.name !== thisChannel.name ){
+    if(args[0] == prefix) return;
+
+    if(msg.channel.name !== thisChannel.name){
     return msg.reply(`Please use #bot-commands channel :poop:`);
     }
 
@@ -284,7 +310,7 @@ bot.on('message', msg =>{
               
 
                 if (memberInfo.roles.has(myRole.id)){                 //initiates member info
-                    subtractDate();
+                    
                     if(!birthday[memberInfo.id]) birthday[memberInfo.id] = {
                         birthday : 0
                     };
