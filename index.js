@@ -134,7 +134,7 @@ bot.on('message', msg =>{
         .addField('?mood', 'Sets your current mood', true)
         .addField('?ping', 'Gives you ping result for the bot', true)
         .addField('?respect @user', 'You can give respect to other user per day')
-        .addField('?kill @user', 'If you can only kill them', true)
+        .addField('?shoot @user', 'If you can only kill them irl', true)
         .addField('?hug @user', 'Hug a person', true)
         .setThumbnail('https://i.imgur.com/iwewYsx.png')
         .setTimestamp()
