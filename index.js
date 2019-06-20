@@ -108,6 +108,21 @@ bot.on('message', msg =>{
             msg.react('585422744347475968')
             msg.react('😂')
         };
+        if(msg.content.includes('naughty')){
+            msg.react('591228114856575007')  
+        };
+        if(msg.content.includes('noty')){
+            msg.react('591228114856575007')  
+        };
+        if(msg.content.includes('nakal')){
+            msg.react('591228114856575007')  
+        };
+        if(msg.content.includes('jahat')){
+            msg.react('591228114856575007')  
+        };
+        if(msg.content.includes('hehe')){
+            msg.react('591230245005164544')  
+        };
     }
     catch(err){
         console.log(err)
@@ -302,6 +317,35 @@ bot.on('message', msg =>{
                 var pfp = avatarInfo.avatarURL
                 var d = new Date(memberInfo.joinedAt),
                 dformat = [d.getDate(),d.getMonth()+1,d.getFullYear()].join('/');
+
+                var periods = {
+                    month: 30 * 24 * 60 * 60 * 1000,
+                    week: 7 * 24 * 60 * 60 * 1000,
+                    day: 24 * 60 * 60 * 1000,
+                    hour: 60 * 60 * 1000,
+                    minute: 60 * 1000
+                };
+
+                var msgCreated = Date.now(msg.channel.createdAt)
+                
+
+                function formatTime(msgCreated, d) {
+                    var diff = msgCreated - d;
+                  
+                    if (diff > periods.month) {
+                      // it was at least a month ago
+                      return Math.floor(diff / periods.month) + " months";
+                    } else if (diff > periods.week) {
+                      return Math.floor(diff / periods.week) + " weeks";
+                    } else if (diff > periods.day) {
+                      return Math.floor(diff / periods.day) + " days";
+                    } else if (diff > periods.hour) {
+                      return Math.floor(diff / periods.hour) + " hours";
+                    } else if (diff > periods.minute) {
+                      return Math.floor(diff / periods.minute) + " minutes";
+                    }
+                    return;
+                }
                
                 
                 if(pfp == undefined){
@@ -332,7 +376,7 @@ bot.on('message', msg =>{
                     fs.writeFile('./reputation.json', JSON.stringify(respects), (err) =>{
                         if(err) console.log(err)
                     });
-                  
+                    var memberPeriod = formatTime(msgCreated, d)
 
                     const embed = new Discord.RichEmbed()
                     .setTitle('Member Information')
@@ -343,7 +387,7 @@ bot.on('message', msg =>{
                     .addField('Mood', `${userData2.mood}`, true)
                     .addField('Respects', `${userData3.respects} 🥇`)
                     .addField('Roles', memberInfo.roles.map(r => `${r}`).join('|'))
-                    .addField('Joined since', `${dformat}`)
+                    .addField('Joined since', `${dformat} (${memberPeriod})`)
                     .setThumbnail(`${pfp}`)
                     .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
                     .setTimestamp()
@@ -373,7 +417,9 @@ bot.on('message', msg =>{
                     fs.writeFile('./reputation.json', JSON.stringify(respects), (err) =>{
                         if(err) console.log(err)
                     });
-          
+
+                    var memberPeriod = formatTime(msgCreated, d)
+
                     const embed = new Discord.RichEmbed()                   
                     .setTitle('Member Information')
                     .setColor(`${memberInfo.displayHexColor}`)
@@ -383,7 +429,7 @@ bot.on('message', msg =>{
                     .addField('Mood', `${userData2.mood}`, true)
                     .addField('Respects', `${userData3.respects} 🥇`)
                     .addField('Roles', memberInfo.roles.map(r => `${r}`).join('|'))
-                    .addField('Joined since', `${dformat}`)
+                    .addField('Joined since', `${dformat} (${memberPeriod})`)
                     .setThumbnail(`${pfp}`)
                     .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
                     .setTimestamp()
