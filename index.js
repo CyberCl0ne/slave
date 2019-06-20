@@ -8,6 +8,9 @@ const fs = require('fs');
 const talkedRecently = new Set();
 
 
+               
+
+
 
 let birthday = JSON.parse(fs.readFileSync('./data.json', 'utf8'));
 let mood = JSON.parse(fs.readFileSync('./mood.json', 'utf8'));
@@ -66,7 +69,8 @@ bot.on('guildMemberUpdate',(oldMember, newMember) =>{
 
 bot.on('message', msg =>{
 
-
+    var memberInfo = msg.mentions.members.first();
+    var avatarInfo = msg.mentions.users.first();
 
     const thisChannel = msg.guild.channels.find(channel => channel.name === "🤖bot-commands");
     let args = msg.content.substring(prefix.length).split(" ");
@@ -175,7 +179,32 @@ bot.on('message', msg =>{
         }
         return
     }
+
+    function emotes(title, field, detail, color, thumbnail, footer){
+        const embed = new Discord.RichEmbed()
+        .setTitle(title)
+        .addField(field, detail)
+        .setColor(color)
+        .setThumbnail(thumbnail)
+        .setTimestamp()
+        .setFooter(footer)
+        return msg.channel.send(embed);
+    }
     
+    if(args[0] == 'shoot'){
+        if(!memberInfo){
+            return msg.channel.send('You need to mention which user you want to kill 😈');
+        }
+        
+        let title = 'Shots fired!'
+        let field = ` ${memberInfo.displayName}, you were just shot by ${msg.author.username} 🔫`
+        let detail = 'Blood, blood everywhere'
+        let color = 'bb0a1e'
+        let thumbnail = 'https://i.pinimg.com/originals/5e/59/f6/5e59f6475951584c42ff751e8d748f66.gif'
+        let footer = `Fired by ${msg.author.username}`
+        return emotes(title, field, detail, color, thumbnail, footer);
+    } 
+
     if(args[0] == "clear"){
         if(!args[1]) return msg.reply('Error please define second arg')
         return msg.channel.bulkDelete(args[1]);
@@ -203,9 +232,7 @@ bot.on('message', msg =>{
                 let myRole = msg.guild.roles.find(role => role.name === "Malaysia");
                 let sgRole = msg.guild.roles.find(role => role.name === "Singapore");
 
-                let memberInfo = msg.mentions.members.first();
-                let avatarInfo = msg.mentions.users.first();
-               
+                
                 
                 
          
@@ -249,6 +276,7 @@ bot.on('message', msg =>{
                 var pfp = avatarInfo.avatarURL
                 var d = new Date(memberInfo.joinedAt),
                 dformat = [d.getDate(),d.getMonth()+1,d.getFullYear()].join('/');
+               
                 
                 if(pfp == undefined){
                     var pfp = avatarInfo.defaultAvatarURL
@@ -256,7 +284,7 @@ bot.on('message', msg =>{
               
 
                 if (memberInfo.roles.has(myRole.id)){                 //initiates member info
-                   
+                    subtractDate();
                     if(!birthday[memberInfo.id]) birthday[memberInfo.id] = {
                         birthday : 0
                     };
