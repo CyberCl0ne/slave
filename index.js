@@ -163,7 +163,7 @@ bot.on('message', msg =>{
         let memberInfo1 = msg.mentions.members.first();
                 
         let author = msg.guild.members.get(msg.author.id).displayName;
-        const respBoard = msg.guild.channels.find( channel => channel.name == '⭐respect-board');
+        const respBoard = msg.guild.channels.find( channel => channel.name == '🏅respect-board');
     
         
         if(msg.author.id === memberInfo1.id){
