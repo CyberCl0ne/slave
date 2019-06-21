@@ -154,6 +154,9 @@ bot.on('message', msg =>{
         .addField('?respect @user ✔️', 'Show your gratitude by giving them respect')
         .addField('?shoot @user ✔️', 'If you can only kill them irl', true)
         .addField('?hug @user ✔️', 'Hug a person', true)
+        .addField('?kick @user ✔️', 'Kick those butts', true)
+        .addField('?slap @user ✔️', 'It feels good tho', true)
+        .addField('?fart @user ✔️', 'Let them smell', true)
         .addField('Addition', '"✔️" shows the commands that can be used in any channel')
         .setThumbnail('https://i.imgur.com/iwewYsx.png')
         .setTimestamp()
@@ -262,7 +265,7 @@ bot.on('message', msg =>{
         let title = 'My hand is coming!'
         let field = ` ${memberInfo.displayName}, you were just slapped by ${author} `
         let detail = 'auchh'
-        let color = 'ff69b4'
+        let color = 'f4be41'
         let thumbnail = 'https://media3.giphy.com/media/xT9IgzTnZHL9zp6IPS/source.gif'
         let footer = `Slapped by ${author}`
         return emotes(title, field, detail, color, thumbnail, footer);
@@ -276,8 +279,8 @@ bot.on('message', msg =>{
         
         let title = 'Smell this!'
         let field = ` ${memberInfo.displayName}, you smelled ${author}'s fart `
-        let detail = 'serves you well 💨'
-        let color = 'ff69b4'
+        let detail = 'Serves you well 💨'
+        let color = '26ba21'
         let thumbnail = 'https://media.tenor.com/images/074a0cd24138a6260391f90efabdab5c/tenor.gif'
         let footer = `Farted by ${author}`
         return emotes(title, field, detail, color, thumbnail, footer);
@@ -292,7 +295,7 @@ bot.on('message', msg =>{
         let title = 'Parry this!'
         let field = ` ${memberInfo.displayName}, you were kicked at the butt by ${author}`
         let detail = 'Right to the butt'
-        let color = 'ff69b4'
+        let color = 'f47a42'
         let thumbnail = 'https://media.tenor.com/images/27f16871c55a3376fa4bfdd76ac2ab5c/tenor.gif'
         let footer = `Kicked by ${author}`
         return emotes(title, field, detail, color, thumbnail, footer);
