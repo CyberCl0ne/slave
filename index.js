@@ -21,7 +21,6 @@ let respects = JSON.parse(fs.readFileSync('./reputation.json', 'utf8'));
 bot.on('ready', () =>{
 
     
-
     console.log('This bot is alive!');
     bot.user.setActivity('Habbo');
     
@@ -74,6 +73,7 @@ bot.on('message', msg =>{
 
     const thisChannel = msg.guild.channels.find(channel => channel.name === "🤖bot-commands");
     let args = msg.content.substring(prefix.length).split(" ");
+    
     
     
 
@@ -161,8 +161,11 @@ bot.on('message', msg =>{
     if(args[0] == 'respect'){
         let memberInfo1 = msg.mentions.members.first();
                 
-        let author = msg.author;
-        if(author.id === memberInfo1.id){
+        let author = msg.guild.members.get(msg.author.id).displayName;
+        const respBoard = msg.guild.channels.find( channel => channel.name == '⭐respect-board');
+    
+        
+        if(msg.author.id === memberInfo1.id){
             return msg.reply("You can't give respect to yourself 😜");
         };
         if(!respects[memberInfo1.id]) respects[memberInfo1.id] = {
@@ -172,7 +175,7 @@ bot.on('message', msg =>{
         fs.writeFile('./reputation.json', JSON.stringify(respects), (err) =>{
             if(err) console.log(err)
         });
-        if(talkedRecently.has(author.id)){
+        if(talkedRecently.has(msg.author.id)){
             msg.reply('You can only give one respect per day')
         } else {
             let a = userData3.respects;
@@ -182,16 +185,17 @@ bot.on('message', msg =>{
             });
             const embed = new Discord.RichEmbed()
             .setTitle('Respect Award')
-            .addField(`${memberInfo1.displayName} has been respected by ${author.username}!🔱`, "You've proved your worthiness")
+            .addField(`**${memberInfo1.displayName}** has been respected by ${author}!🔱`, "You've proved your worthiness")
             .setColor('FFD700')
             .setThumbnail('https://i.redd.it/06hdr24vpiuy.png')
             .setTimestamp()
-            .setFooter(`Respected by ${author.username}`)
+            .setFooter(`Respected by ${author}`, `${msg.author.avatarURL}`)
             msg.channel.send(embed);
-           
-            talkedRecently.add(author.id);
+            respBoard.send(embed);
+
+            talkedRecently.add(msg.author.id);
             setTimeout(() => {
-                talkedRecently.delete(author.id);
+                talkedRecently.delete(msg.author.id);
             }, 86400000);
         }
         return
@@ -209,31 +213,32 @@ bot.on('message', msg =>{
     }
     
     if(args[0] == 'shoot'){
-       
+        let author = msg.guild.members.get(msg.author.id).displayName;
         if(!memberInfo){
             return msg.channel.send('You need to mention which user you want to kill 😈');
         }
         
         let title = 'Shots fired!'
-        let field = ` ${memberInfo.displayName}, you were just shot by ${msg.author.username} 🔫`
+        let field = ` ${memberInfo.displayName}, you were just shot by ${author} 🔫`
         let detail = 'Blood, blood everywhere'
         let color = 'bb0a1e'
         let thumbnail = 'https://i.pinimg.com/originals/5e/59/f6/5e59f6475951584c42ff751e8d748f66.gif'
-        let footer = `Fired by ${msg.author.username}`
+        let footer = `Fired by ${author}`
         return emotes(title, field, detail, color, thumbnail, footer);
     }
        
     if(args[0] == 'hug'){
+        let author = msg.guild.members.get(msg.author.id).displayName;
         if(!memberInfo){
             return msg.channel.send('You need to mention which user you want to hug️ ❤️');
         }
         
         let title = 'Giving you a big hug!'
-        let field = ` ${memberInfo.displayName}, you were just hugged by ${msg.author.username} ❤️`
+        let field = ` ${memberInfo.displayName}, you were just hugged by ${author} ❤️`
         let detail = '😍'
         let color = 'ff69b4'
         let thumbnail = 'https://i.pinimg.com/originals/42/94/de/4294deb5ec97086243174b085d609695.gif'
-        let footer = `Hugged by ${msg.author.username}`
+        let footer = `Hugged by ${author}`
         return emotes(title, field, detail, color, thumbnail, footer);
     }
 
