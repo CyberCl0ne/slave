@@ -117,6 +117,9 @@ bot.on('message', msg =>{
         if(msg.content.includes('nakal')){
             msg.react('591228114856575007')  
         };
+        if(msg.content.includes('piak')){
+            msg.react('591228114856575007')  
+        };
         if(msg.content.includes('jahat')){
             msg.react('591228114856575007')  
         };
