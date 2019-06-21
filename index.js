@@ -173,6 +173,13 @@ bot.on('message', msg =>{
             respects : 0
         };
         let userData3 = respects[memberInfo1.id];
+        let compliments = ["You've proved your worthiness","A knight with shining armour","What an honor!","King Arthur himself bows down to you","May your day blessed",
+            "With the highest regard","It ain't much but it honest work","You should be proud of yourself","You have impeccable manners",
+            "You're more helpful than you realize","Your kindness is a balm to all who encounter it",
+            "You're even more beautiful in the inside than you're on the outside","You're a candle in the darkness",
+            "You're a gift to those who are around you"]
+        var randomCompliments = compliments[Math.floor(Math.random() * compliments.length)];
+
         fs.writeFile('./reputation.json', JSON.stringify(respects), (err) =>{
             if(err) console.log(err)
         });
@@ -186,7 +193,7 @@ bot.on('message', msg =>{
             });
             const embed = new Discord.RichEmbed()
             .setTitle('Respect Award')
-            .addField(`**${memberInfo1.displayName}** has been respected by ${author}!🔱`, "You've proved your worthiness")
+            .addField(`**${memberInfo1.displayName}** has been respected!🔱`, `${randomCompliments}`)
             .setColor('FFD700')
             .setThumbnail('https://i.redd.it/06hdr24vpiuy.png')
             .setTimestamp()
