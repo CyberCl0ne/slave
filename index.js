@@ -173,9 +173,7 @@ bot.on('message', msg =>{
 
     if(args[0] == prefix) return;
 
-    if(msg.channel.name !== thisChannel.name){
-    return msg.reply(`Please use #bot-commands channel :poop:`);
-    }
+   
 
    
 
@@ -399,6 +397,8 @@ bot.on('message', msg =>{
            
            
         }
+    }else{
+        return msg.reply(`Please use #bot-commands channel :poop:`);
     }
        
     
