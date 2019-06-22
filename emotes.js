@@ -87,6 +87,6 @@ module.exports = (msg, args, memberInfo, Discord) => {
         let footer = `Kicked by ${author}`
         return emotes(title, field, detail, color, thumbnail, footer);
     }
-    
+    return;
 
 };
