@@ -1,6 +1,6 @@
-module.exports = list => {
-     
+module.exports = (msg) => {
     
+ 
     try {
         if(msg.content.includes('wow')){
             msg.react('585848100933992448')
@@ -55,4 +55,5 @@ module.exports = list => {
     }
 
     
-}
+
+};

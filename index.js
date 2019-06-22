@@ -74,10 +74,9 @@ bot.on('message', msg =>{
 
     const thisChannel = msg.guild.channels.find(channel => channel.name === "🤖bot-commands");
     let args = msg.content.substring(prefix.length).split(" ");
+   
     
-    const reacts = reactions(list);
-
-    reacts();
+    reactions(msg);
 
     if (!msg.content.startsWith(prefix) || msg.author.bot) return;
 
