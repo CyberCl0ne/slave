@@ -80,11 +80,19 @@ bot.on('message', msg =>{
   
     reactions(msg);
 
-    if (!msg.content.startsWith(prefix) || msg.author.bot) return;
+    if (!msg.content.startsWith(prefix) || msg.author.bot ) return;
 
-    emotes(msg, args, memberInfo, Discord);
   
     if(!args[0]) return;
+
+   
+    emotes(msg, args, memberInfo, Discord);
+  
+    
+
+
+
+  
 
     if(args[0] == 'help'){
         let myEmoji = bot.emojis.find(emoji => emoji.name === "malaysia");
@@ -173,9 +181,6 @@ bot.on('message', msg =>{
 
     if(args[0] == prefix) return;
 
-   
-
-   
 
     if(msg.channel.name == thisChannel.name){
         switch(args[0]){
@@ -397,9 +402,7 @@ bot.on('message', msg =>{
            
            
         }
-    }else{
-        return msg.reply(`Please use #bot-commands channel :poop:`);
-    }
+    };
        
     
 })
