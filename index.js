@@ -5,6 +5,7 @@ const prefix = "?";
 let xp = require('./xp.json');
 var data = require('./data.json');
 const fs = require('fs');
+const reactions = require('./reactions.js');
 const talkedRecently = new Set();
 
 
@@ -74,64 +75,9 @@ bot.on('message', msg =>{
     const thisChannel = msg.guild.channels.find(channel => channel.name === "🤖bot-commands");
     let args = msg.content.substring(prefix.length).split(" ");
     
-    
-    
+    const reacts = reactions(list);
 
-   
-    try {
-        if(msg.content.includes('wow')){
-            msg.react('585848100933992448')
-        }; 
-        if(msg.content.includes('WOW')){
-            msg.react('585848100933992448')
-        }; 
-        if(msg.content.includes('oof')){
-            msg.react('585420623161982987')
-        };
-        if(msg.content.includes('OOF')){
-            msg.react('585420623161982987')
-        };
-        if(msg.content.includes('lmao')){
-            msg.react('585422744347475968')
-        };
-        if(msg.content.includes('lol')){
-            msg.react('😂')
-        };
-        if(msg.content.includes('wtf')){
-            msg.react('585422238702895104')
-        };
-        if(msg.content.includes('haha')){
-            msg.react('585422744347475968')
-            msg.react('😂')
-        };
-        if(msg.content.includes('HAHA')){
-            msg.react('585422744347475968')
-            msg.react('😂')
-        };
-        if(msg.content.includes('naughty')){
-            msg.react('591228114856575007')  
-        };
-        if(msg.content.includes('noty')){
-            msg.react('591228114856575007')  
-        };
-        if(msg.content.includes('nakal')){
-            msg.react('591228114856575007')  
-        };
-        if(msg.content.includes('piak')){
-            msg.react('591228114856575007')  
-        };
-        if(msg.content.includes('jahat')){
-            msg.react('591228114856575007')  
-        };
-        if(msg.content.includes('hehe')){
-            msg.react('591230245005164544')  
-        };
-    }
-    catch(err){
-        console.log(err)
-    }
-
-    
+    reacts();
 
     if (!msg.content.startsWith(prefix) || msg.author.bot) return;
 
@@ -183,7 +129,7 @@ bot.on('message', msg =>{
             "With the highest regard","It ain't much but it honest work","You should be proud of yourself","You have impeccable manners",
             "You're more helpful than you realize","Your kindness is a balm to all who encounter it",
             "You're even more beautiful in the inside than you're on the outside","You're a candle in the darkness",
-            "You're a gift to those who are around you"]
+            "You're a gift to those who are around you","You're breathtaking"]
         var randomCompliments = compliments[Math.floor(Math.random() * compliments.length)];
 
         fs.writeFile('./reputation.json', JSON.stringify(respects), (err) =>{
