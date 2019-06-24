@@ -8,9 +8,9 @@ const fs = require('fs');
 const reactions = require('./reactions.js');
 const talkedRecently = new Set();
 const emotes = require('./emotes.js');
-
-
-               
+const mongoose = require('mongoose');
+const request = require('request');
+           
 
 
 
@@ -24,7 +24,7 @@ bot.on('ready', () =>{
 
     
     console.log('This bot is alive!');
-    bot.user.setActivity('Habbo');
+    bot.user.setActivity('Habbo | use ?help');
     
 
     
@@ -397,8 +397,24 @@ bot.on('message', msg =>{
                 msg.reply(`Your mood has been updated to "${newMood}"`)
 
             break;
-          
-           
+            case 'cat':
+               
+                request.get('http://thecatapi.com/api/images/get?format=src&type=png',{
+
+                }, function(error, response, body){
+                    if(!error && response.statusCode == 200){
+                        const embed = new Discord.RichEmbed()
+                        .setImage(response.request.uri.href)
+                        .setFooter(`requested by ${msg.author.username}`)
+                        .setColor('24E2E7')
+                        .setTimestamp()
+                        return msg.channel.send(embed);
+                    } else {
+                        console.log(error)
+                    }
+                })
+              
+            break;
            
            
         }
@@ -407,5 +423,5 @@ bot.on('message', msg =>{
     
 })
 
-bot.login(config.token);
+bot.login(process.env.BOT_TOKEN);
 
