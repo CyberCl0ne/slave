@@ -127,7 +127,7 @@ bot.on('message', msg =>{
         let author = msg.guild.members.get(msg.author.id).displayName;
         const respBoard = msg.guild.channels.find( channel => channel.name == '🏅respect-board');
     
-        
+        if(!memberInfo1) return msg.reply('You need to tell me which user you want to respect')
         if(msg.author.id === memberInfo1.id){
             return msg.reply("You can't give respect to yourself 😜");
         };
