@@ -2,15 +2,13 @@ const Discord = require('discord.js');
 const bot = new Discord.Client();
 const config = require('./config.json');
 const prefix = "?";
-let xp = require('./xp.json');
-var data = require('./data.json');
-const fs = require('fs');
+
 const reactions = require('./reactions.js');
 const talkedRecently = new Set();
 const emotes = require('./emotes.js');
 const commands = require('./commands');
 const mongoose = require('mongoose');
-const uri = "mongodb+srv://jiman:left4dead!@cluster0-h9ref.mongodb.net/test?retryWrites=true&w=majority"; 
+const uri = process.env.uri; 
 const addScheme1 = require('./addSchema.js')
 mongoose.connect(uri, {useNewUrlParser: true});
 
@@ -201,5 +199,5 @@ bot.on('message', msg =>{
     mongoose.set('debug', true);
 })
 
-bot.login(config.token);
+bot.login(process.env.BOT_TOKEN);
 

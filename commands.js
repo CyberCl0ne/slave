@@ -186,7 +186,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
                         myUser.birthday = bDay
                         myUser.save()
                         .catch(err => console.log(err))
-                        msg.reply(`Your birthday has been updated to "${bDay}"`)
+                        msg.channel.send(`Your birthday has been updated to "${bDay}"`)
                         
                     }
 
@@ -223,7 +223,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
                     myUser.mood = newMood
                     myUser.save()
                     .catch(err => console.log(err))
-                    msg.reply(`Your mood has been updated to "${newMood}"`)
+                    msg.channel.send(`Your mood has been updated to "${newMood}"`)
                 }).catch(err => console.log(err))
                
                
