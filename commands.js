@@ -4,9 +4,9 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
     const fs = require('fs');
     let birthday = JSON.parse(fs.readFileSync('./data.json', 'utf8'));
     let mood = JSON.parse(fs.readFileSync('./mood.json', 'utf8'));
-    const addSchema1 = require('./addSchema');
+    const addSchema1 = require('./addSchema.js');
     
-    let respects = JSON.parse(fs.readFileSync('./reputation.json', 'utf8'));
+  
 
     if(msg.channel.name == thisChannel.name){
         switch(args[0]){
@@ -102,125 +102,132 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
                 if(pfp == undefined){
                     var pfp = avatarInfo.defaultAvatarURL
                 }
-              
-
-                if (memberInfo.roles.has(myRole.id)){                 //initiates member info
+        
                     
-                    if(!birthday[memberInfo.id]) birthday[memberInfo.id] = {
-                        birthday : 0
-                    };
-                    if(!mood[memberInfo.id]) mood[memberInfo.id] = {
-                        mood : 0
-                    };
-                    if(!respects[memberInfo.id]) respects[memberInfo.id] = {
-                        respects : 0
-                    };
-                    let userData = birthday[memberInfo.id];
-                    let userData2 = mood[memberInfo.id];
-                    let userData3 = respects[memberInfo.id];
-                    fs.writeFile('./data.json', JSON.stringify(birthday), (err) =>{
-                        if(err) console.log(err)
-                    });
-                    fs.writeFile('./mood.json', JSON.stringify(mood), (err) =>{
-                        if(err) console.log(err)
-                    });
-                    fs.writeFile('./reputation.json', JSON.stringify(respects), (err) =>{
-                        if(err) console.log(err)
-                    });
-                    var memberPeriod = formatTime(msgCreated, d)
-
-                    const embed = new Discord.RichEmbed()
-                    .setTitle('Member Information')
-                    .setColor(`${memberInfo.displayHexColor}`)
-                    .addField('Name', `${memberInfo.displayName}`, true)
-                    .addField('Team', `${myRole}`, true)
-                    .addField('Birthday', `${userData.birthday}`, true)
-                    .addField('Mood', `${userData2.mood}`, true)
-                    .addField('Respects', `${userData3.respects} 🥇`)
-                    .addField('Roles', memberInfo.roles.map(r => `${r}`).join('|'))
-                    .addField('Joined since', `${dformat} (${memberPeriod})`)
-                    .setThumbnail(`${pfp}`)
-                    .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
-                    .setTimestamp()
-                    return msg.channel.send(embed);
+                try{
+                    addSchema1.findOne({ userID : memberInfo.id },['userID','birthday','respect','mood'],async function(err,myUser){
+                        if(err) return console.log(err);
+                        
+                            if(!myUser){
+                                const upSchema = new addSchema1({
+                                    _id: mongoose.Types.ObjectId(),
+                                    username: memberInfo.username,
+                                    userID: memberInfo.id,
+                                    birthday: 0,
+                                    respect: 0,
+                                    mood: 'none',
+                                    time: msg.createdAt
+                                });
+                                await upSchema.save()
+                                .then(result => console.log(result))
+                                .catch(err => console.log(err));
+                                msg.channel.send("For first time, it'll be like this. Give it another shot 🍷")
+                            };
+                        
+                        if(err) return console.log(err);
+                        if (memberInfo.roles.has(myRole.id)){
+                            var team = myRole
+                        }else if (memberInfo.roles.has(sgRole.id)){
+                            var team = sgRole
+                        }else return;   
+                        var memberPeriod = formatTime(msgCreated, d)
+                        let birthday = await myUser.birthday;
+                        let mood = await myUser.mood;
+                        let respect = await myUser.respect;
+                        const embed = new Discord.RichEmbed()
+                    
+                        .setTitle('Member Information')
+                        .setColor(`${memberInfo.displayHexColor}`)
+                        .addField('Name', `${memberInfo.displayName}`, true)
+                        .addField('Team', `${team}`, true)
+                        .addField('Birthday', `${birthday}`, true)
+                        .addField('Mood', `${mood}`, true)
+                        .addField('Respects', `${respect} 🥇`)
+                        .addField('Roles', memberInfo.roles.map(r => `${r}`).join('|'))
+                        .addField('Joined since', `${dformat} (${memberPeriod})`)
+                        .setThumbnail(`${pfp}`)
+                        .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
+                        .setTimestamp()
+                        return msg.channel.send(embed);
+                        
+                        
+                        
+                    }).catch(err => console.log(err));
+                }catch(err){
+                    console.log(err)
                 }
-
-                if (memberInfo.roles.has(sgRole.id)){        //initiates member info
                    
-                    if(!birthday[memberInfo.id]) birthday[memberInfo.id] = {
-                        birthday : 0
-                    };
-                    if(!mood[memberInfo.id]) mood[memberInfo.id] = {
-                        mood : 0
-                    };
-                    if(!respects[memberInfo.id]) respects[memberInfo.id] = {
-                        respects : 0
-                    };
-                    let userData = birthday[memberInfo.id];
-                    let userData2 = mood[memberInfo.id];
-                    let userData3 = respects[memberInfo.id];
-                    fs.writeFile('./data.json', JSON.stringify(birthday), (err) =>{
-                        if(err) console.log(err)
-                    });
-                    fs.writeFile('./mood.json', JSON.stringify(mood), (err) =>{
-                        if(err) console.log(err)
-                    });
-                    fs.writeFile('./reputation.json', JSON.stringify(respects), (err) =>{
-                        if(err) console.log(err)
-                    });
-
-                    var memberPeriod = formatTime(msgCreated, d)
-
-                    const embed = new Discord.RichEmbed()                   
-                    .setTitle('Member Information')
-                    .setColor(`${memberInfo.displayHexColor}`)
-                    .addField('Name', `${memberInfo.displayName}`, true)
-                    .addField('Team', `${sgRole}`, true)
-                    .addField('Birthday', `${userData.birthday}`, true)
-                    .addField('Mood', `${userData2.mood}`, true)
-                    .addField('Respects', `${userData3.respects} 🥇`)
-                    .addField('Roles', memberInfo.roles.map(r => `${r}`).join('|'))
-                    .addField('Joined since', `${dformat} (${memberPeriod})`)
-                    .setThumbnail(`${pfp}`)
-                    .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
-                    .setTimestamp()
-                    return msg.channel.send(embed);      
-                }  
-               
-            
             break;
            
             case 'birthday':
                 
-                if(!birthday[msg.author.id]) birthday[msg.author.id] = {
-                    birthday : 0
-                };
                 if(!args[1] || !args[2] || !args[3]) return msg.reply("Invalid input! Please use dd mm yyyy format ")
+
+                addSchema1.findOne({ userID: msg.author.id }, 'birthday', async function(err, myUser){
+                    if(err) return console.log(err);
+                    
+                    if(!myUser){
+                        const upSchema = new addSchema1({
+                            _id: mongoose.Types.ObjectId(),
+                            username: msg.author.displayName,
+                            userID: msg.author.id,
+                            birthday: 0,
+                            respect: 0,
+                            mood: 'none',
+                            time: msg.createdAt
+                        });
+                        await upSchema.save()
+                        .then(result => console.log(result))
+                        .catch(err => console.log(err))
+                        msg.channel.send("For first time, it'll be like this. Give it another shot 🍷")
+                    }else{
+                      
+                        bDay = args[1] + "/" + args[2] + "/" + args[3];                
+                        
+                        myUser.birthday = bDay
+                        myUser.save()
+                        .catch(err => console.log(err))
+                        msg.reply(`Your birthday has been updated to "${bDay}"`)
+                        
+                    }
+
+                }).catch(err => console.log(err))
+                
                     
                 
                
-                let userData = birthday[msg.author.id];
-    
-                bDay = args[1] + "/" + args[2] + "/" + args[3];                
-                userData.birthday = (bDay);
-                fs.writeFile('./data.json', JSON.stringify(birthday), (err) =>{
-                    if(err) console.log(err)
-                });
-                msg.reply(`Your birthday has been updated to "${bDay}"`)
                 
             break;
             case 'mood':
-                if(!mood[msg.author.id]) mood[msg.author.id] = {
-                    mood : 0
-                };
+               
                 if(!args[1]) return  msg.reply(`What? You're telling me you don't have any mood right now? :eyes: `);
-                let userData1 = mood[msg.author.id];
-                newMood = args[1];
-                userData1.mood = (newMood);
-                fs.writeFile('./mood.json', JSON.stringify(mood), (err) =>{
-                    if(err) console.log(err)
-                });
-                msg.reply(`Your mood has been updated to "${newMood}"`)
+               
+                addSchema1.findOne({ userID: msg.author.id }, 'mood', async function(err, myUser){
+                    if(err) return console.log(err)
+
+                    if(!myUser){
+                        const upSchema = new addSchema1({
+                            _id: mongoose.Types.ObjectId(),
+                            username: msg.author.id,
+                            userID: msg.author.id,
+                            birthday: 0,
+                            respect: 0,
+                            mood: 0,
+                            time: msg.createdAt
+                        })
+                        await upSchema.save()
+                        .then(result => console.log(result))
+                        .catch(err => console.log(err))
+                        msg.channel.send("For first time, it'll be like this. Give it another shot 🍷")
+                    }
+                    newMood = args[1];
+                    myUser.mood = newMood
+                    myUser.save()
+                    .catch(err => console.log(err))
+                    msg.reply(`Your mood has been updated to "${newMood}"`)
+                }).catch(err => console.log(err))
+               
+               
 
             break;
             case 'cat':
@@ -247,8 +254,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
                     _id: mongoose.Types.ObjectId(),
                     username: msg.author.username,
                     userID: msg.author.id,
-                    tarUser: memberInfo.displayName,
-                    tarID: memberInfo.id,
+                    birthday: 'none',
                     motto: args[2],
                     time: msg.createdAt
                 });
@@ -260,14 +266,55 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
            break;
            case 'fetch':
                try{
-                    addSchema1.findOne({ 'tarUser':`${memberInfo.displayName}` },['tarID','tarUser','motto'], function(err,addSchema1){
+                    addSchema1.findOne({ 'userID':`${memberInfo.id}` },['birthday','respect','motto'], function(err,addSchema1){
                         if(err) return console.log(err);
+                        if(!addSchema1.userID){
+                            const upSchema = new addSchema1({
+                                _id: mongoose.Types.ObjectId(),
+                                username: msg.author.username,
+                                userID: msg.author.id,
+                                birthday: memberInfo.displayName,
+                                respect: 0,
+                                motto: 'none',
+                                time: msg.createdAt
+                            });
+                            upSchema.save()
+                            .then(result => console.log(result))
+                            .catch(err => console.log(err));
+                        }
                         msg.channel.send(`Target user : ${addSchema1.tarUser} Target ID : ${addSchema1.tarID} Target motto: ${addSchema1.motto}`);
                     });
                }catch(err){
                    console.log(err)
                }
 
+           break;
+           case 'update':
+               try{
+                    addSchema1.findOne({ 'userID':`${msg.author.id}` },'motto', function(err,addSchema1){
+                        if(err) return console.log(err);
+                        if(!addSchema1.motto){
+                            const upSchema = new addSchema1({
+                                _id: mongoose.Types.ObjectId(),
+                                username: msg.author.username,
+                                userID: msg.author.id,
+                                tarUser: memberInfo.displayName,
+                                tarID: memberInfo.id,
+                                motto: 'none',
+                                time: msg.createdAt
+                            });
+                            upSchema.save()
+                            .then(result => console.log(result))
+                            .catch(err => console.log(err));
+                        }else{
+                            addSchema1.motto = args[1];
+                            addSchema1.save()
+                            .catch(err => console.log(err));
+                        }
+                    }).catch(err => console.log(err));
+               }catch(err){
+                   console.log(err)
+               };
            break;
         }
     };

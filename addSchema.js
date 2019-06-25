@@ -5,9 +5,9 @@
         _id: mongoose.Schema.Types.ObjectId,
         username: String,
         userID: String,
-        tarUser: String,
-        tarID: String,
-        motto: String,
+        birthday: String,
+        respect: Number,
+        mood: String,
         time: String
     });
 

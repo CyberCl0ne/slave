@@ -10,8 +10,8 @@ const talkedRecently = new Set();
 const emotes = require('./emotes.js');
 const commands = require('./commands');
 const mongoose = require('mongoose');
-const uri = "mongodb+srv://jiman:left4dead!@cluster0-h9ref.mongodb.net/test"
-
+const uri = "mongodb+srv://jiman:left4dead!@cluster0-h9ref.mongodb.net/test?retryWrites=true&w=majority"; 
+const addScheme1 = require('./addSchema.js')
 mongoose.connect(uri, {useNewUrlParser: true});
 
 
@@ -35,7 +35,7 @@ bot.on('guildMemberAdd', member =>{
     const channel = member.guild.channels.find(channel => channel.name === "📣announcements");
     if(!channel) return;
 
-    channel.send(`Let us welcome to our new member ${member.user} , hang tight! ${member.user} is choosing a side right now `)
+    channel.send(`Let us welcome to our new member, hang tight! ${member.user} is choosing a side right now `)
 
 });
 
@@ -137,10 +137,8 @@ bot.on('message', msg =>{
         if(msg.author.id === memberInfo1.id){
             return msg.reply("You can't give respect to yourself 😜");                                                                        //prevent users from giving respect to themselves
         };
-        if(!respects[memberInfo1.id]) respects[memberInfo1.id] = {
-            respects : 0
-        };
-        let userData3 = respects[memberInfo1.id];
+        
+       
         let compliments = ["You've proved your worthiness","A knight with shining armour","What an honor!","King Arthur himself bows down to you","May your day blessed",
             "With the highest regard","It ain't much but it honest work","You should be proud of yourself","You have impeccable manners",
             "You're more helpful than you realize","Your kindness is a balm to all who encounter it",
@@ -148,26 +146,43 @@ bot.on('message', msg =>{
             "You're a gift to those who are around you","You're breathtaking"]
         var randomCompliments = compliments[Math.floor(Math.random() * compliments.length)];                                            //randomize compliments
 
-        fs.writeFile('./reputation.json', JSON.stringify(respects), (err) =>{
-            if(err) console.log(err)
-        });
+       
         if(talkedRecently.has(msg.author.id)){
             msg.reply('You can only give one respect per day')                                                                        
         } else {
-            let a = userData3.respects;
-            userData3.respects = (++a);
-            fs.writeFile('./reputation.json', JSON.stringify(respects), (err) =>{
-                if(err) console.log(err)
-            });
-            const embed = new Discord.RichEmbed()
-            .setTitle('Respect Award')
-            .addField(`**${memberInfo1.displayName}** has been respected!🔱`, `${randomCompliments}`)
-            .setColor('FFD700')
-            .setThumbnail('https://i.redd.it/06hdr24vpiuy.png')
-            .setTimestamp()
-            .setFooter(`Respected by ${author}`, `${msg.author.avatarURL}`)
-            msg.channel.send(embed);
-            respBoard.send(embed);
+                addScheme1.findOne({ userID:memberInfo1.id }, 'respect', async function(err, myUser){
+                if(err) return console.log(err)
+                if(!myUser){
+                    const upScheme = new addScheme1({
+                        _id: mongoose.Types.ObjectId(),
+                        username: memberInfo1.displayName,
+                        userID: memberInfo1.id,
+                        birthday: 0,
+                        respect: 0,
+                        mood: 'none',
+                        time: msg.createdAt
+                    })
+                    await upScheme.save()
+                    .then(result => console.log(result))
+                    .catch(err => console.log(err))
+                    
+                }else{
+                    myUser.respect = myUser.respect + 1;
+                    myUser.save()
+                    .catch(err => console.log(err))
+                
+                    const embed = new Discord.RichEmbed()
+                    .setTitle('Respect Award')
+                    .addField(`**${memberInfo1.displayName}** has been respected!🔱`, `${randomCompliments}`)
+                    .setColor('FFD700')
+                    .setThumbnail('https://i.redd.it/06hdr24vpiuy.png')
+                    .setTimestamp()
+                    .setFooter(`Respected by ${author}`, `${msg.author.avatarURL}`)
+                    msg.channel.send(embed);
+                    respBoard.send(embed);
+                }
+            })
+            
 
             talkedRecently.add(msg.author.id);
             setTimeout(() => {                                          //creates a cooldown for this command
@@ -184,7 +199,7 @@ bot.on('message', msg =>{
 
     commands(msg, Discord, args, memberInfo, avatarInfo, thisChannel);
        
-    
+    mongoose.set('debug', true);
 })
 
 bot.login(config.token);
