@@ -249,7 +249,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
                     userID: msg.author.id,
                     tarUser: memberInfo.displayName,
                     tarID: memberInfo.id,
-                    motto: msg.content.slice(args[0].length),
+                    motto: args[2],
                     time: msg.createdAt
                 });
                 upSchema.save()
