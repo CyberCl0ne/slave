@@ -7,6 +7,7 @@
         userID: String,
         tarUser: String,
         tarID: String,
+        motto: String,
         time: String
     });
 

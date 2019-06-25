@@ -12,13 +12,7 @@ const commands = require('./commands');
 const mongoose = require('mongoose');
 const uri = "mongodb+srv://jiman:left4dead!@cluster0-h9ref.mongodb.net/test"
 
-mongoose.connect(uri, function(err, client){
-    if(err){
-        console.log('Error while connecting mongodb atlas..\n', err)
-    }
-    console.log('connected...');
-   
-})
+mongoose.connect(uri, {useNewUrlParser: true});
 
 
 
@@ -193,5 +187,5 @@ bot.on('message', msg =>{
     
 })
 
-bot.login(process.env.BOT_TOKEN);
+bot.login(config.token);
 

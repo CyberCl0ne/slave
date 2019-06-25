@@ -243,25 +243,36 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
             break;
            case 'add':
               
-                const addSchema = new addSchema1({
+                const upSchema = new addSchema1({
                     _id: mongoose.Types.ObjectId(),
                     username: msg.author.username,
                     userID: msg.author.id,
                     tarUser: memberInfo.displayName,
                     tarID: memberInfo.id,
+                    motto: msg.content.slice(args[0].length),
                     time: msg.createdAt
                 });
-                addSchema.save()
+                upSchema.save()
                 .then(result => console.log(result))
                 .catch(err => console.log(err));
 
                 msg.reply('The data has been saved')
            break;
-           
+           case 'fetch':
+               try{
+                    addSchema1.findOne({ 'tarUser':`${memberInfo.displayName}` },['tarID','tarUser','motto'], function(err,addSchema1){
+                        if(err) return console.log(err);
+                        msg.channel.send(`Target user : ${addSchema1.tarUser} Target ID : ${addSchema1.tarID} Target motto: ${addSchema1.motto}`);
+                    });
+               }catch(err){
+                   console.log(err)
+               }
+
+           break;
         }
     };
 
-       
+    
 
 
     if(args[0] == "clear"){
