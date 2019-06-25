@@ -1,8 +1,10 @@
 module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
 
+    const mongoose = require('mongoose');
     const fs = require('fs');
     let birthday = JSON.parse(fs.readFileSync('./data.json', 'utf8'));
     let mood = JSON.parse(fs.readFileSync('./mood.json', 'utf8'));
+    const addSchema1 = require('./addSchema');
     
     let respects = JSON.parse(fs.readFileSync('./reputation.json', 'utf8'));
 
@@ -239,7 +241,22 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
                 })
               
             break;
-           
+           case 'add':
+              
+                const addSchema = new addSchema1({
+                    _id: mongoose.Types.ObjectId(),
+                    username: msg.author.username,
+                    userID: msg.author.id,
+                    tarUser: memberInfo.displayName,
+                    tarID: memberInfo.id,
+                    time: msg.createdAt
+                });
+                addSchema.save()
+                .then(result => console.log(result))
+                .catch(err => console.log(err));
+
+                msg.reply('The data has been saved')
+           break;
            
         }
     };
@@ -248,7 +265,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
 
 
     if(args[0] == "clear"){
-        if(!msg.member.id(264010327023288323)) return msg.reply('Who are you?') //only me can use this command
+        if(!msg.author.id(264010327023288323)) return msg.reply('Who are you?') //only me can use this command
         if(!args[1]) return msg.reply('Error please define second arg') //number of msgs need to be deleted
         return msg.channel.bulkDelete(args[1]);
     }

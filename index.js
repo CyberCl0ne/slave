@@ -9,8 +9,16 @@ const reactions = require('./reactions.js');
 const talkedRecently = new Set();
 const emotes = require('./emotes.js');
 const commands = require('./commands');
-           
+const mongoose = require('mongoose');
+const uri = "mongodb+srv://jiman:left4dead!@cluster0-h9ref.mongodb.net/test"
 
+mongoose.connect(uri, function(err, client){
+    if(err){
+        console.log('Error while connecting mongodb atlas..\n', err)
+    }
+    console.log('connected...');
+   
+})
 
 
 
@@ -30,12 +38,18 @@ bot.on('ready', () =>{
 
 bot.on('guildMemberAdd', member =>{
 
-    const channel = member.guild.channels.find(channel => channel.name === "announcements");
+    const channel = member.guild.channels.find(channel => channel.name === "📣announcements");
     if(!channel) return;
 
-    channel.send(`Welcome to our server, ${member.user} , have a casual chat with people here! `)
+    channel.send(`Let us welcome to our new member ${member.user} , hang tight! ${member.user} is choosing a side right now `)
 
 });
+
+bot.on('guildMemberRemove', member =>{
+    const channel =  member.guild.channels.find(channel => channel.name === "📣announcements");
+    if(!channel) return;
+     channel.send(`Goodbye ${member.user}, it's hard to say goodbye `)
+})
 
 bot.on('guildMemberUpdate',(oldMember, newMember) =>{
     const channel = newMember.guild.channels.find(channel => channel.name === "📣announcements");
