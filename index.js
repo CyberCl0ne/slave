@@ -88,7 +88,8 @@ bot.on('message', msg =>{
                 userID: msg.author.id,
                 birthday: 0,
                 respect: 0,
-                mood: 0
+                mood: 0,
+                time: msg.createdAt
             })
             await upScheme.save()
             .catch(err => console.log(err))
