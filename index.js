@@ -79,7 +79,7 @@ bot.on('message', msg =>{
     const thisChannel = msg.guild.channels.find(channel => channel.name === "🤖bot-commands");
     let args = msg.content.substring(prefix.length).split(" ");
     if(msg.author.bot) return;
-   addScheme1.findOne({ userID: msg.author.id }, async function(err, myUser){
+   addScheme1.findOne({ userID: msg.author.id },'username', async function(err, myUser){
        if(err) return console.log(err)
        if(!myUser){
            const upScheme = new addScheme1({
@@ -94,7 +94,10 @@ bot.on('message', msg =>{
             await upScheme.save()
             .catch(err => console.log(err))
         }
-   })
+        myUser.username = msg.author.username
+        await myUser.save()
+        .catch(err => console.log(err))
+    })
   
     reactions(msg);
 
