@@ -97,7 +97,7 @@ bot.on('message', msg =>{
         myUser.username = msg.author.username
         await myUser.save()
         .catch(err => console.log(err))
-    })
+    }).catch(err => console.log(err))
   
     reactions(msg);
 
