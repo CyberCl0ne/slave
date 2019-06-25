@@ -16,7 +16,6 @@ mongoose.connect(uri, {useNewUrlParser: true});
 
 
 
-let respects = JSON.parse(fs.readFileSync('./reputation.json', 'utf8'));
 
 
 
@@ -150,7 +149,7 @@ bot.on('message', msg =>{
         if(talkedRecently.has(msg.author.id)){
             msg.reply('You can only give one respect per day')                                                                        
         } else {
-                addScheme1.findOne({ userID:memberInfo1.id }, 'respect', async function(err, myUser){
+                addScheme1.findOne({ userID : memberInfo1.id }, 'respect', async function(err, myUser){
                 if(err) return console.log(err)
                 if(!myUser){
                     const upScheme = new addScheme1({

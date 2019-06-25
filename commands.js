@@ -1,9 +1,8 @@
 module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
 
     const mongoose = require('mongoose');
-    const fs = require('fs');
-    let birthday = JSON.parse(fs.readFileSync('./data.json', 'utf8'));
-    let mood = JSON.parse(fs.readFileSync('./mood.json', 'utf8'));
+ 
+   
     const addSchema1 = require('./addSchema.js');
     
   
@@ -111,7 +110,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
                             if(!myUser){
                                 const upSchema = new addSchema1({
                                     _id: mongoose.Types.ObjectId(),
-                                    username: memberInfo.username,
+                                    username: memberInfo.displayName,
                                     userID: memberInfo.id,
                                     birthday: 0,
                                     respect: 0,
