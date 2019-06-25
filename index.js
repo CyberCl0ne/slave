@@ -78,7 +78,7 @@ bot.on('message', msg =>{
 
     const thisChannel = msg.guild.channels.find(channel => channel.name === "🤖bot-commands");
     let args = msg.content.substring(prefix.length).split(" ");
-    
+    if(msg.author.bot) return;
    addScheme1.findOne({ userID: msg.author.id }, async function(err, myUser){
        if(err) return console.log(err)
        if(!myUser){
@@ -98,7 +98,7 @@ bot.on('message', msg =>{
   
     reactions(msg);
 
-    if (!msg.content.startsWith(prefix) || msg.author.bot ) return;
+    if (!msg.content.startsWith(prefix)) return;
 
   
     if(!args[0]) return;
