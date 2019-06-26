@@ -10,7 +10,9 @@ const commands = require('./commands');
 const mongoose = require('mongoose');
 const uri = process.env.uri; 
 const addScheme1 = require('./addSchema.js')
-mongoose.connect('mongodb+srv://jiman:left4dead!@cluster0-h9ref.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true});
+const token = process.env.BOT_TOKEN;
+mongoose.connect(uri, {useNewUrlParser: true});
+
 
 
 
@@ -218,5 +220,5 @@ bot.on('message', msg =>{
     mongoose.set('debug', true);
 })
 
-bot.login(config.token);
+bot.login(token);
 
