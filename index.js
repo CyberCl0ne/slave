@@ -10,7 +10,7 @@ const commands = require('./commands');
 const mongoose = require('mongoose');
 const uri = process.env.uri; 
 const addScheme1 = require('./addSchema.js')
-mongoose.connect(uri, {useNewUrlParser: true});
+mongoose.connect('mongodb+srv://jiman:left4dead!@cluster0-h9ref.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true});
 
 
 
@@ -128,13 +128,14 @@ bot.on('message', msg =>{
         .addField('?info @user', 'Displays info about mentioned user', true)      
         .addField('?mood', 'Sets your current mood', true)
         .addField('?ping', 'Gives you ping result for the bot', true)
-        .addField('?respect @user ✔', 'Show your gratitude by giving them respect')
-        .addField('?shoot @user ✔', 'If you can only kill them irl', true)
-        .addField('?hug @user ✔', 'Hug a person', true)
-        .addField('?kick @user ✔', 'Kick those butts', true)
-        .addField('?slap @user ✔', 'It feels good tho', true)
-        .addField('?fart @user ✔', 'Let them smell', true)
-        .addField('Addition', '"✔" shows the commands that can be used in any channel')
+        .addField('?meme ?cat ?food', 'Gives you random image at particular channel only', true)
+        .addField('?respect @user 📌', 'Show your gratitude by giving them respect')
+        .addField('?shoot @user 📌', 'If you can only kill them irl', true)
+        .addField('?hug @user 📌', 'Hug a person', true)
+        .addField('?kick @user 📌', 'Kick those butts', true)
+        .addField('?slap @user 📌', 'It feels good tho', true)
+        .addField('?fart @user 📌', 'Let them smell', true)
+        .addField('Addition', '"📌" shows the commands that can be used in any channel')
         .setThumbnail('https://i.imgur.com/iwewYsx.png')
         .setTimestamp()
         .setColor('24E2E7')
@@ -217,5 +218,5 @@ bot.on('message', msg =>{
     mongoose.set('debug', true);
 })
 
-bot.login(process.env.BOT_TOKEN);
+bot.login(config.token);
 

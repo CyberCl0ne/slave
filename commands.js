@@ -1,10 +1,12 @@
 module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
 
     const mongoose = require('mongoose');
- 
+    const randomPuppy = require('random-puppy');
    
     const addSchema1 = require('./addSchema.js');
-    
+    const foodChannel = msg.guild.channels.find(channel => channel.name == '🍗food');
+    const catsChannel = msg.guild.channels.find(channel => channel.name == '😻cats');
+    const memeChannel = msg.guild.channels.find(channel => channel.id == '576957550251999262');
   
 
     if(msg.channel.name == thisChannel.name){
@@ -69,6 +71,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
                 dformat = [d.getDate(),d.getMonth()+1,d.getFullYear()].join('/');
 
                 var periods = {
+                    year: 12 * 30 * 24 * 60 * 1000,
                     month: 30 * 24 * 60 * 60 * 1000,
                     week: 7 * 24 * 60 * 60 * 1000,
                     day: 24 * 60 * 60 * 1000,
@@ -81,8 +84,9 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
 
                 function formatTime(msgCreated, d) {
                     var diff = msgCreated - d;
-                  
-                    if (diff > periods.month) {
+                    if(diff > periods.year){
+                      return Math.floor(diff / periods.year) + " years";
+                    }else if (diff > periods.month) {
                       // it was at least a month ago
                       return Math.floor(diff / periods.month) + " months";
                     } else if (diff > periods.week) {
@@ -114,7 +118,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
                                     userID: memberInfo.id,
                                     birthday: 0,
                                     respect: 0,
-                                    mood: 'none',
+                                    mood: 0,
                                     time: msg.createdAt
                                 });
                                 await upSchema.save()
@@ -229,25 +233,8 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
                
 
             break;
-            case 'cat':
-               
-                request.get('http://thecatapi.com/api/images/get?format=src&type=png',{
-
-                }, function(error, response, body){
-                    if(!error && response.statusCode == 200){
-                        const embed = new Discord.RichEmbed()
-                        .setImage(response.request.uri.href)
-                        .setFooter(`requested by ${msg.author.username}`)
-                        .setColor('24E2E7')
-                        .setTimestamp()
-                        return msg.channel.send(embed);
-                    } else {
-                        console.log(error)
-                    }
-                })
-              
-            break;
-           case 'add':
+            
+            case 'add':
               
                 const upSchema = new addSchema1({
                     _id: mongoose.Types.ObjectId(),
@@ -262,8 +249,8 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
                 .catch(err => console.log(err));
 
                 msg.reply('The data has been saved')
-           break;
-           case 'fetch':
+            break;
+            case 'fetch':
                try{
                     addSchema1.findOne({ 'userID':`${memberInfo.id}` },['birthday','respect','motto'], function(err,addSchema1){
                         if(err) return console.log(err);
@@ -287,8 +274,8 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
                    console.log(err)
                }
 
-           break;
-           case 'update':
+            break;
+            case 'update':
                try{
                     addSchema1.findOne({ 'userID':`${msg.author.id}` },'motto', function(err,addSchema1){
                         if(err) return console.log(err);
@@ -311,14 +298,52 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
                             .catch(err => console.log(err));
                         }
                     }).catch(err => console.log(err));
-               }catch(err){
+                  }catch(err){
                    console.log(err)
-               };
-           break;
+                };
+            break;
         }
     };
-
-    
+    if(args[0] == 'food'){
+        if(msg.channel.name == foodChannel.name){
+            msg.channel.send('Hold on...🍷')
+            .then((msg) => {
+              msg.delete(3000)
+            }).catch(err => console.log(err));
+            randomPuppy('FoodPorn').then(   
+                URL => msg.channel.send(URL)
+            ).catch(err => console.log(err));
+        }else{
+          return  msg.channel.send('🥥 #food channel please')
+        };
+    };   
+    if(args[0] == 'cat'){
+        if(msg.channel.name == catsChannel.name){
+            msg.channel.send('Hold on...🍷')
+            .then((msg) => {
+              msg.delete(3000)
+            }).catch(err => console.log(err));
+            randomPuppy('Catmemes').then(
+                URL => msg.channel.send(URL)
+            ).catch(err => console.log(err));
+        }else{
+            return msg.channel.send('Nyiaaaaaaw! use #cats channel 🐱')
+        };
+    };     
+    if(args[0] == 'meme'){
+        if(msg.channel.id == memeChannel.id){
+            msg.channel.send('Hold on...🍷')
+            .then((msg) => {
+              msg.delete(3000)
+            }).catch(err => console.log(err));
+            randomPuppy('me_irl').then(
+                URL => msg.channel.send(URL)
+            ).catch(err => console.log(err));
+        }else{
+            return msg.channel.send('Meme channel is not here')
+        };
+    };                   
+        
 
 
     if(args[0] == "clear"){
