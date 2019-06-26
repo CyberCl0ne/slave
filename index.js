@@ -9,7 +9,10 @@ const emotes = require('./emotes.js');
 const commands = require('./commands');
 const mongoose = require('mongoose');
 const uri = process.env.uri; 
-const addScheme1 = require('./addSchema.js')
+const addScheme1 = require('./addSchema.js');
+const timedPost = require('./timedPost.js');
+
+
 const token = process.env.BOT_TOKEN;
 mongoose.connect(uri, {useNewUrlParser: true});
 
@@ -100,7 +103,10 @@ bot.on('message', msg =>{
         await myUser.save()
         .catch(err => console.log(err))
     }).catch(err => console.log(err))
-  
+    
+    timedPost(msg);
+
+   
     reactions(msg);
 
     if (!msg.content.startsWith(prefix)) return;
@@ -114,7 +120,7 @@ bot.on('message', msg =>{
     
 
 
-
+        
   
 
     if(args[0] == 'help'){
@@ -166,7 +172,7 @@ bot.on('message', msg =>{
 
        
         if(talkedRecently.has(msg.author.id)){
-            msg.reply('You can only give one respect per day')                                                                        
+            msg.reply('You have used up your respect for today')                                                                        
         } else {
                 addScheme1.findOne({ userID : memberInfo1.id }, 'respect', async function(err, myUser){
                 if(err) return console.log(err)
