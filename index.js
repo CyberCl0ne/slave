@@ -8,12 +8,12 @@ const talkedRecently = new Set();
 const emotes = require('./emotes.js');
 const commands = require('./commands');
 const mongoose = require('mongoose');
-const uri = process.env.uri; 
+const uri = process.env.uri 
 const addScheme1 = require('./addSchema.js');
 const timedPost = require('./timedPost.js');
 
 
-const token = process.env.BOT_TOKEN;
+const token = process.env.BOT_TOKEN
 mongoose.connect(uri, {useNewUrlParser: true});
 
 
