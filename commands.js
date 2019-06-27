@@ -168,7 +168,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
                         .addField('Mood', `${mood}`, true)
                         .addField('Respects', `${respect} 🥇`)
                         .addField('Roles', memberInfo.roles.map(r => `${r}`).join('|'))
-                        .addField('User info', `Joined since: ${dformat} (${memberPeriod}) \n Account created on ${d1format} (${userPeriod})`)
+                        .addField('User info', `Joined since: ${dformat} (${memberPeriod}) \n Account created on: ${d1format} (${userPeriod})`)
                         .setThumbnail(`${pfp}`)
                         .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
                         .setTimestamp()
