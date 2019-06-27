@@ -191,6 +191,7 @@ bot.on('message', msg =>{
                         birthday: 0,
                         respect: 0,
                         mood: 'none',
+                        msgSent: 0,
                         time: msg.createdAt
                     })
                     await upScheme.save()
