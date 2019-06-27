@@ -8,6 +8,7 @@
         birthday: String,
         respect: Number,
         mood: String,
+        msgSent: Number,
         time: String
     });
 

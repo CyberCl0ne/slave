@@ -128,7 +128,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
         
                     
                 try{
-                    addSchema1.findOne({ userID : memberInfo.id },['userID','birthday','respect','mood'],async function(err,myUser){
+                    addSchema1.findOne({ userID : memberInfo.id },['userID','birthday','respect','mood','msgSent'],async function(err,myUser){
                         if(err) return console.log(err);
                         
                             if(!myUser){
@@ -139,6 +139,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
                                     birthday: 0,
                                     respect: 0,
                                     mood: 0,
+                                    msgSent: 0,
                                     time: msg.createdAt
                                 });
                                 await upSchema.save()
@@ -158,6 +159,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
                         let birthday = await myUser.birthday;
                         let mood = await myUser.mood;
                         let respect = await myUser.respect;
+                        let messages = await myUser.msgSent;
                         const embed = new Discord.RichEmbed()
                         
                         .setTitle('Member Information')
@@ -166,7 +168,8 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
                         .addField('Team', `${team}`, true)
                         .addField('Birthday', `${birthday}`, true)
                         .addField('Mood', `${mood}`, true)
-                        .addField('Respects', `${respect} 🥇`)
+                        .addField('Respects', `${respect} 🥇`, true)
+                        .addField('Stats', `Message: ${messages} messages`, true)
                         .addField('Roles', memberInfo.roles.map(r => `${r}`).join('|'))
                         .addField('User info', `Joined since: ${dformat} (${memberPeriod}) \n Account created on: ${d1format} (${userPeriod})`)
                         .setThumbnail(`${pfp}`)
@@ -198,6 +201,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
                             birthday: 0,
                             respect: 0,
                             mood: 'none',
+                            msgSent: 0,
                             time: msg.createdAt
                         });
                         await upSchema.save()
@@ -237,6 +241,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
                             birthday: 0,
                             respect: 0,
                             mood: 0,
+                            msgSent: 0,
                             time: msg.createdAt
                         })
                         await upSchema.save()

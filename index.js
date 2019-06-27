@@ -84,7 +84,10 @@ bot.on('message', msg =>{
     const thisChannel = msg.guild.channels.find(channel => channel.name === "🤖bot-commands");
     let args = msg.content.substring(prefix.length).split(" ");
     if(msg.author.bot) return;
-   addScheme1.findOne({ userID: msg.author.id },'username', async function(err, myUser){
+
+   
+
+   addScheme1.findOne({ userID: msg.author.id },['username','msgSent','birthday','respect','mood','msgSent'], async function(err, myUser){
        if(err) return console.log(err)
        if(!myUser){
            const upScheme = new addScheme1({
@@ -94,11 +97,13 @@ bot.on('message', msg =>{
                 birthday: 0,
                 respect: 0,
                 mood: 0,
+                msgSent: 0,
                 time: msg.createdAt
             })
             await upScheme.save()
             .catch(err => console.log(err))
         }
+        myUser.msgSent = myUser.msgSent + 1
         myUser.username = msg.author.username
         await myUser.save()
         .catch(err => console.log(err))
@@ -118,7 +123,9 @@ bot.on('message', msg =>{
     emotes(msg, args, memberInfo, Discord);
   
     
-
+    if(msg.mentions.everyone){
+        msg.reply("OWowowow slow down mate. That's illegal");
+    }
 
         
   
