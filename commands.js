@@ -67,11 +67,13 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
                 if(memberInfo.joinedAt == undefined) return;
 
                 var pfp = avatarInfo.avatarURL
-                var d = new Date(memberInfo.joinedAt),
+                var d = new Date(memberInfo.joinedAt)
+                var d1 = new Date(avatarInfo.createdAt)
                 dformat = [d.getDate(),d.getMonth()+1,d.getFullYear()].join('/');
+                d1format = [d1.getDate(),d.getMonth()+1,d1.getFullYear()].join('/');
 
                 var periods = {
-                    year: 12 * 30 * 24 * 60 * 1000,
+                    year: 12 * 30 * 24 * 60 * 60 * 1000,
                     month: 30 * 24 * 60 * 60 * 1000,
                     week: 7 * 24 * 60 * 60 * 1000,
                     day: 24 * 60 * 60 * 1000,
@@ -81,6 +83,24 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
 
                 var msgCreated = Date.now(msg.channel.createdAt)
                 
+                function formatTime1(msgCreated, d1) {
+                    var diff = msgCreated - d1;
+                    if(diff > periods.year){
+                      return Math.floor(diff / periods.year) + " years";
+                    }else if (diff > periods.month) {
+                      // it was at least a month ago
+                      return Math.floor(diff / periods.month) + " months";
+                    } else if (diff > periods.week) {
+                      return Math.floor(diff / periods.week) + " weeks";
+                    } else if (diff > periods.day) {
+                      return Math.floor(diff / periods.day) + " days";
+                    } else if (diff > periods.hour) {
+                      return Math.floor(diff / periods.hour) + " hours";
+                    } else if (diff > periods.minute) {
+                      return Math.floor(diff / periods.minute) + " minutes";
+                    }
+                    return;
+                }
 
                 function formatTime(msgCreated, d) {
                     var diff = msgCreated - d;
@@ -132,13 +152,14 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
                             var team = myRole
                         }else if (memberInfo.roles.has(sgRole.id)){
                             var team = sgRole
-                        }else return;   
+                        }else return;
+                        var userPeriod = formatTime1(msgCreated, d1)   
                         var memberPeriod = formatTime(msgCreated, d)
                         let birthday = await myUser.birthday;
                         let mood = await myUser.mood;
                         let respect = await myUser.respect;
                         const embed = new Discord.RichEmbed()
-                    
+                        
                         .setTitle('Member Information')
                         .setColor(`${memberInfo.displayHexColor}`)
                         .addField('Name', `${memberInfo.displayName}`, true)
@@ -147,7 +168,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
                         .addField('Mood', `${mood}`, true)
                         .addField('Respects', `${respect} 🥇`)
                         .addField('Roles', memberInfo.roles.map(r => `${r}`).join('|'))
-                        .addField('Joined since', `${dformat} (${memberPeriod})`)
+                        .addField('User info', `Joined since: ${dformat} (${memberPeriod}) \n Account created on ${d1format} (${userPeriod})`)
                         .setThumbnail(`${pfp}`)
                         .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
                         .setTimestamp()
@@ -304,6 +325,8 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
             break;
         }
     };
+   
+
     if(args[0] == 'food'){
         if(msg.channel.name == foodChannel.name){
             msg.channel.send('Hold on...🍷')
@@ -324,7 +347,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
               msg.delete(3000)
             }).catch(err => console.log(err));
             randomPuppy('Catmemes').then(
-                URL => msg.channel.send(URL)
+              URL => msg.channel.send(URL)
             ).catch(err => console.log(err));
         }else{
             return msg.channel.send('Nyiaaaaaaw! use #cats channel 🐱')

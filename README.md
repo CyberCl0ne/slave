@@ -1,7 +1,7 @@
 # slave
 UN[SG-MY] Discord Bot (discord.js)
 
-features
+features  
 -Team profile
 -User profile
 -Announce when new user joined a specifed role

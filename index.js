@@ -1,8 +1,8 @@
 const Discord = require('discord.js');
 const bot = new Discord.Client();
-const config = require('./config.json');
-const prefix = "?";
 
+const prefix = "?";
+const config = require('./config.json');
 const reactions = require('./reactions.js');
 const talkedRecently = new Set();
 const emotes = require('./emotes.js');
