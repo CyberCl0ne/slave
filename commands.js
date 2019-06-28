@@ -1,13 +1,15 @@
-module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
+module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel,) => {
 
     const mongoose = require('mongoose');
     const randomPuppy = require('random-puppy');
    
+    
     const addSchema1 = require('./addSchema.js');
     const foodChannel = msg.guild.channels.find(channel => channel.name == '🍗food');
     const catsChannel = msg.guild.channels.find(channel => channel.name == '😻cats');
     const memeChannel = msg.guild.channels.find(channel => channel.id == '576957550251999262');
-  
+
+    
 
     if(msg.channel.name == thisChannel.name){
         switch(args[0]){
@@ -24,10 +26,6 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
             case 'info':
                 let myRole = msg.guild.roles.find(role => role.name === "Malaysia");
                 let sgRole = msg.guild.roles.find(role => role.name === "Singapore");
-
-                
-                
-                
          
             
                 if (!args[1]){
@@ -338,9 +336,13 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
             .then((msg) => {
               msg.delete(3000)
             }).catch(err => console.log(err));
-            randomPuppy('FoodPorn').then(   
-                URL => msg.channel.send(URL)
-            ).catch(err => console.log(err));
+            randomPuppy('FoodPorn').then( URL => { 
+                var embed = new Discord.RichEmbed()
+                .setImage(URL)
+                .setTimestamp()
+                .setColor('24E2E7')
+                msg.channel.send(embed)     
+            }).catch(err => console.log(err));
         }else{
           return  msg.channel.send('🥥 #food channel please')
         };
@@ -351,9 +353,13 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
             .then((msg) => {
               msg.delete(3000)
             }).catch(err => console.log(err));
-            randomPuppy('Catmemes').then(
-              URL => msg.channel.send(URL)
-            ).catch(err => console.log(err));
+            randomPuppy('Catmemes').then( URL => {
+               var embed = new Discord.RichEmbed()
+                .setImage(URL)
+                .setTimestamp()
+                .setColor('24E2E7')
+                msg.channel.send(embed)
+            }).catch(err => console.log(err));
         }else{
             return msg.channel.send('Nyiaaaaaaw! use #cats channel 🐱')
         };
@@ -364,9 +370,13 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
             .then((msg) => {
               msg.delete(3000)
             }).catch(err => console.log(err));
-            randomPuppy('me_irl').then(
-                URL => msg.channel.send(URL)
-            ).catch(err => console.log(err));
+            randomPuppy('me_irl').then( URL => {
+                var embed = new Discord.RichEmbed()
+                .setImage(URL)
+                .setTimestamp()
+                .setColor('24E2E7')
+                msg.channel.send(embed)
+            }).catch(err => console.log(err));
         }else{
             return msg.channel.send('Meme channel is not here')
         };
@@ -375,7 +385,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
 
 
     if(args[0] == "clear"){
-        if(!msg.author.id(264010327023288323)) return msg.reply('Who are you?') //only me can use this command
+        if(msg.author.id != "264010327023288323") return msg.reply('Who are you?') //only me can use this command
         if(!args[1]) return msg.reply('Error please define second arg') //number of msgs need to be deleted
         return msg.channel.bulkDelete(args[1]);
     }

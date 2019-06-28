@@ -14,9 +14,7 @@ const timedPost = require('./timedPost.js');
 
 
 const token = process.env.BOT_TOKEN
-mongoose.connect(uri, {useNewUrlParser: true});
-
-
+mongoose.connect('mongodb+srv://jiman:left4dead!@cluster0-h9ref.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true});
 
 
 
@@ -75,6 +73,56 @@ bot.on('guildMemberUpdate',(oldMember, newMember) =>{
 
 });
 
+bot.on('raw', event => {
+    
+    var eventName = event.t;
+    if( eventName == 'MESSAGE_REACTION_ADD') {
+        if(event.d.message_id == '594124253465673739'){
+            var reactionChannel = bot.channels.get(event.d.channel_id);
+            if(reactionChannel.messages.has(event.d.message_id)) return;  //if it already cached proceed to messageReactionAdd
+            else{
+                reactionChannel.fetchMessage(event.d.message_id)            //if not it will cache the message and read the reaction at the specific message
+                .then( msg => {
+                    var msgReaction = msg.reactions.get(event.d.emoji.name + ":" + event.d.emoji.id);
+                    var user = bot.users.get(event.d.user_id);
+                    bot.emit('messageReactionAdd', msgReaction, user);
+
+                })
+                .catch(err => console.log(err));
+            }
+        }
+    }
+
+    if( eventName == 'MESSAGE_REACTION_ADD') {
+        if(event.d.message_id == '594157320485994496'){                   // for choose-side channel
+            var reactionChannel = bot.channels.get(event.d.channel_id);
+            if(reactionChannel.messages.has(event.d.message_id)) return;  //if it already cached proceed to messageReactionAdd
+            else{
+                reactionChannel.fetchMessage(event.d.message_id)            //if not it will cache the message and read the reaction at the specific message
+                .then( msg => {
+                    var msgReaction = msg.reactions.get(event.d.emoji.name + ":" + event.d.emoji.id);
+                    var user = bot.users.get(event.d.user_id);
+                    bot.emit('messageReactionAdd', msgReaction, user);
+
+                })
+                .catch(err => console.log(err));
+            }
+        }
+    }
+})
+
+bot.on('messageReactionAdd', (messageReaction, user) => {
+    var roleName = messageReaction.emoji.name;
+    var role = messageReaction.message.guild.roles.find(role => role.name.toLowerCase() === roleName.toLowerCase());
+    var member = messageReaction.message.guild.members.find(member => member.id == user.id);
+   if(role){
+       if(member){
+           member.addRole(role.id)
+           .then(console.log('Sucesss!'))
+           .catch(err => console.log(err));
+       }
+   }
+})
 
 bot.on('message', msg =>{
 
@@ -85,6 +133,7 @@ bot.on('message', msg =>{
     let args = msg.content.substring(prefix.length).split(" ");
     if(msg.author.bot) return;
 
+   
    
 
    addScheme1.findOne({ userID: msg.author.id },['username','msgSent','birthday','respect','mood','msgSent'], async function(err, myUser){
@@ -103,6 +152,7 @@ bot.on('message', msg =>{
             await upScheme.save()
             .catch(err => console.log(err))
         }
+        
         myUser.msgSent = myUser.msgSent + 1
         myUser.username = msg.author.username
         await myUser.save()
@@ -234,5 +284,7 @@ bot.on('message', msg =>{
     mongoose.set('debug', true);
 })
 
-bot.login(token);
+
+
+bot.login('NTgyMjIyMDY5MzA4MTk0ODE4.XRSUYw.xTIx6xuojGWkPULIFAUEeK2NIn0');
 

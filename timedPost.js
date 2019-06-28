@@ -6,14 +6,14 @@ const memeChannel = msg.guild.channels.find(channel => channel.id == '5769575502
 
 setTimeout(() => randomPuppy('Catmemes').then(
     URL => catsChannel.send(URL) 
-  ).catch(err => console.log(err)), 1 * 24 * 60 * 60 * 1000);
+  ).catch(err => console.log(err)), 1 * 6 * 60 * 60 * 1000);
 
   setTimeout(() => randomPuppy('Foodporn').then(
     URL => foodChannel.send(URL)
-  ).catch(err => console.log(err)), 1 * 24 * 60 * 60 * 1000);
+  ).catch(err => console.log(err)), 1 * 6 * 60 * 60 * 1000);
 
   setTimeout(() => randomPuppy('me_irl').then(
     URL =>  memeChannel.send(URL)
-  ).catch(err => console.log(err)), 1 * 24 * 60 * 60 * 1000);
+  ).catch(err => console.log(err)), 1 * 6 * 60 * 60 * 1000);
 
 };
