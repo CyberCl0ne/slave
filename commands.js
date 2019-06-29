@@ -1,13 +1,38 @@
-module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
+module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel, bot) => {
 
     const mongoose = require('mongoose');
     const randomPuppy = require('random-puppy');
    
+    
     const addSchema1 = require('./addSchema.js');
     const foodChannel = msg.guild.channels.find(channel => channel.name == '🍗food');
     const catsChannel = msg.guild.channels.find(channel => channel.name == '😻cats');
     const memeChannel = msg.guild.channels.find(channel => channel.id == '576957550251999262');
-  
+
+    if(args[0] == 'help'){
+        let myEmoji = bot.emojis.find(emoji => emoji.name === "malaysia");
+        let sgEmoji = bot.emojis.find(emoji => emoji.name === "singapore");
+    
+    
+        const embed = new Discord.RichEmbed()
+        .setTitle('Bot Commands')
+        .addField('?info Malaysia', `Displays info about Malaysia team ${myEmoji}`, true )
+        .addField('?info Singapore', `Displays info about Singapore team ${sgEmoji}`)
+        .addField('?birthday', 'Sets your birthday', true)
+        .addField('?info @user', 'Displays info about mentioned user', true)      
+        .addField('?mood', 'Sets your current mood', true)
+        .addField('?ping', 'Gives you ping result for the bot', true)
+        .addField('?meme ?cat ?food', 'Gives you random image at particular channel only', true)
+        .addField('?respect @user 📌', 'Show your gratitude by giving them respect')
+        .addField('?shoot ?hug ?kick ?slap ?fart 📌', 'Emotes to spice up the chat', true)
+        .addField('Addition', '"📌" shows the commands that can be used in any channel')
+        .setThumbnail('https://i.imgur.com/iwewYsx.png')
+        .setTimestamp()
+        .setColor('24E2E7')
+        .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
+        return msg.channel.send(embed);
+
+    };
 
     if(msg.channel.name == thisChannel.name){
         switch(args[0]){
@@ -24,10 +49,6 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
             case 'info':
                 let myRole = msg.guild.roles.find(role => role.name === "Malaysia");
                 let sgRole = msg.guild.roles.find(role => role.name === "Singapore");
-
-                
-                
-                
          
             
                 if (!args[1]){
@@ -67,11 +88,13 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
                 if(memberInfo.joinedAt == undefined) return;
 
                 var pfp = avatarInfo.avatarURL
-                var d = new Date(memberInfo.joinedAt),
+                var d = new Date(memberInfo.joinedAt)
+                var d1 = new Date(avatarInfo.createdAt)
                 dformat = [d.getDate(),d.getMonth()+1,d.getFullYear()].join('/');
+                d1format = [d1.getDate(),d.getMonth()+1,d1.getFullYear()].join('/');
 
                 var periods = {
-                    year: 12 * 30 * 24 * 60 * 1000,
+                    year: 12 * 30 * 24 * 60 * 60 * 1000,
                     month: 30 * 24 * 60 * 60 * 1000,
                     week: 7 * 24 * 60 * 60 * 1000,
                     day: 24 * 60 * 60 * 1000,
@@ -81,6 +104,24 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
 
                 var msgCreated = Date.now(msg.channel.createdAt)
                 
+                function formatTime1(msgCreated, d1) {
+                    var diff = msgCreated - d1;
+                    if(diff > periods.year){
+                      return Math.floor(diff / periods.year) + " years";
+                    }else if (diff > periods.month) {
+                      // it was at least a month ago
+                      return Math.floor(diff / periods.month) + " months";
+                    } else if (diff > periods.week) {
+                      return Math.floor(diff / periods.week) + " weeks";
+                    } else if (diff > periods.day) {
+                      return Math.floor(diff / periods.day) + " days";
+                    } else if (diff > periods.hour) {
+                      return Math.floor(diff / periods.hour) + " hours";
+                    } else if (diff > periods.minute) {
+                      return Math.floor(diff / periods.minute) + " minutes";
+                    }
+                    return;
+                }
 
                 function formatTime(msgCreated, d) {
                     var diff = msgCreated - d;
@@ -108,7 +149,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
         
                     
                 try{
-                    addSchema1.findOne({ userID : memberInfo.id },['userID','birthday','respect','mood'],async function(err,myUser){
+                    addSchema1.findOne({ userID : memberInfo.id },['userID','birthday','respect','mood','msgSent'],async function(err,myUser){
                         if(err) return console.log(err);
                         
                             if(!myUser){
@@ -119,6 +160,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
                                     birthday: 0,
                                     respect: 0,
                                     mood: 0,
+                                    msgSent: 0,
                                     time: msg.createdAt
                                 });
                                 await upSchema.save()
@@ -132,22 +174,25 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
                             var team = myRole
                         }else if (memberInfo.roles.has(sgRole.id)){
                             var team = sgRole
-                        }else return;   
+                        }else return;
+                        var userPeriod = formatTime1(msgCreated, d1)   
                         var memberPeriod = formatTime(msgCreated, d)
                         let birthday = await myUser.birthday;
                         let mood = await myUser.mood;
                         let respect = await myUser.respect;
+                        let messages = await myUser.msgSent;
                         const embed = new Discord.RichEmbed()
-                    
+                        
                         .setTitle('Member Information')
                         .setColor(`${memberInfo.displayHexColor}`)
                         .addField('Name', `${memberInfo.displayName}`, true)
                         .addField('Team', `${team}`, true)
                         .addField('Birthday', `${birthday}`, true)
                         .addField('Mood', `${mood}`, true)
-                        .addField('Respects', `${respect} 🥇`)
+                        .addField('Respects', `${respect} 🥇`, true)
+                        .addField('Stats', `💬: ${messages} messages`, true)
                         .addField('Roles', memberInfo.roles.map(r => `${r}`).join('|'))
-                        .addField('Joined since', `${dformat} (${memberPeriod})`)
+                        .addField('User info', `Joined since: ${dformat} (${memberPeriod}) \n Account created on: ${d1format} (${userPeriod})`)
                         .setThumbnail(`${pfp}`)
                         .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
                         .setTimestamp()
@@ -177,6 +222,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
                             birthday: 0,
                             respect: 0,
                             mood: 'none',
+                            msgSent: 0,
                             time: msg.createdAt
                         });
                         await upSchema.save()
@@ -216,6 +262,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
                             birthday: 0,
                             respect: 0,
                             mood: 0,
+                            msgSent: 0,
                             time: msg.createdAt
                         })
                         await upSchema.save()
@@ -304,15 +351,21 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
             break;
         }
     };
+   
+
     if(args[0] == 'food'){
         if(msg.channel.name == foodChannel.name){
             msg.channel.send('Hold on...🍷')
             .then((msg) => {
               msg.delete(3000)
             }).catch(err => console.log(err));
-            randomPuppy('FoodPorn').then(   
-                URL => msg.channel.send(URL)
-            ).catch(err => console.log(err));
+            randomPuppy('FoodPorn').then( URL => { 
+                var embed = new Discord.RichEmbed()
+                .setImage(URL)
+                .setTimestamp()
+                .setColor('24E2E7')
+                msg.channel.send(embed)     
+            }).catch(err => console.log(err));
         }else{
           return  msg.channel.send('🥥 #food channel please')
         };
@@ -323,9 +376,13 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
             .then((msg) => {
               msg.delete(3000)
             }).catch(err => console.log(err));
-            randomPuppy('Catmemes').then(
-                URL => msg.channel.send(URL)
-            ).catch(err => console.log(err));
+            randomPuppy('Catmemes').then( URL => {
+               var embed = new Discord.RichEmbed()
+                .setImage(URL)
+                .setTimestamp()
+                .setColor('24E2E7')
+                msg.channel.send(embed)
+            }).catch(err => console.log(err));
         }else{
             return msg.channel.send('Nyiaaaaaaw! use #cats channel 🐱')
         };
@@ -336,9 +393,13 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
             .then((msg) => {
               msg.delete(3000)
             }).catch(err => console.log(err));
-            randomPuppy('me_irl').then(
-                URL => msg.channel.send(URL)
-            ).catch(err => console.log(err));
+            randomPuppy('me_irl').then( URL => {
+                var embed = new Discord.RichEmbed()
+                .setImage(URL)
+                .setTimestamp()
+                .setColor('24E2E7')
+                msg.channel.send(embed)
+            }).catch(err => console.log(err));
         }else{
             return msg.channel.send('Meme channel is not here')
         };
@@ -347,7 +408,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel) => {
 
 
     if(args[0] == "clear"){
-        if(!msg.author.id(264010327023288323)) return msg.reply('Who are you?') //only me can use this command
+        if(msg.author.id != "264010327023288323") return msg.reply('Who are you?') //only me can use this command
         if(!args[1]) return msg.reply('Error please define second arg') //number of msgs need to be deleted
         return msg.channel.bulkDelete(args[1]);
     }

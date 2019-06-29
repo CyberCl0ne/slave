@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const bot = new Discord.Client();
-const config = require('./config.json');
+
 const prefix = "?";
 
 const reactions = require('./reactions.js');
@@ -8,15 +8,14 @@ const talkedRecently = new Set();
 const emotes = require('./emotes.js');
 const commands = require('./commands');
 const mongoose = require('mongoose');
-const uri = process.env.uri; 
+const uri = process.env.uri 
 const addScheme1 = require('./addSchema.js');
 const timedPost = require('./timedPost.js');
+const colorName = ['hotpink1', 'babyblue1', 'russet1','jade1','bumblebee1','mint1','fossil1','pitchblack1','palewhite1','ferrari1','tiger1','grape1','azure1'];
 
 
-const token = process.env.BOT_TOKEN;
+const token = process.env.BOT_TOKEN
 mongoose.connect(uri, {useNewUrlParser: true});
-
-
 
 
 
@@ -28,7 +27,7 @@ bot.on('ready', () =>{
     console.log('This bot is alive!');
     bot.user.setActivity('Habbo | use ?help');
     
-
+    
     
 })
 
@@ -75,6 +74,76 @@ bot.on('guildMemberUpdate',(oldMember, newMember) =>{
 
 });
 
+bot.on('raw', event => {
+    
+    var eventName = event.t;
+    if( eventName == 'MESSAGE_REACTION_ADD') {
+        if(event.d.message_id == '594124253465673739'){                   //for colour role
+            var reactionChannel = bot.channels.get(event.d.channel_id);
+            if(reactionChannel.messages.has(event.d.message_id)) return;  //if it already cached proceed to messageReactionAdd
+            else{
+                reactionChannel.fetchMessage(event.d.message_id)            //if not it will cache the message and read the reaction at the specific message
+                .then( msg => {
+                    var msgReaction = msg.reactions.get(event.d.emoji.name + ":" + event.d.emoji.id);
+                    var user = bot.users.get(event.d.user_id);
+                    bot.emit('messageReactionAdd', msgReaction, user);
+
+                })
+                .catch(err => console.log(err));
+            }
+        }
+    }
+
+    if( eventName == 'MESSAGE_REACTION_ADD') {
+        if(event.d.message_id == '594157320485994496'){                   // for choose-side channel
+            var reactionChannel = bot.channels.get(event.d.channel_id);
+            if(reactionChannel.messages.has(event.d.message_id)) return;  //if it already cached proceed to messageReactionAdd
+            else{
+                reactionChannel.fetchMessage(event.d.message_id)            //if not it will cache the message and read the reaction at the specific message
+                .then( msg => {
+                    var msgReaction = msg.reactions.get(event.d.emoji.name + ":" + event.d.emoji.id);
+                    var user = bot.users.get(event.d.user_id);
+                    
+                    bot.emit('messageReactionAdd', msgReaction, user);
+
+                })
+                .catch(err => console.log(err));
+            }
+        }
+    }
+})
+
+
+
+bot.on('messageReactionAdd', (messageReaction, user) => {
+    var roleName = messageReaction.emoji.name;
+    var role = messageReaction.message.guild.roles.find(role => role.name.toLowerCase() === roleName.toLowerCase());
+    var member = messageReaction.message.guild.members.find(member => member.id == user.id);
+   
+   
+    
+    
+    async function giveRole(member){
+        var memberColorID = await member.colorRole.id;
+        var memberColor = await member.roles.find(r => colorName.includes(r.name));
+        console.log(memberColorID)
+        if(memberColor){
+           
+            member.removeRole(memberColorID)
+            .then(console.log('role removed'))
+            .catch(err => console.log(err));
+        }  
+        member.addRole(role.id)
+        .then(console.log('Sucesss!'))
+        .catch(err => console.log(err));
+    };
+
+   if(role){
+       if(member){
+            giveRole(member);
+        }
+    }
+})
 
 bot.on('message', msg =>{
 
@@ -84,7 +153,11 @@ bot.on('message', msg =>{
     const thisChannel = msg.guild.channels.find(channel => channel.name === "🤖bot-commands");
     let args = msg.content.substring(prefix.length).split(" ");
     if(msg.author.bot) return;
-   addScheme1.findOne({ userID: msg.author.id },'username', async function(err, myUser){
+
+   
+   
+
+   addScheme1.findOne({ userID: msg.author.id },['username','msgSent','birthday','respect','mood','msgSent'], async function(err, myUser){
        if(err) return console.log(err)
        if(!myUser){
            const upScheme = new addScheme1({
@@ -94,11 +167,14 @@ bot.on('message', msg =>{
                 birthday: 0,
                 respect: 0,
                 mood: 0,
+                msgSent: 0,
                 time: msg.createdAt
             })
             await upScheme.save()
             .catch(err => console.log(err))
         }
+        
+        myUser.msgSent = myUser.msgSent + 1
         myUser.username = msg.author.username
         await myUser.save()
         .catch(err => console.log(err))
@@ -118,39 +194,14 @@ bot.on('message', msg =>{
     emotes(msg, args, memberInfo, Discord);
   
     
-
+    if(msg.mentions.everyone){
+        msg.reply("OWowowow slow down mate. That's illegal");
+    }
 
         
   
 
-    if(args[0] == 'help'){
-        let myEmoji = bot.emojis.find(emoji => emoji.name === "malaysia");
-        let sgEmoji = bot.emojis.find(emoji => emoji.name === "singapore");
-    
-    
-        const embed = new Discord.RichEmbed()
-        .setTitle('Bot Commands')
-        .addField('?info Malaysia', `Displays info about Malaysia team ${myEmoji}`, true )
-        .addField('?info Singapore', `Displays info about Singapore team ${sgEmoji}`)
-        .addField('?birthday', 'Sets your birthday', true)
-        .addField('?info @user', 'Displays info about mentioned user', true)      
-        .addField('?mood', 'Sets your current mood', true)
-        .addField('?ping', 'Gives you ping result for the bot', true)
-        .addField('?meme ?cat ?food', 'Gives you random image at particular channel only', true)
-        .addField('?respect @user 📌', 'Show your gratitude by giving them respect')
-        .addField('?shoot @user 📌', 'If you can only kill them irl', true)
-        .addField('?hug @user 📌', 'Hug a person', true)
-        .addField('?kick @user 📌', 'Kick those butts', true)
-        .addField('?slap @user 📌', 'It feels good tho', true)
-        .addField('?fart @user 📌', 'Let them smell', true)
-        .addField('Addition', '"📌" shows the commands that can be used in any channel')
-        .setThumbnail('https://i.imgur.com/iwewYsx.png')
-        .setTimestamp()
-        .setColor('24E2E7')
-        .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
-        return msg.channel.send(embed);
-
-    }
+   
     if(args[0] == 'respect'){
         let memberInfo1 = msg.mentions.members.first();
                 
@@ -184,6 +235,7 @@ bot.on('message', msg =>{
                         birthday: 0,
                         respect: 0,
                         mood: 'none',
+                        msgSent: 0,
                         time: msg.createdAt
                     })
                     await upScheme.save()
@@ -221,10 +273,12 @@ bot.on('message', msg =>{
     if(args[0] == prefix) return;
 
 
-    commands(msg, Discord, args, memberInfo, avatarInfo, thisChannel);
+    commands(msg, Discord, args, memberInfo, avatarInfo, thisChannel, bot);
        
     mongoose.set('debug', true);
 })
+
+
 
 bot.login(token);
 
