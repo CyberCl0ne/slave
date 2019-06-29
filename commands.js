@@ -1,4 +1,4 @@
-module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel,) => {
+module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel, bot) => {
 
     const mongoose = require('mongoose');
     const randomPuppy = require('random-puppy');
@@ -9,7 +9,30 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel,) => {
     const catsChannel = msg.guild.channels.find(channel => channel.name == '😻cats');
     const memeChannel = msg.guild.channels.find(channel => channel.id == '576957550251999262');
 
+    if(args[0] == 'help'){
+        let myEmoji = bot.emojis.find(emoji => emoji.name === "malaysia");
+        let sgEmoji = bot.emojis.find(emoji => emoji.name === "singapore");
     
+    
+        const embed = new Discord.RichEmbed()
+        .setTitle('Bot Commands')
+        .addField('?info Malaysia', `Displays info about Malaysia team ${myEmoji}`, true )
+        .addField('?info Singapore', `Displays info about Singapore team ${sgEmoji}`)
+        .addField('?birthday', 'Sets your birthday', true)
+        .addField('?info @user', 'Displays info about mentioned user', true)      
+        .addField('?mood', 'Sets your current mood', true)
+        .addField('?ping', 'Gives you ping result for the bot', true)
+        .addField('?meme ?cat ?food', 'Gives you random image at particular channel only', true)
+        .addField('?respect @user 📌', 'Show your gratitude by giving them respect')
+        .addField('?shoot ?hug ?kick ?slap ?fart 📌', 'Emotes to spice up the chat', true)
+        .addField('Addition', '"📌" shows the commands that can be used in any channel')
+        .setThumbnail('https://i.imgur.com/iwewYsx.png')
+        .setTimestamp()
+        .setColor('24E2E7')
+        .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
+        return msg.channel.send(embed);
+
+    };
 
     if(msg.channel.name == thisChannel.name){
         switch(args[0]){
