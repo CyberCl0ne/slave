@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const bot = new Discord.Client();
 
 const prefix = "?";
-
+const samePerson = new Set();
 const reactions = require('./reactions.js');
 const talkedRecently = new Set();
 const emotes = require('./emotes.js');
@@ -243,7 +243,7 @@ bot.on('message', async msg =>{
 
    
     if(args[0] == 'respect'){
-        //a feature to give respect to other members
+        //A feature to give respect to other members
     
         let memberInfo1 = msg.mentions.members.first();
                 
@@ -253,8 +253,8 @@ bot.on('message', async msg =>{
         if(!memberInfo1) return msg.reply('You need to tell me which user you want to respect')
         
         if(msg.author.id === memberInfo1.id){
-            return msg.reply("You can't give respect to yourself 😜");                                                                        //prevent users from giving respect to themselves
-        };
+            return msg.reply("You can't give respect to yourself 😜");                                                                       
+        }; //prevent users from giving respect to themselves
         
        
         let compliments = ["You've proved your worthiness","A knight with shining armour","What an honor!","King Arthur himself bows down to you","May your day blessed",
@@ -262,13 +262,17 @@ bot.on('message', async msg =>{
             "You're more helpful than you realize","Your kindness is a balm to all who encounter it",
             "You're even more beautiful in the inside than you're on the outside","You're a candle in the darkness",
             "You're a gift to those who are around you","You're breathtaking"]
-        var randomCompliments = compliments[Math.floor(Math.random() * compliments.length)];                                            //randomize compliments
+        var randomCompliments = compliments[Math.floor(Math.random() * compliments.length)];                                           
+        //randomize compliments
 
-       
         if(talkedRecently.has(msg.author.id)){
-            msg.reply('You have used up your respect for today')                                                                        
-        } else {
-                addScheme1.findOne({ userID : memberInfo1.id }, 'respect', async function(err, myUser){
+            msg.channel.send('You have used up your respect for today')
+            //respect cooldown                                                                        
+        }else if(samePerson.has(memberInfo1.id)){
+            msg.channel.send("Didn't you just respected the user? 🤔")
+        }else{
+        
+            addScheme1.findOne({ userID : memberInfo1.id }, 'respect', async function(err, myUser){
                 if(err) return console.log(err)
                 if(!myUser){
                     const upScheme = new addScheme1({
@@ -301,7 +305,10 @@ bot.on('message', async msg =>{
                     respBoard.send(embed);
                 }
             })
-            
+            samePerson.add(memberInfo1.id);
+            setTimeout(() => {
+                samePerson.delete(memberInfo1.id);
+            }, 2 * 24 * 60 * 60 * 1000);
 
             talkedRecently.add(msg.author.id);
             setTimeout(() => {                                          //creates a cooldown for this command

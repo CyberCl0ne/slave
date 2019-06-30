@@ -35,7 +35,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel, bot) 
 
     };
 
-    if(msg.channel.name == thisChannel.name){
+    if(msg.channel.name == thisChannel.name || msg.channel.id === "576986467084140557"){
         switch(args[0]){
             case 'ping':
                 msg.channel.send("Pinging ...") // Placeholder for pinging ... 
@@ -356,7 +356,65 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel, bot) 
                    console.log(err)
                 };
             break;
+            case 'leaderboard':
+                
+                addSchema1.find({
+                    __v : 0
+                }).sort([
+                    ['respect','descending']
+                ]).exec((err, res) => {
+                    if(err) console.log(err)
+
+                    let embed = new Discord.RichEmbed()
+                    .setTitle('Respect Leaderboard 🏆')
+                    .setTimestamp()
+                    .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
+                    .setColor('FFD700')
+                    .setThumbnail('https://i.redd.it/06hdr24vpiuy.png')
+                    if(res.length === 0){
+                        embed.setColor('RED')
+                        embed.addField('No data found')
+
+                    }else if(res.length < 10){
+                        
+                        for(i = 0; i < res.length; i++){
+                            let member = msg.guild.members.get(res[i].userID) || "USER LEFT"
+                            if(member === "USER LEFT"){
+                                embed.addField(`${i + 1}. ${member}`, `**respects**: ${res[i].respect}`);
+                            }else if(i + 1 == 1){
+                                embed.addField(`${i + 1}. ${member.user.username} 🥇`, `**respects**: ${res[i].respect}`);
+                            }else if(i + 1 == 2){
+                                embed.addField(`${i + 1}. ${member.user.username} 🥈`, `**respects**: ${res[i].respect}`);
+                            }else if(i + 1 == 3){
+                                embed.addField(`${i + 1}. ${member.user.username} 🥉`, `**respects**: ${res[i].respect}`);
+                            }else{
+                                embed.addField(`${i + 1}. ${member.user.username}`, `**respects**: ${res[i].respect}`);
+                            }
+                        }
+
+                    }else{
+                        for(i = 0; i < 10; i++){
+                            let member = msg.guild.members.get(res[i].userID) || "USER LEFT"
+                            if(member === "USER LEFT"){
+                                embed.addField(`${i + 1}. ${member}`, `**respects**: ${res[i].respect}`);
+                            }else if(i + 1 == 1){
+                                embed.addField(`${i + 1}. ${member.user.username} 🥇`, `**respects**: ${res[i].respect}`);
+                            }else if(i + 1 == 2){
+                                embed.addField(`${i + 1}. ${member.user.username} 🥈`, `**respects**: ${res[i].respect}`);
+                            }else if(i + 1 == 3){
+                                embed.addField(`${i + 1}. ${member.user.username} 🥉`, `**respects**: ${res[i].respect}`);
+                            }else{
+                                embed.addField(`${i + 1}. ${member.user.username}`, `**respects**: ${res[i].respect}`);
+                            }
+                        }
+                    }
+                    msg.channel.send(embed);
+                })
+                
+               
+            break;
         }
+
     };
    
 
