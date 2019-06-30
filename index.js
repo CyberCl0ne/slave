@@ -13,12 +13,13 @@ const addScheme1 = require('./addSchema.js');
 const timedPost = require('./timedPost.js');
 const colorName = ['hotpink1', 'babyblue1', 'russet1','jade1','bumblebee1','mint1','fossil1','pitchblack1','palewhite1','ferrari1','tiger1','grape1','azure1'];
 const resRole = ['Malaysia', 'Singapore'];
+const respLimit = new Map();
 const { inspect } = require('util');
 
 
 const token = process.env.BOT_TOKEN
 //use config.var for security reason
-mongoose.connect("mongodb+srv://jiman:left4dead!@cluster0-h9ref.mongodb.net/test?retryWrites=true&w=majority", {useNewUrlParser: true});
+mongoose.connect(uri, {useNewUrlParser: true});
 //connect with mongoDB database
 
 
@@ -265,11 +266,18 @@ bot.on('message', async msg =>{
         var randomCompliments = compliments[Math.floor(Math.random() * compliments.length)];                                           
         //randomize compliments
 
-        if(talkedRecently.has(msg.author.id)){
+        if(!respLimit.has(msg.author.id)){
+            respLimit.set(msg.author.id, 0);
+        }else{
+            respLimit.set(msg.author.id, respLimit.get(msg.author.id) + 1)
+        }
+
+        if(respLimit.get(msg.author.id) > 3){
             msg.channel.send('You have used up your respect for today')
             //respect cooldown                                                                        
         }else if(samePerson.has(memberInfo1.id)){
-            msg.channel.send("Didn't you just respected the user? 🤔")
+            msg.channel.send("Didn't you just respect the user? 🤔")
+            //restrict from giving respect to same person for two consecutive days
         }else{
         
             addScheme1.findOne({ userID : memberInfo1.id }, 'respect', async function(err, myUser){
@@ -305,15 +313,19 @@ bot.on('message', async msg =>{
                     respBoard.send(embed);
                 }
             })
+           
+          
+
             samePerson.add(memberInfo1.id);
             setTimeout(() => {
                 samePerson.delete(memberInfo1.id);
             }, 2 * 24 * 60 * 60 * 1000);
 
-            talkedRecently.add(msg.author.id);
-            setTimeout(() => {                                          //creates a cooldown for this command
-                talkedRecently.delete(msg.author.id);
-            }, 86400000);                                               //24hrs
+            
+            setTimeout(() => {                                         
+                respLimit.delete(msg.author.id);
+            }, 86400000);
+            //24hrs                                               
         }
         return
     }
@@ -330,5 +342,5 @@ bot.on('message', async msg =>{
 
 
 
-bot.login("NTgyMjIyMDY5MzA4MTk0ODE4.XRRCbw.jleOTmTW9zv111yAhliZQ88mWls");
+bot.login(token);
 
