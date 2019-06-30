@@ -13,7 +13,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel, bot) 
         let myEmoji = bot.emojis.find(emoji => emoji.name === "malaysia");
         let sgEmoji = bot.emojis.find(emoji => emoji.name === "singapore");
     
-    
+        console.log(memberInfo);
         const embed = new Discord.RichEmbed()
         .setTitle('Bot Commands')
         .addField('?info Malaysia', `Displays info about Malaysia team ${myEmoji}`, true )
@@ -31,6 +31,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel, bot) 
         .setColor('24E2E7')
         .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
         return msg.channel.send(embed);
+        
 
     };
 
@@ -39,7 +40,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel, bot) 
             case 'ping':
                 msg.channel.send("Pinging ...") // Placeholder for pinging ... 
 			    .then((msg) => { // Resolve promise
-				msg.edit("Ping: " + (Date.now() - msg.createdTimestamp) + "ms") // Edits message with current timestamp minus timestamp of message
+				msg.edit("Ping: " + (Date.now() - msg.createdTimestamp) + "ms" +"  "+"API latency: " + Math.round(bot.ping) + "ms") // Edits message with current timestamp minus timestamp of message
 			});
                 
             break;
@@ -84,7 +85,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel, bot) 
                     };
 
                 }
-
+                
                 if(memberInfo.joinedAt == undefined) return;
 
                 var pfp = avatarInfo.avatarURL
@@ -146,7 +147,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel, bot) 
                 if(pfp == undefined){
                     var pfp = avatarInfo.defaultAvatarURL
                 }
-        
+                
                     
                 try{
                     addSchema1.findOne({ userID : memberInfo.id },['userID','birthday','respect','mood','msgSent'],async function(err,myUser){
@@ -177,8 +178,12 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel, bot) 
                         }else return;
                         var userPeriod = formatTime1(msgCreated, d1)   
                         var memberPeriod = formatTime(msgCreated, d)
+                        
                         let birthday = await myUser.birthday;
                         let mood = await myUser.mood;
+                        
+                        let roles = await memberInfo.roles.filter(r => r.name != "@everyone").map(r => r).join("|");
+
                         let respect = await myUser.respect;
                         let messages = await myUser.msgSent;
                         const embed = new Discord.RichEmbed()
@@ -191,14 +196,16 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel, bot) 
                         .addField('Mood', `${mood}`, true)
                         .addField('Respects', `${respect} 🥇`, true)
                         .addField('Stats', `💬: ${messages} messages`, true)
-                        .addField('Roles', memberInfo.roles.map(r => `${r}`).join('|'))
+                        .addField('Roles', `${roles}`)
                         .addField('User info', `Joined since: ${dformat} (${memberPeriod}) \n Account created on: ${d1format} (${userPeriod})`)
                         .setThumbnail(`${pfp}`)
                         .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
                         .setTimestamp()
+
+                        
                         return msg.channel.send(embed);
                         
-                        
+                       
                         
                     }).catch(err => console.log(err));
                 }catch(err){

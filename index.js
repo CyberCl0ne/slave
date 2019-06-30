@@ -12,10 +12,14 @@ const uri = process.env.uri
 const addScheme1 = require('./addSchema.js');
 const timedPost = require('./timedPost.js');
 const colorName = ['hotpink1', 'babyblue1', 'russet1','jade1','bumblebee1','mint1','fossil1','pitchblack1','palewhite1','ferrari1','tiger1','grape1','azure1'];
+const resRole = ['Malaysia', 'Singapore'];
+const { inspect } = require('util');
 
 
 const token = process.env.BOT_TOKEN
-mongoose.connect(uri, {useNewUrlParser: true});
+//use config.var for security reason
+mongoose.connect("mongodb+srv://jiman:left4dead!@cluster0-h9ref.mongodb.net/test?retryWrites=true&w=majority", {useNewUrlParser: true});
+//connect with mongoDB database
 
 
 
@@ -26,7 +30,7 @@ bot.on('ready', () =>{
     
     console.log('This bot is alive!');
     bot.user.setActivity('Habbo | use ?help');
-    
+    //sets the status of the bot
     
     
 })
@@ -78,14 +82,18 @@ bot.on('raw', event => {
     
     var eventName = event.t;
     if( eventName == 'MESSAGE_REACTION_ADD') {
-        if(event.d.message_id == '594124253465673739'){                   //for colour role
+        if(event.d.message_id == '594124253465673739'){
+            //to filter the event that occur on specific message
+            //this is for colour role                   
             var reactionChannel = bot.channels.get(event.d.channel_id);
             if(reactionChannel.messages.has(event.d.message_id)) return;  //if it already cached proceed to messageReactionAdd
             else{
                 reactionChannel.fetchMessage(event.d.message_id)            //if not it will cache the message and read the reaction at the specific message
                 .then( msg => {
-                    var msgReaction = msg.reactions.get(event.d.emoji.name + ":" + event.d.emoji.id);
+                    var msgReaction = msg.reactions.get(event.d.emoji.name + ":" + event.d.emoji.id); 
+                    //gets the emoji name and id
                     var user = bot.users.get(event.d.user_id);
+                    //gets the user ID that interacted with the message
                     bot.emit('messageReactionAdd', msgReaction, user);
 
                 })
@@ -93,16 +101,18 @@ bot.on('raw', event => {
             }
         }
     }
-
+    
     if( eventName == 'MESSAGE_REACTION_ADD') {
         if(event.d.message_id == '594157320485994496'){                   // for choose-side channel
             var reactionChannel = bot.channels.get(event.d.channel_id);
             if(reactionChannel.messages.has(event.d.message_id)) return;  //if it already cached proceed to messageReactionAdd
             else{
                 reactionChannel.fetchMessage(event.d.message_id)            //if not it will cache the message and read the reaction at the specific message
+                
                 .then( msg => {
                     var msgReaction = msg.reactions.get(event.d.emoji.name + ":" + event.d.emoji.id);
                     var user = bot.users.get(event.d.user_id);
+                    
                     
                     bot.emit('messageReactionAdd', msgReaction, user);
 
@@ -124,12 +134,15 @@ bot.on('messageReactionAdd', (messageReaction, user) => {
     
     
     async function giveRole(member){
-        var memberColorID = await member.colorRole.id;
-        var memberColor = await member.roles.find(r => colorName.includes(r.name));
+       
+        var memberColor =  member.roles.find(r => colorName.includes(r.name));
+        //find if the color role is from verified roles, it will remove the current role
         console.log(memberColorID)
         if(memberColor){
-           
+            var memberColorID = await member.colorRole.id;
+            //get the color role ID from the member
             member.removeRole(memberColorID)
+            //removes color role
             .then(console.log('role removed'))
             .catch(err => console.log(err));
         }  
@@ -138,28 +151,37 @@ bot.on('messageReactionAdd', (messageReaction, user) => {
         .catch(err => console.log(err));
     };
 
-   if(role){
+   if(role){ //filter the reactions that have the same name for the roles
        if(member){
-            giveRole(member);
+            giveRole(member).catch(err => console.log(err));
+            //give roles
+        
+            
         }
     }
 })
 
-bot.on('message', msg =>{
+bot.on('message', async msg =>{
 
     var memberInfo = msg.mentions.members.first();
     var avatarInfo = msg.mentions.users.first();
 
     const thisChannel = msg.guild.channels.find(channel => channel.name === "🤖bot-commands");
+    
     let args = msg.content.substring(prefix.length).split(" ");
+    //split the args with whitespace
     if(msg.author.bot) return;
+    //if the command from author return
 
    
    
 
    addScheme1.findOne({ userID: msg.author.id },['username','msgSent','birthday','respect','mood','msgSent'], async function(err, myUser){
+       //find data in mongoDB based on member ID
+       //the whole purpose of this structure is for counting the number of messages sent by the user and upload it in database
        if(err) return console.log(err)
        if(!myUser){
+           //if there's no data, it creates new data
            const upScheme = new addScheme1({
                _id: mongoose.Types.ObjectId(),
                 username: msg.author.username,
@@ -171,16 +193,20 @@ bot.on('message', msg =>{
                 time: msg.createdAt
             })
             await upScheme.save()
+            //saving the data
             .catch(err => console.log(err))
         }
         
         myUser.msgSent = myUser.msgSent + 1
+        //adds 1 to current messages sent by the user
         myUser.username = msg.author.username
+        //updates the username
         await myUser.save()
         .catch(err => console.log(err))
     }).catch(err => console.log(err))
     
     timedPost(msg);
+    
 
    
     reactions(msg);
@@ -196,19 +222,36 @@ bot.on('message', msg =>{
     
     if(msg.mentions.everyone){
         msg.reply("OWowowow slow down mate. That's illegal");
+        //shout at member who mass mentions
     }
 
-        
-  
+    if(args[0] == "eval"){
+        if(msg.author.id != '264010327023288323') return msg.channel.send("You don't have the permission to execute the command.~");
+        //eval command for testing purposes
+
+        let evaled;
+        try{
+            evaled = await eval(args[1]);
+            msg.channel.send(inspect(evaled));
+            console.log(inspect(evaled));
+        }catch{
+            console.log(err);
+            msg.channel.send("There was an error during evaluation.");
+        }
+    }
+ 
 
    
     if(args[0] == 'respect'){
+        //a feature to give respect to other members
+    
         let memberInfo1 = msg.mentions.members.first();
                 
         let author = msg.guild.members.get(msg.author.id).displayName;
         const respBoard = msg.guild.channels.find( channel => channel.name == '🏅respect-board');
     
         if(!memberInfo1) return msg.reply('You need to tell me which user you want to respect')
+        
         if(msg.author.id === memberInfo1.id){
             return msg.reply("You can't give respect to yourself 😜");                                                                        //prevent users from giving respect to themselves
         };
@@ -275,10 +318,10 @@ bot.on('message', msg =>{
 
     commands(msg, Discord, args, memberInfo, avatarInfo, thisChannel, bot);
        
-    mongoose.set('debug', true);
+    
 })
 
 
 
-bot.login(token);
+bot.login("NTgyMjIyMDY5MzA4MTk0ODE4.XRRCbw.jleOTmTW9zv111yAhliZQ88mWls");
 
