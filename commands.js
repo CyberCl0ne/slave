@@ -142,7 +142,30 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel, bot) 
                     }
                     return;
                 }
-               
+                
+                function convert(a){
+                    console.log(a)
+                    if (a > periods.hour){
+                        var hour = Math.floor(a / periods.hour);
+                        var remainder = a - hour * periods.hour;
+                        if(remainder > periods.minute){
+                            var mins = Math.floor(remainder / periods.minute);
+                        }else{
+                            var mins = 0
+                        }
+                        return `🔊: ${hour} hours, ${mins} mins `
+                    }else if (a > periods.minute){
+                        var hour = 0;
+                        var mins = Math.floor(a / periods.minute);
+                        return `🔊: ${hour} hours, ${mins} mins `
+                    }else{
+                        var hour = 0;
+                        var mins = 0;
+                        return `🔊: ${hour} hours, ${mins} mins `
+                    }
+                  
+                   
+                }
                 
                 if(pfp == undefined){
                     var pfp = avatarInfo.defaultAvatarURL
@@ -150,7 +173,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel, bot) 
                 
                     
                 try{
-                    addSchema1.findOne({ userID : memberInfo.id },['userID','birthday','respect','mood','msgSent'],async function(err,myUser){
+                    addSchema1.findOne({ userID : memberInfo.id },['userID','birthday','respect','mood','msgSent','vcTime'],async function(err,myUser){
                         if(err) return console.log(err);
                         
                             if(!myUser){
@@ -162,6 +185,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel, bot) 
                                     respect: 0,
                                     mood: 0,
                                     msgSent: 0,
+                                    vcTime: 0,
                                     time: msg.createdAt
                                 });
                                 await upSchema.save()
@@ -184,6 +208,11 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel, bot) 
                         
                         let roles = await memberInfo.roles.filter(r => r.name != "@everyone").map(r => r).join("|");
 
+                        var time = await myUser.vcTime;
+                        
+                       
+
+                   
                         let respect = await myUser.respect;
                         let messages = await myUser.msgSent;
                         const embed = new Discord.RichEmbed()
@@ -195,7 +224,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel, bot) 
                         .addField('Birthday', `${birthday}`, true)
                         .addField('Mood', `${mood}`, true)
                         .addField('Respects', `${respect} 🥇`, true)
-                        .addField('Stats', `💬: ${messages} messages`, true)
+                        .addField('Stats', `💬: ${messages} messages \n ${convert(time)}`, true)
                         .addField('Roles', `${roles}`)
                         .addField('User info', `Joined since: ${dformat} (${memberPeriod}) \n Account created on: ${d1format} (${userPeriod})`)
                         .setThumbnail(`${pfp}`)
@@ -230,6 +259,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel, bot) 
                             respect: 0,
                             mood: 'none',
                             msgSent: 0,
+                            vcTime: 0,
                             time: msg.createdAt
                         });
                         await upSchema.save()
@@ -270,6 +300,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel, bot) 
                             respect: 0,
                             mood: 0,
                             msgSent: 0,
+                            vcTime: 0,
                             time: msg.createdAt
                         })
                         await upSchema.save()

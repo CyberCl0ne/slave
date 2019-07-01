@@ -9,6 +9,7 @@
         respect: Number,
         mood: String,
         msgSent: Number,
+        vcTime: Number,
         time: String
     });
 

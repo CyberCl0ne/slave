@@ -15,7 +15,7 @@ const colorName = ['hotpink1', 'babyblue1', 'russet1','jade1','bumblebee1','mint
 const resRole = ['Malaysia', 'Singapore'];
 const respLimit = new Map();
 const { inspect } = require('util');
-
+const joinChannel = new Map();
 
 const token = process.env.BOT_TOKEN
 //use config.var for security reason
@@ -78,6 +78,45 @@ bot.on('guildMemberUpdate',(oldMember, newMember) =>{
     
 
 });
+mongoose.set('useFindAndModify', false);
+
+bot.on('voiceStateUpdate', (oldMember, newMember) => {
+    var newUserChannel = newMember.voiceChannel
+    var oldUserChannel = oldMember.voiceChannel
+    if(oldUserChannel === undefined && newUserChannel !== undefined){
+        joinChannel.set(newMember.id, (new Date).getTime());
+    }else if(newUserChannel === undefined){
+        
+        var timeStamp = (new Date).getTime() - joinChannel.get(newMember.id); 
+    
+        var newValue =  { $set: { vcTime : timeStamp}};
+        console.log(timeStamp)
+        addScheme1.findOneAndUpdate({ userID : newMember.id}, newValue,(err, res) => {
+            console.log(err);
+            if(!res){
+                const upScheme = new addScheme1({
+                    _id: mongoose.Types.ObjectId(),
+                    username: newMember.user.username,
+                    userID: newMember.user.id,
+                    birthday: 0,
+                    respect: 0,
+                    mood: 0,
+                    msgSent: 0,
+                    vcTime: timeStamp,
+                    time: new Date()
+                })
+                upScheme.save()
+                .catch(err => console.log(err))
+            }
+
+            res.vcTime = res.vcTime + timeStamp
+            res.save()
+            .catch(err => console.log(err))
+        }).catch(err => console.log(err))
+
+        joinChannel.delete(newMember.id);
+    }
+})
 
 bot.on('raw', event => {
     
@@ -87,9 +126,11 @@ bot.on('raw', event => {
             //to filter the event that occur on specific message
             //this is for colour role                   
             var reactionChannel = bot.channels.get(event.d.channel_id);
-            if(reactionChannel.messages.has(event.d.message_id)) return;  //if it already cached proceed to messageReactionAdd
+            if(reactionChannel.messages.has(event.d.message_id)) return; 
+             //if it already cached proceed to messageReactionAdd
             else{
-                reactionChannel.fetchMessage(event.d.message_id)            //if not it will cache the message and read the reaction at the specific message
+                reactionChannel.fetchMessage(event.d.message_id)
+                //if not it will cache the message and read the reaction at the specific message          
                 .then( msg => {
                     var msgReaction = msg.reactions.get(event.d.emoji.name + ":" + event.d.emoji.id); 
                     //gets the emoji name and id
@@ -104,12 +145,14 @@ bot.on('raw', event => {
     }
     
     if( eventName == 'MESSAGE_REACTION_ADD') {
-        if(event.d.message_id == '594157320485994496'){                   // for choose-side channel
+        if(event.d.message_id == '594157320485994496'){
+            // for choose-side channel                   
             var reactionChannel = bot.channels.get(event.d.channel_id);
-            if(reactionChannel.messages.has(event.d.message_id)) return;  //if it already cached proceed to messageReactionAdd
+            if(reactionChannel.messages.has(event.d.message_id)) return;
+            //if it already cached proceed to messageReactionAdd  
             else{
-                reactionChannel.fetchMessage(event.d.message_id)            //if not it will cache the message and read the reaction at the specific message
-                
+                reactionChannel.fetchMessage(event.d.message_id)           
+                //if not it will cache the message and read the reaction at the specific message
                 .then( msg => {
                     var msgReaction = msg.reactions.get(event.d.emoji.name + ":" + event.d.emoji.id);
                     var user = bot.users.get(event.d.user_id);
@@ -191,6 +234,7 @@ bot.on('message', async msg =>{
                 respect: 0,
                 mood: 0,
                 msgSent: 0,
+                vcTime: 0,
                 time: msg.createdAt
             })
             await upScheme.save()
@@ -273,7 +317,7 @@ bot.on('message', async msg =>{
         }
 
         if(respLimit.get(msg.author.id) > 3){
-            msg.channel.send('You have used up your respect for today')
+            msg.channel.send('You have used up all your respects for today')
             //respect cooldown                                                                        
         }else if(samePerson.has(memberInfo1.id)){
             msg.channel.send("Didn't you just respect the user? 🤔")
@@ -281,8 +325,10 @@ bot.on('message', async msg =>{
         }else{
         
             addScheme1.findOne({ userID : memberInfo1.id }, 'respect', async function(err, myUser){
+                //fetch database info from mongoDB
                 if(err) return console.log(err)
                 if(!myUser){
+                    //creates default data for user
                     const upScheme = new addScheme1({
                         _id: mongoose.Types.ObjectId(),
                         username: memberInfo1.displayName,
@@ -290,7 +336,8 @@ bot.on('message', async msg =>{
                         birthday: 0,
                         respect: 0,
                         mood: 'none',
-                        msgSent: 0,
+                        msgSent: 1,
+                        vcTime: 0,
                         time: msg.createdAt
                     })
                     await upScheme.save()
@@ -298,7 +345,9 @@ bot.on('message', async msg =>{
                     .catch(err => console.log(err))
                     
                 }else{
+                    
                     myUser.respect = myUser.respect + 1;
+                    //add 1 point for the user
                     myUser.save()
                     .catch(err => console.log(err))
                 
@@ -310,22 +359,28 @@ bot.on('message', async msg =>{
                     .setTimestamp()
                     .setFooter(`Respected by ${author}`, `${msg.author.avatarURL}`)
                     msg.channel.send(embed);
+                    //sends message to the channel that they have been respected
                     respBoard.send(embed);
+                    //sends message to respect board channel
                 }
             })
            
           
 
             samePerson.add(memberInfo1.id);
+            //add user ID in variable
             setTimeout(() => {
                 samePerson.delete(memberInfo1.id);
             }, 2 * 24 * 60 * 60 * 1000);
+            //24 hours
+            //sets timeout to clear the userID
 
             
             setTimeout(() => {                                         
                 respLimit.delete(msg.author.id);
             }, 86400000);
-            //24hrs                                               
+            //24hrs    
+            //3 respects per day                                           
         }
         return
     }
