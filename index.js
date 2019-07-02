@@ -19,7 +19,7 @@ const joinChannel = new Map();
 
 const token = process.env.BOT_TOKEN
 //use config.var for security reason
-mongoose.connect(uri, {useNewUrlParser: true});
+mongoose.connect( "mongodb+srv://jiman:left4dead!@cluster0-h9ref.mongodb.net/test?retryWrites=true&w=majority", {useNewUrlParser: true});
 //connect with mongoDB database
 
 
@@ -91,7 +91,7 @@ bot.on('voiceStateUpdate', (oldMember, newMember) => {
     
         var newValue =  { $set: { vcTime : timeStamp}};
         console.log(timeStamp)
-        addScheme1.findOneAndUpdate({ userID : newMember.id}, newValue,(err, res) => {
+        addScheme1.findOneAndUpdate({ userID : newMember.id}, newValue, ["vcTime"],(err, res) => {
             console.log(err);
             if(!res){
                 const upScheme = new addScheme1({
@@ -397,5 +397,5 @@ bot.on('message', async msg =>{
 
 
 
-bot.login(token);
+bot.login("NTgyMjIyMDY5MzA4MTk0ODE4.XRRCbw.jleOTmTW9zv111yAhliZQ88mWls");
 
