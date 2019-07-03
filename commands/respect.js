@@ -2,6 +2,12 @@ module.exports = {
     name: 'respect',
     description: 'give respect to other user',
     execute(msg, respLimit, samePerson){
+       
+        
+        var respLimit = new Map();
+        const Discord = require('discord.js');
+        var samePerson = new Set();
+
         const addSchema1 = require('../addSchema.js');
 
         //A feature to give respect to other members

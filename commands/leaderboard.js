@@ -45,7 +45,7 @@ module.exports = {
                 for(i = 0; i < 10; i++){
                     let member = msg.guild.members.get(res[i].userID) || "USER LEFT"
                     if(member === "USER LEFT"){
-                        list.push(` ${i + 1}. ${member} ${res[i].respect}`); 
+                        list.push(` ${i + 1}. ${member} | ${res[i].respect}`); 
                     }else if(i + 1 == 1){
                         list.push(` ${i + 1}. ${member.user.username} 🥇 | ${res[i].respect}`);
                     }else if(i + 1 == 2){

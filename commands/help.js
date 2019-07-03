@@ -1,13 +1,13 @@
 module.exports = {
     name: 'help',
     description: 'Provides list of commands',
-    execute(msg, bot){
+    execute(msg){
         var Discord = require('discord.js');
-
+        var bot = new Discord.Client();
         let myEmoji = bot.emojis.find(emoji => emoji.name === "malaysia");
         let sgEmoji = bot.emojis.find(emoji => emoji.name === "singapore");
     
-        console.log(memberInfo);
+       
         const embed = new Discord.RichEmbed()
         .setTitle('Bot Commands')
         .addField('?info Malaysia', `Displays info about Malaysia team ${myEmoji}`, true )

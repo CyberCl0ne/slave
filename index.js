@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 const bot = new Discord.Client();
 bot.commands = new Discord.Collection();
 const prefix = "?";
+const respLimit = new Map();
 const samePerson = new Set();
 const reactions = require('./reactions.js');
 
@@ -14,7 +15,7 @@ const addSchema1 = require('./addSchema.js');
 const timedPost = require('./timedPost.js');
 const colorName = ['hotpink1', 'babyblue1', 'russet1','jade1','bumblebee1','mint1','fossil1','pitchblack1','palewhite1','ferrari1','tiger1','grape1','azure1'];
 const resRole = ['Malaysia', 'Singapore'];
-const respLimit = new Map();
+
 const { inspect } = require('util');
 const joinChannel = new Map();
 
@@ -59,7 +60,7 @@ bot.on('guildMemberAdd', member =>{
 bot.on('guildMemberRemove', member =>{
     const channel =  member.guild.channels.find(channel => channel.name === "📣announcements");
     if(!channel) return;
-     channel.send(`Goodbye ${member.user}, it's hard to say goodbye `)
+    channel.send(`Goodbye ${member.user}, it's hard to say goodbye `)
 })
 
 bot.on('guildMemberUpdate',(oldMember, newMember) =>{
@@ -101,8 +102,9 @@ bot.on('voiceStateUpdate', (oldMember, newMember) => {
         var timeStamp = (new Date).getTime() - joinChannel.get(newMember.id); 
     
         var newValue =  { $set: { vcTime : timeStamp}};
+
        
-        addSchema1.findOneAndUpdate({ userID : newMember.id}, newValue, ["vcTime"],(err, res) => {
+        addSchema1.findOneAndUpdate({ userID : newMember.id}, newValue, ["vcTime"],async function(err, res) {
             console.log(err);
             if(!res){
                 const upScheme = new addSchema1({
@@ -119,9 +121,15 @@ bot.on('voiceStateUpdate', (oldMember, newMember) => {
                 upScheme.save()
                 .catch(err => console.log(err))
             }
-
-            res.vcTime = res.vcTime + timeStamp
+            var vcTime1 = await res.vcTime
+            console.log(vcTime1)
+            var add = vcTime1 + timeStamp;
+            res.vcTime =  add
+            
+            console.log(add)
             res.save()
+
+
             .catch(err => console.log(err))
         }).catch(err => console.log(err))
 
@@ -182,8 +190,11 @@ bot.on('raw', event => {
 
 bot.on('messageReactionAdd', (messageReaction, user) => {
     var roleName = messageReaction.emoji.name;
+    //fetch emoji reaction name
     var role = messageReaction.message.guild.roles.find(role => role.name.toLowerCase() === roleName.toLowerCase());
+    //find emoji in guild that matches the name
     var member = messageReaction.message.guild.members.find(member => member.id == user.id);
+    //get the id of member that reacted to the message
    
    
     
@@ -228,12 +239,15 @@ bot.on('message', async msg =>{
     const command = bot.commands.get(args[0]);
 
     var memberInfo = msg.mentions.members.first();
+    //fetch member property
     var avatarInfo = msg.mentions.users.first();
+    //fetch user property
 
     const thisChannel = msg.guild.channels.find(channel => channel.name === "🤖bot-commands");
 
     try{
         command.execute(msg, args, memberInfo, avatarInfo, bot, thisChannel, avatarInfo, addSchema1, mongoose, samePerson, respLimit);
+        //executes commands
     }catch(err){
         console.log(err)
         msg.channel.send('There was an error trying to execute the command!');
