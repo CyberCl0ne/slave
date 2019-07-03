@@ -4,7 +4,7 @@ const foodChannel = msg.guild.channels.find(channel => channel.name == '🍗food
 const catsChannel = msg.guild.channels.find(channel => channel.name == '😻cats');
 const memeChannel = msg.guild.channels.find(channel => channel.id == '576957550251999262');
 
-setTimeout(() => randomPuppy('Catmemes').then( URL =>{
+setTimeout(() => randomPuppy('Catmemes').then( URL => {
   var embed = new Discord.Richembed()
   .setImage(URL)
   .setTimestamp()

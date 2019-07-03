@@ -1,0 +1,207 @@
+module.exports = {
+    name: 'info',
+    description: 'sends info',
+    execute(msg, args, memberInfo, avatarInfo, thisChannel){
+        var myRole = msg.guild.roles.find(role => role.name === `Malaysia`);
+        var sgRole = msg.guild.roles.find(role => role.name === `Singapore`);
+
+        const mongoose = require('mongoose');
+
+        const Discord = require('discord.js');
+
+        const addSchema1 = require('../addSchema.js');
+        
+        if(msg.channel.name != thisChannel.name || msg.channel.id != "576986467084140557") return msg.reply('Please use the correct channel');
+    
+        if (!args[1]){
+            return msg.reply('You need to specify which team or user')
+        }
+
+        if(!memberInfo){
+            
+            if (args[1] == myRole.name ){
+               
+                const embed = new Discord.RichEmbed()
+                .setTitle('Team Information')
+                .addField('Region', 'Malaysia')
+                .setTimestamp()
+                .setThumbnail('https://i.imgur.com/0ZK52WE.png')
+                .setColor('4286f4')
+                .addField('Member', myRole.members.size)
+                .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
+                .setTimestamp()
+                return msg.channel.send(embed);
+            };
+
+            if (args[1] == sgRole.name ){
+                
+                const embed = new Discord.RichEmbed()
+                .setTitle('Team Information')
+                .addField('Region', 'Singapore')
+                .setTimestamp()
+                .setThumbnail('https://i.imgur.com/x3KTH7M.png')
+                .setColor('ff2121')
+                .addField('Member', sgRole.members.size)
+                .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
+                .setTimestamp()
+                return msg.channel.send(embed);
+            };
+
+        }
+        
+        if(memberInfo.joinedAt == undefined) return;
+
+        var pfp = avatarInfo.avatarURL
+        var d = new Date(memberInfo.joinedAt)
+        var d1 = new Date(avatarInfo.createdAt)
+        dformat = [d.getDate(),d.getMonth()+1,d.getFullYear()].join('/');
+        d1format = [d1.getDate(),d.getMonth()+1,d1.getFullYear()].join('/');
+
+        var periods = {
+            year: 12 * 30 * 24 * 60 * 60 * 1000,
+            month: 30 * 24 * 60 * 60 * 1000,
+            week: 7 * 24 * 60 * 60 * 1000,
+            day: 24 * 60 * 60 * 1000,
+            hour: 60 * 60 * 1000,
+            minute: 60 * 1000
+        };
+
+        var msgCreated = Date.now(msg.channel.createdAt)
+        
+        function formatTime1(msgCreated, d1) {
+            var diff = msgCreated - d1;
+            if(diff > periods.year){
+              return Math.floor(diff / periods.year) + " years";
+            }else if (diff > periods.month) {
+              // it was at least a month ago
+              return Math.floor(diff / periods.month) + " months";
+            } else if (diff > periods.week) {
+              return Math.floor(diff / periods.week) + " weeks";
+            } else if (diff > periods.day) {
+              return Math.floor(diff / periods.day) + " days";
+            } else if (diff > periods.hour) {
+              return Math.floor(diff / periods.hour) + " hours";
+            } else if (diff > periods.minute) {
+              return Math.floor(diff / periods.minute) + " minutes";
+            }
+            return;
+        }
+
+        function formatTime(msgCreated, d) {
+            var diff = msgCreated - d;
+            if(diff > periods.year){
+              return Math.floor(diff / periods.year) + " years";
+            }else if (diff > periods.month) {
+              // it was at least a month ago
+              return Math.floor(diff / periods.month) + " months";
+            } else if (diff > periods.week) {
+              return Math.floor(diff / periods.week) + " weeks";
+            } else if (diff > periods.day) {
+              return Math.floor(diff / periods.day) + " days";
+            } else if (diff > periods.hour) {
+              return Math.floor(diff / periods.hour) + " hours";
+            } else if (diff > periods.minute) {
+              return Math.floor(diff / periods.minute) + " minutes";
+            }
+            return;
+        }
+        
+        function convert(a){
+            console.log(a)
+            if (a > periods.hour){
+                var hour = Math.floor(a / periods.hour);
+                var remainder = a - hour * periods.hour;
+                if(remainder > periods.minute){
+                    var mins = Math.floor(remainder / periods.minute);
+                }else{
+                    var mins = 0
+                }
+                return `🔊: ${hour} hours, ${mins} mins `
+            }else if (a > periods.minute){
+                var hour = 0;
+                var mins = Math.floor(a / periods.minute);
+                return `🔊: ${hour} hours, ${mins} mins `
+            }else{
+                var hour = 0;
+                var mins = 0;
+                return `🔊: ${hour} hours, ${mins} mins `
+            }
+          
+           
+        }
+        
+        if(pfp == undefined){
+            var pfp = avatarInfo.defaultAvatarURL
+        }
+        
+            
+        try{
+            addSchema1.findOne({ userID : memberInfo.id },['userID','birthday','respect','mood','msgSent','vcTime'],async function(err, myUser){
+                if(err) return console.log(err);
+                
+                if(!myUser){
+                    const upSchema = new addSchema1({
+                        _id: mongoose.Types.ObjectId(),
+                        username: memberInfo.displayName,
+                        userID: memberInfo.id,
+                        birthday: 0,
+                        respect: 0,
+                        mood: 0,
+                        msgSent: 0,
+                        vcTime: 0,
+                        time: msg.createdAt
+                    });
+                    await upSchema.save()
+                    .then(result => console.log(result))
+                    .catch(err => console.log(err));
+                    msg.channel.send("For first time, it'll be like this. Give it another shot 🍷")
+                };
+                
+                if(err) return console.log(err);
+                if (memberInfo.roles.has(myRole.id)){
+                    var team = myRole
+                }else if (memberInfo.roles.has(sgRole.id)){
+                    var team = sgRole
+                }else return;
+                var userPeriod = formatTime1(msgCreated, d1)   
+                var memberPeriod = formatTime(msgCreated, d)
+                
+                let birthday = await myUser.birthday;
+                let mood = await myUser.mood;
+                
+                let roles = await memberInfo.roles.filter(r => r.name != "@everyone").map(r => r).join("|");
+
+                var time = await myUser.vcTime;
+                
+               
+
+           
+                let respect = await myUser.respect;
+                let messages = await myUser.msgSent;
+                const embed = new Discord.RichEmbed()
+                
+                .setTitle('Member Information')
+                .setColor(`${memberInfo.displayHexColor}`)
+                .addField('Name', `${memberInfo.displayName}`, true)
+                .addField('Team', `${team}`, true)
+                .addField('Birthday', `${birthday}`, true)
+                .addField('Mood', `${mood}`, true)
+                .addField('Respects', `${respect} 🥇`, true)
+                .addField('Stats', `💬: ${messages} messages \n ${convert(time)}`, true)
+                .addField('Roles', `${roles}`)
+                .addField('User info', ` \` Joined since: ${dformat} (${memberPeriod}) \n Account created on: ${d1format} (${userPeriod}) \` `)
+                .setThumbnail(`${pfp}`)
+                .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
+                .setTimestamp()
+
+                
+                return msg.channel.send(embed);
+                
+               
+                
+            }).catch(err => console.log(err));
+        }catch(err){
+            console.log(err)
+        }
+    },
+};
