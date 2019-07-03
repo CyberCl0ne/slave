@@ -48,8 +48,9 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel, bot) 
                 msg.channel.send('youtube.com')
             break;
             case 'info':
-                let myRole = msg.guild.roles.find(role => role.name === "Malaysia");
-                let sgRole = msg.guild.roles.find(role => role.name === "Singapore");
+                var myRole = msg.guild.roles.find(role => role.name === `Malaysia`);
+                var sgRole = msg.guild.roles.find(role => role.name === `Singapore`);
+                
          
             
                 if (!args[1]){
@@ -57,8 +58,9 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel, bot) 
                 }
 
                 if(!memberInfo){
-
-                    if (args[1] == myRole.name){
+                    
+                    if (args[1] == myRole.name ){
+                       
                         const embed = new Discord.RichEmbed()
                         .setTitle('Team Information')
                         .addField('Region', 'Malaysia')
@@ -71,7 +73,8 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel, bot) 
                         return msg.channel.send(embed);
                     };
     
-                    if (args[1] == sgRole.name){
+                    if (args[1] == sgRole.name ){
+                        
                         const embed = new Discord.RichEmbed()
                         .setTitle('Team Information')
                         .addField('Region', 'Singapore')
@@ -226,7 +229,7 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel, bot) 
                         .addField('Respects', `${respect} 🥇`, true)
                         .addField('Stats', `💬: ${messages} messages \n ${convert(time)}`, true)
                         .addField('Roles', `${roles}`)
-                        .addField('User info', `Joined since: ${dformat} (${memberPeriod}) \n Account created on: ${d1format} (${userPeriod})`)
+                        .addField('User info', ` \` Joined since: ${dformat} (${memberPeriod}) \n Account created on: ${d1format} (${userPeriod}) \` `)
                         .setThumbnail(`${pfp}`)
                         .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
                         .setTimestamp()
@@ -397,11 +400,12 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel, bot) 
                     if(err) console.log(err)
 
                     let embed = new Discord.RichEmbed()
-                    .setTitle('Respect Leaderboard 🏆')
+                   
                     .setTimestamp()
                     .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
                     .setColor('FFD700')
                     .setThumbnail('https://i.redd.it/06hdr24vpiuy.png')
+                   
                     if(res.length === 0){
                         embed.setColor('RED')
                         embed.addField('No data found')
@@ -424,21 +428,27 @@ module.exports = (msg, Discord, args, memberInfo, avatarInfo, thisChannel, bot) 
                         }
 
                     }else{
+                        var list = []
                         for(i = 0; i < 10; i++){
                             let member = msg.guild.members.get(res[i].userID) || "USER LEFT"
                             if(member === "USER LEFT"){
-                                embed.addField(`${i + 1}. ${member}`, `**respects**: ${res[i].respect}`);
+                                list.push(` ${i + 1}. ${member} ${res[i].respect}`); 
                             }else if(i + 1 == 1){
-                                embed.addField(`${i + 1}. ${member.user.username} 🥇`, `**respects**: ${res[i].respect}`);
+                                list.push(` ${i + 1}. ${member.user.username} 🥇 | ${res[i].respect}`);
                             }else if(i + 1 == 2){
-                                embed.addField(`${i + 1}. ${member.user.username} 🥈`, `**respects**: ${res[i].respect}`);
+                                list.push(` ${i + 1}. ${member.user.username} 🥈 | ${res[i].respect}`);
                             }else if(i + 1 == 3){
-                                embed.addField(`${i + 1}. ${member.user.username} 🥉`, `**respects**: ${res[i].respect}`);
+                                list.push(` ${i + 1}. ${member.user.username} 🥉 | ${res[i].respect}`);
                             }else{
-                                embed.addField(`${i + 1}. ${member.user.username}`, `**respects**: ${res[i].respect}`);
+                                list.push(` ${i + 1}. ${member.user.username} | ${res[i].respect}`);
                             }
+                            
                         }
                     }
+                    if(userLeft === undefined){
+                        var userLeft = " "
+                    }
+                    embed.addField('Respect Leaderboard 🏆', list.join('\n'))
                     msg.channel.send(embed);
                 })
                 

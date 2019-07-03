@@ -90,7 +90,7 @@ bot.on('voiceStateUpdate', (oldMember, newMember) => {
         var timeStamp = (new Date).getTime() - joinChannel.get(newMember.id); 
     
         var newValue =  { $set: { vcTime : timeStamp}};
-        console.log(timeStamp)
+       
         addScheme1.findOneAndUpdate({ userID : newMember.id}, newValue, ["vcTime"],(err, res) => {
             console.log(err);
             if(!res){
