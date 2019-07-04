@@ -1,21 +1,25 @@
 # slave
+
+
 **UN[SG-MY] Discord Bot (discord.js)**
 
-__Features__  
-Team profile 
+A discord bot that is developed in JavaScript using discord.js library. This bot is mainly focuses on a single server and still in beta development. Not intended to use in any other server.
 
-User profile
+## __Features__  
+* Team profile 
 
-Announces when new user joined a specifed role
+* User profile
 
-Reacts to certain keyword
+* Announces when new user joined a specifed role
 
-Colour Role
+* Reacts to certain keyword
 
-Respect features
+* Colour Role
 
-Emotes
+* Respect features
 
-Sets "mood" , "birthday"
+* Emotes
 
-Fetch random image (cats, memes, food)
+* Sets "mood" , "birthday"
+
+* Fetch random image (cats, memes, food)
