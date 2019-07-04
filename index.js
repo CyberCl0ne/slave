@@ -256,8 +256,12 @@ bot.on('message', async msg =>{
     reactions(msg);
 
     emotes(msg, args, memberInfo, Discord);
+
+    if(!msg.content.startsWith(prefix)) return;
     
     if(!command) return;
+
+    
     
     if(msg.mentions.everyone){
         msg.reply("OWowowow slow down mate. That's illegal");

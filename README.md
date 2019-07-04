@@ -31,8 +31,6 @@ A discord bot that is developed in JavaScript using discord.js library. This bot
 
 ### In Development
 
-* VC time board
-
 * Team leader
 
 * Rank system and gives role 
