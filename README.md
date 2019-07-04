@@ -9,3 +9,13 @@ __Features__
 >Announces when new user joined a specifed role
 
 >Reacts to certain keyword
+
+>Colour Role
+
+>Respect features
+
+>Emotes
+
+>Sets "mood" , "birthday"
+
+>Fetch random image (cats, memes, food)
