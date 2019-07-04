@@ -2,20 +2,20 @@
 **UN[SG-MY] Discord Bot (discord.js)**
 
 __Features__  
->Team profile
+Team profile 
 
->User profile
+User profile
 
->Announces when new user joined a specifed role
+Announces when new user joined a specifed role
 
->Reacts to certain keyword
+Reacts to certain keyword
 
->Colour Role
+Colour Role
 
->Respect features
+Respect features
 
->Emotes
+Emotes
 
->Sets "mood" , "birthday"
+Sets "mood" , "birthday"
 
->Fetch random image (cats, memes, food)
+Fetch random image (cats, memes, food)
