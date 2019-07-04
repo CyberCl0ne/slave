@@ -1,7 +1,7 @@
-# slave
+# UN[SG-MY] Discord Bot (discord.js)
 
 
-**UN[SG-MY] Discord Bot (discord.js)**
+**Introduction**
 
 A discord bot that is developed in JavaScript using discord.js library. This bot is mainly focuses on a single server and still in beta development. Not intended to use in any other server.
 
