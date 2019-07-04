@@ -14,7 +14,7 @@ A discord bot that is developed in JavaScript using discord.js library. This bot
 
 * Reacts to certain keyword
 
-* Colour Role
+* Reaction role (*for colour role*)
 
 * Respect features
 
@@ -23,3 +23,5 @@ A discord bot that is developed in JavaScript using discord.js library. This bot
 * Sets "mood" , "birthday"
 
 * Fetch random image (cats, memes, food)
+
+
