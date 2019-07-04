@@ -30,7 +30,7 @@ A discord bot that is developed in JavaScript using discord.js library. This bot
 * Messages sent board data
 
 
-### In Development
+## In Development
 
 * Team leader
 
@@ -40,7 +40,7 @@ A discord bot that is developed in JavaScript using discord.js library. This bot
 
 * Streak
 
-#### License
+### License & Copyright
 
 Licensed under [MIT License](LICENSE).
 
