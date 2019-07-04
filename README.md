@@ -1,7 +1,8 @@
 # UN[SG-MY] Discord Bot (discord.js)
 
+<img src="https://user-images.githubusercontent.com/50593529/60682921-c5757300-9ec7-11e9-9e75-a931cfcfb761.png" width="250">
 
-**Introduction**
+# **Introduction**
 
 A discord bot that is developed in JavaScript using discord.js library. This bot is mainly focuses on a single server and still in beta development. Not intended to use in any other server.
 
@@ -31,13 +32,13 @@ A discord bot that is developed in JavaScript using discord.js library. This bot
 
 ### In Development
 
-* VC time board
-
 * Team leader
 
 * Rank system and gives role 
 
 * Mini-game
+
+* Streak
 
 
 
