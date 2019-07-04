@@ -1,6 +1,7 @@
 module.exports = {
     name: 'leaderboard',
     description: 'sends respect leaderboard',
+    aliases: ['rl','respl'],
     execute(msg){
         const Discord = require('discord.js');
         const addSchema1 = require('../addSchema.js');

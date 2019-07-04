@@ -15,8 +15,8 @@ setTimeout(() => randomPuppy('Catmemes').then( URL => {
 setTimeout(() => randomPuppy('Foodporn').then(URL => {
   var embed = new Discord.Richembed()
   .setImage(URL)
-  .setTimestamp('24E2E7')
-  .setColor()
+  .setTimestamp()
+  .setColor('24E2E7')
  return foodChannel.send(embed)
 }).catch(err => console.log(err)), 1 * 6 * 60 * 60 * 1000);
 

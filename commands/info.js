@@ -1,22 +1,31 @@
+
+
+const mongoose = require('mongoose');
+
+const Discord = require('discord.js');
+
+const addSchema1 = require('../addSchema.js');
+
 module.exports = {
   name: 'info',
   description: 'sends info',
+  aliases: ['i', 'profile', 'p'],
   execute(msg, args, memberInfo, avatarInfo){
         
     var myRole = msg.guild.roles.find(role => role.name === `Malaysia`);
     var sgRole = msg.guild.roles.find(role => role.name === `Singapore`);
-
-    const mongoose = require('mongoose');
-
-    const Discord = require('discord.js');
-
-    const addSchema1 = require('../addSchema.js');
     
-    if (!args[1]){
-      return msg.reply('You need to specify which team or user')
+    if (!memberInfo){
+      
+      var user = msg.guild.members.find(m => m.id === msg.author.id);
+      var avatar = msg.author;
+    } else {
+      var user = memberInfo;
+      var avatar = avatarInfo;
     }
 
-    if(!memberInfo){
+    
+    if(!user){
         
     if (args[1] == myRole.name ){
         
@@ -48,11 +57,11 @@ module.exports = {
 
     }
       
-    if(memberInfo.joinedAt == undefined) return;
 
-    var pfp = avatarInfo.avatarURL
-    var d = new Date(memberInfo.joinedAt)
-    var d1 = new Date(avatarInfo.createdAt)
+
+    var pfp = avatar.avatarURL
+    var d = new Date(user.joinedAt)
+    var d1 = new Date(avatar.createdAt)
     dformat = [d.getDate(),d.getMonth()+1,d.getFullYear()].join('/');
     d1format = [d1.getDate(),d.getMonth()+1,d1.getFullYear()].join('/');
 
@@ -106,7 +115,7 @@ module.exports = {
     }
       
     function convert(a){
-      console.log(a)
+      
       if (a > periods.hour){
         var hour = Math.floor(a / periods.hour);
         var remainder = a - hour * periods.hour;
@@ -128,19 +137,19 @@ module.exports = {
     }
     
     if(pfp == undefined){
-      var pfp = avatarInfo.defaultAvatarURL
+      var pfp = avatar.defaultAvatarURL
     }
       
           
     try{
-      addSchema1.findOne({ userID : memberInfo.id },['userID','birthday','respect','mood','msgSent','vcTime'],async function(err, myUser){
+      addSchema1.findOne({ userID : user.id },['userID','birthday','respect','mood','msgSent','vcTime'],async function(err, myUser){
         if(err) return console.log(err);
         
         if(!myUser){
           const upSchema = new addSchema1({
             _id: mongoose.Types.ObjectId(),
-            username: memberInfo.displayName,
-            userID: memberInfo.id,
+            username: user.displayName,
+            userID: user.id,
             birthday: 0,
             respect: 0,
             mood: 0,
@@ -155,9 +164,9 @@ module.exports = {
         };
         
         if(err) return console.log(err);
-        if (memberInfo.roles.has(myRole.id)){
+        if (user.roles.has(myRole.id)){
         var team = myRole
-        }else if (memberInfo.roles.has(sgRole.id)){
+        }else if (user.roles.has(sgRole.id)){
         var team = sgRole
         }else return;
         var userPeriod = formatTime1(msgCreated, d1)   
@@ -166,7 +175,7 @@ module.exports = {
         let birthday = await myUser.birthday;
         let mood = await myUser.mood;
         
-        let roles = await memberInfo.roles.filter(r => r.name != "@everyone").map(r => r).join("|");
+        let roles = await user.roles.filter(r => r.name != "@everyone").map(r => r).join("|");
 
         var time = await myUser.vcTime;
         
@@ -178,8 +187,8 @@ module.exports = {
         const embed = new Discord.RichEmbed()
         
         .setTitle('Member Information')
-        .setColor(`${memberInfo.displayHexColor}`)
-        .addField('Name', `${memberInfo.displayName}`, true)
+        .setColor(`${user.displayHexColor}`)
+        .addField('Name', `${user.displayName}`, true)
         .addField('Team', `${team}`, true)
         .addField('Birthday', `${birthday}`, true)
         .addField('Mood', `${mood}`, true)

@@ -6,7 +6,7 @@ const prefix = "?";
 const respLimit = new Map();
 const samePerson = new Set();
 const reactions = require('./reactions.js');
-
+const msgCount = require('./msgCount.js');
 const emotes = require('./emotes.js');
 
 const mongoose = require('mongoose');
@@ -24,7 +24,7 @@ const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('
 
 
 const token = process.env.BOT_TOKEN
-//use config.var for security reason
+
 mongoose.connect(uri, {useNewUrlParser: true});
 //connect with mongoDB database
 
@@ -95,6 +95,9 @@ mongoose.set('useFindAndModify', false);
 bot.on('voiceStateUpdate', (oldMember, newMember) => {
     var newUserChannel = newMember.voiceChannel
     var oldUserChannel = oldMember.voiceChannel
+
+    if(newMember.user.bot) return;
+
     if(oldUserChannel === undefined && newUserChannel !== undefined){
         joinChannel.set(newMember.id, (new Date).getTime());
     }else if(newUserChannel === undefined){
@@ -229,21 +232,37 @@ bot.on('messageReactionAdd', (messageReaction, user) => {
 
 bot.on('message', async msg =>{
 
-    let args = msg.content.substring(prefix.length).split(" ");
+    let args = await msg.content.substring(prefix.length).split(" ");
     //split the args with whitespace
     if(msg.author.bot) return;
-    //if the command from author return
+    //if the command from bot return
 
 
-    if(!bot.commands.has(args[0])) return;
-    const command = bot.commands.get(args[0]);
+   
+    const command = bot.commands.get(args[0]) || bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(args[0]));
 
     var memberInfo = msg.mentions.members.first();
     //fetch member property
     var avatarInfo = msg.mentions.users.first();
     //fetch user property
 
-    const thisChannel = msg.guild.channels.find(channel => channel.name === "🤖bot-commands");
+    var thisChannel = await msg.guild.channels.find(channel => channel.name === "🤖bot-commands");
+  
+
+    msgCount(msg);
+   
+    timedPost(msg);
+    
+    reactions(msg);
+
+    emotes(msg, args, memberInfo, Discord);
+    
+    if(!command) return;
+    
+    if(msg.mentions.everyone){
+        msg.reply("OWowowow slow down mate. That's illegal");
+        //shout at member who mass mentions
+    }
 
     try{
         command.execute(msg, args, memberInfo, avatarInfo, bot, thisChannel, avatarInfo, addSchema1, mongoose, samePerson, respLimit);
@@ -252,70 +271,6 @@ bot.on('message', async msg =>{
         console.log(err)
         msg.channel.send('There was an error trying to execute the command!');
     }
-
-  
-    
-   
-   
-   
-
-   addSchema1.findOne({ userID: msg.author.id },['username','msgSent','birthday','respect','mood','msgSent'], async function(err, myUser){
-       //find data in mongoDB based on member ID
-       //the whole purpose of this structure is for counting the number of messages sent by the user and upload it in database
-       if(err) return console.log(err)
-       if(!myUser){
-           //if there's no data, it creates new data
-           const upScheme = new addSchema1({
-               _id: mongoose.Types.ObjectId(),
-                username: msg.author.username,
-                userID: msg.author.id,
-                birthday: 0,
-                respect: 0,
-                mood: 0,
-                msgSent: 0,
-                vcTime: 0,
-                time: msg.createdAt
-            })
-            await upScheme.save()
-            //saving the data
-            .catch(err => console.log(err))
-        }
-        
-        myUser.msgSent = myUser.msgSent + 1
-        //adds 1 to current messages sent by the user
-        myUser.username = msg.author.username
-        //updates the username
-        await myUser.save()
-        .catch(err => console.log(err))
-    }).catch(err => console.log(err))
-    
-    timedPost(msg);
-    
-  
-   
-    reactions(msg);
-
-    if (!msg.content.startsWith(prefix)) return;
-
-  
-    if(!args[0]) return;
-
-   
-    emotes(msg, args, memberInfo, Discord);
-  
-    
-    if(msg.mentions.everyone){
-        msg.reply("OWowowow slow down mate. That's illegal");
-        //shout at member who mass mentions
-    }
-
-    
- 
-
-
-
-    if(args[0] == prefix) return;
-       
     
 })
 

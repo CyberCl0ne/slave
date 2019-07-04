@@ -1,6 +1,7 @@
 module.exports = {
     name: "msgboard",
     description: "displays the leaderboard of messages sent",
+    aliases: ['ml', 'msgl'],
     execute(msg){
         const Discord = require('discord.js');
         const addSchema1 = require('../addSchema.js');

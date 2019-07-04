@@ -1,10 +1,13 @@
+const addSchema1 = require('../addSchema.js');
+
 module.exports = {
     name: 'mood',
     description: 'sets the current mood of an user',
-    execute(msg, args, thisChannel){
-        const addSchema1 = require('../addSchema.js')
-
-        if(msg.channel.name != thisChannel.name || msg.channel.id != "576986467084140557") return msg.reply('Please use the correct channel');
+  
+    execute(msg, args){
+        
+        
+       
         
         if(!args[1]) return  msg.reply(`What? You're telling me you don't have any mood right now? :eyes: `);
                

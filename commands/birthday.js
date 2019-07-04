@@ -1,10 +1,11 @@
 module.exports = {
     name: "birthday",
     description: "updates birthday to database",
-    execute(msg, args, thisChannel){
+    aliases: ['birthdate', 'b'],
+    execute(msg, args){
        const addSchema1 = require('../addSchema.js')
 
-        if(msg.channel.name != thisChannel.name || msg.channel.id != "576986467084140557") return msg.reply('Please use the correct channel');
+       
 
         if(!args[1] || !args[2] || !args[3]) return msg.reply("Invalid input! Please use dd mm yyyy format ");
 

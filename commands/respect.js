@@ -1,6 +1,7 @@
 module.exports = {
     name: 'respect',
     description: 'give respect to other user',
+    aliases: ['r', 'resp'],
     execute(msg, respLimit, samePerson){
        
         
