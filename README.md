@@ -25,3 +25,13 @@ A discord bot that is developed in JavaScript using discord.js library. This bot
 * Fetch random image (cats, memes, food)
 
 
+### In Development
+
+* VC time board
+
+* Rank system and gives role 
+
+* Mini-game
+
+
+
