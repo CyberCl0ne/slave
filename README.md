@@ -40,5 +40,7 @@ A discord bot that is developed in JavaScript using discord.js library. This bot
 
 * Streak
 
+#### License
 
+Licensed under [MIT License](LICENSE).
 
