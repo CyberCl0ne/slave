@@ -29,6 +29,8 @@ A discord bot that is developed in JavaScript using discord.js library. This bot
 
 * VC time board
 
+* Team leader
+
 * Rank system and gives role 
 
 * Mini-game
