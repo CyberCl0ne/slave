@@ -17,7 +17,7 @@ A discord bot that is developed in JavaScript using discord.js library. This bot
 
 * Reaction role (*for colour role and team role*)
 
-* Respect features
+* Respect other member
 
 * Emotes
 
