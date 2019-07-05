@@ -9,8 +9,8 @@ A discord bot that is developed in JavaScript using discord.js library. This bot
 ## Key Features  
 
 * User profile
-  * VC time
-  * Messages sent
+  * VC time, messages sent
+  * Cool profile looking
 
 * Announces when new user joined a specifed role (*when user joined team role*)
 
