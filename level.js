@@ -2,7 +2,7 @@ const addSchema1 = require('./addSchema.js');
 
 module.exports = (msg) => {
 
-    var newValue = { $set: { level: 0 } }
+    var newValue = { $set: { level: 1 } }
 
     addSchema1.findOneAndUpdate({ userID: msg.author.id }, newValue,['username','msgSent','birthday','respect','mood','msgSent'], async function(err, myUser){
         //find data in mongoDB based on member ID
@@ -27,7 +27,7 @@ module.exports = (msg) => {
             .catch(err => console.log(err))
         }
         var currLvl = await myUser.level;
-        var nextLvl = await myUser.level * 100;
+        var nextLvl = await myUser.level * 150;
         
         if(myUser.msgSent == nextLvl){
             var newLvl = currLvl + 1;

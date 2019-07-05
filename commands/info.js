@@ -208,7 +208,7 @@ module.exports = {
         let respect = await myUser.respect;
         let messages = await myUser.msgSent;
         console.log(level);
-        let percent = await Math.floor((messages / ((level + 1) * 100)) * 100)
+        let percent = await Math.floor((messages / ((level + 1) * 150)) * 100)
 
         const embed = new Discord.RichEmbed()
         
