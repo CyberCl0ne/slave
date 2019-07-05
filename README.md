@@ -40,6 +40,8 @@ A discord bot that is developed in JavaScript using discord.js library. This bot
 
 * Streak
 
+* Integrate with PUBG api
+
 ### License & Copyright
 
 Licensed under [MIT License](LICENSE).
