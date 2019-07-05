@@ -6,8 +6,7 @@
 
 A discord bot that is developed in JavaScript using discord.js library. This bot is mainly focuses on a single server and still in beta development. Not intended to use in any other server.
 
-## __Features__  
-* Team profile 
+## Key Features  
 
 * User profile
   * VC time
@@ -15,7 +14,6 @@ A discord bot that is developed in JavaScript using discord.js library. This bot
 
 * Announces when new user joined a specifed role (*when user joined team role*)
 
-* Reacts to certain keyword
 
 * Reaction role (*for colour role and team role*)
 
@@ -23,11 +21,9 @@ A discord bot that is developed in JavaScript using discord.js library. This bot
 
 * Emotes
 
-* Sets "mood" , "birthday"
-
 * Fetch random image (cats, memes, food)
 
-* Messages sent board data
+* Statistics
 
 
 ## In Development
