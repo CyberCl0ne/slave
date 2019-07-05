@@ -1,7 +1,7 @@
 
 
 const mongoose = require('mongoose');
-
+const assets = require('../local/assets.js')
 const Discord = require('discord.js');
 
 const addSchema1 = require('../addSchema.js');
@@ -11,9 +11,10 @@ module.exports = {
   description: 'sends info',
   aliases: ['i', 'profile', 'p'],
   execute(msg, args, memberInfo, avatarInfo){
+   
         
-    var myRole = msg.guild.roles.find(role => role.name === `Malaysia`);
-    var sgRole = msg.guild.roles.find(role => role.name === `Singapore`);
+    var myRole = msg.guild.roles.find(role => role.name == "Malaysia");
+    var sgRole = msg.guild.roles.find(role => role.name == "Singapore");
     
     if (!memberInfo){
       
@@ -25,7 +26,7 @@ module.exports = {
     }
 
     
-    if(!user){
+    
         
     if (args[1] == myRole.name ){
         
@@ -33,10 +34,10 @@ module.exports = {
       .setTitle('Team Information')
       .addField('Region', 'Malaysia')
       .setTimestamp()
-      .setThumbnail('https://i.imgur.com/0ZK52WE.png')
-      .setColor('4286f4')
+      .setThumbnail(assets.myImg)
+      .setColor(assets.myColor)
       .addField('Member', myRole.members.size)
-      .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
+      .setFooter( assets.trademark, assets.myImg)
       .setTimestamp()
       return msg.channel.send(embed);
     };
@@ -47,15 +48,15 @@ module.exports = {
       .setTitle('Team Information')
       .addField('Region', 'Singapore')
       .setTimestamp()
-      .setThumbnail('https://i.imgur.com/x3KTH7M.png')
-      .setColor('ff2121')
+      .setThumbnail(assets.sgImg)
+      .setColor(assets.sgColor)
       .addField('Member', sgRole.members.size)
-      .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
+      .setFooter(assets.trademark, assets.defaultImg)
       .setTimestamp()
       return msg.channel.send(embed);
     };
 
-    }
+    
       
 
 
@@ -135,6 +136,30 @@ module.exports = {
         return `🔊: ${hour} hours, ${mins} mins `
       }
     }
+
+    function progress(a){
+      if(a > 90){
+        return ('⏹️⏹️⏹️⏹️⏹️⏹️⏹️⏹️⏹️➖')
+      }else if(a > 80){
+        return ('⏹️⏹️⏹️⏹️⏹️⏹️⏹️⏹️➖➖')
+      }else if(a > 70){
+        return ('⏹️⏹️⏹️⏹️⏹️⏹️⏹️➖➖➖')
+      }else if(a > 60){
+        return ('⏹️⏹️⏹️⏹️⏹️⏹️➖➖➖➖')
+      }else if(a > 50){
+        return ('⏹️⏹️⏹️⏹️⏹️➖➖➖➖➖')
+      }else if(a > 40){
+        return ('⏹️⏹️⏹️⏹️➖➖➖➖➖➖')
+      }else if(a > 30){
+        return ('⏹️⏹️⏹️➖➖➖➖➖➖➖')
+      }else if(a > 20){
+        return ('⏹️⏹️➖➖➖➖➖➖➖➖')
+      }else if(a > 10){
+        return ('⏹️➖➖➖➖➖➖➖➖➖')
+      }else{
+        return ('➖➖➖➖➖➖➖➖➖➖')
+      }
+    }
     
     if(pfp == undefined){
       var pfp = avatar.defaultAvatarURL
@@ -142,7 +167,7 @@ module.exports = {
       
           
     try{
-      addSchema1.findOne({ userID : user.id },['userID','birthday','respect','mood','msgSent','vcTime'],async function(err, myUser){
+      addSchema1.findOne({ userID : user.id },['userID','birthday','respect','mood','msgSent','vcTime','level'],async function(err, myUser){
         if(err) return console.log(err);
         
         if(!myUser){
@@ -155,6 +180,7 @@ module.exports = {
             mood: 0,
             msgSent: 0,
             vcTime: 0,
+            level: 1,
             time: msg.createdAt
           });
           await upSchema.save()
@@ -178,12 +204,12 @@ module.exports = {
         let roles = await user.roles.filter(r => r.name != "@everyone").map(r => r).join("|");
 
         var time = await myUser.vcTime;
-        
-        
-
-    
+        let level = await myUser.level;
         let respect = await myUser.respect;
         let messages = await myUser.msgSent;
+        console.log(level);
+        let percent = await Math.floor((messages / ((level + 1) * 100)) * 100)
+
         const embed = new Discord.RichEmbed()
         
         .setTitle('Member Information')
@@ -196,8 +222,9 @@ module.exports = {
         .addField('Stats', `💬: ${messages} messages \n ${convert(time)}`, true)
         .addField('Roles', `${roles}`)
         .addField('User info', ` \` Joined since: ${dformat} (${memberPeriod}) \n Account created on: ${d1format} (${userPeriod}) \` `)
+        .addField('Level', `Lvl: ${level} | ${percent} to level ${level + 1} \n ${progress(percent)}`)
         .setThumbnail(`${pfp}`)
-        .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
+        .setFooter(assets.trademark, assets.defaultImg)
         .setTimestamp()
 
         

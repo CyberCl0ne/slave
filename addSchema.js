@@ -10,6 +10,7 @@
         mood: String,
         msgSent: Number,
         vcTime: Number,
+        level: Number,
         time: String
     });
 

@@ -2,7 +2,7 @@ module.exports = {
     name: 'respect',
     description: 'give respect to other user',
     aliases: ['r', 'resp'],
-    execute(msg, respLimit, samePerson){
+    execute(msg){
        
         
         var respLimit = new Map();
@@ -23,7 +23,7 @@ module.exports = {
         if(!memberInfo1) return msg.reply('You need to tell me which user you want to respect')
          
         if(msg.author.id === memberInfo1.id){
-             return msg.reply("You can't give respect to yourself 😜");                                                                       
+            return msg.reply("You can't give respect to yourself 😜");                                                                       
         }; //prevent users from giving respect to themselves
          
         
@@ -61,8 +61,9 @@ module.exports = {
                         birthday: 0,
                         respect: 0,
                         mood: 'none',
-                        msgSent: 1,
+                        msgSent: 0,
                         vcTime: 0,
+                        level: 1,
                         time: msg.createdAt
                     })
                     await upScheme.save()

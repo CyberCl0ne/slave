@@ -2,7 +2,9 @@ const addSchema1 = require('./addSchema.js');
 
 module.exports = (msg) => {
 
-    addSchema1.findOne({ userID: msg.author.id },['username','msgSent','birthday','respect','mood','msgSent'], async function(err, myUser){
+    var newValue = { $set: { level: 0 } }
+
+    addSchema1.findOneAndUpdate({ userID: msg.author.id }, newValue,['username','msgSent','birthday','respect','mood','msgSent'], async function(err, myUser){
         //find data in mongoDB based on member ID
         //the whole purpose of this structure is for counting the number of messages sent by the user and upload it in database
         if(err) return console.log(err)
@@ -17,13 +19,22 @@ module.exports = (msg) => {
                 mood: 0,
                 msgSent: 1,
                 vcTime: 0,
+                level: 1,
                 time: msg.createdAt
             })
             await upScheme.save()
             //saving the data
             .catch(err => console.log(err))
         }
-         
+        var currLvl = await myUser.level;
+        var nextLvl = await myUser.level * 100;
+        
+        if(myUser.msgSent == nextLvl){
+            var newLvl = currLvl + 1;
+            msg.channel.send(`Congrats! you have ranked up to ${newLvl}!`)
+            
+        }
+        myUser.level = newLvl
         myUser.msgSent = myUser.msgSent + 1
         //adds 1 to current messages sent by the user
         myUser.username = msg.author.username

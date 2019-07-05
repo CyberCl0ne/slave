@@ -22,6 +22,7 @@ module.exports = {
                     mood: 'none',
                     msgSent: 0,
                     vcTime: 0,
+                    level: 1,
                     time: msg.createdAt
                 });
                 await upSchema.save()

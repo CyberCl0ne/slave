@@ -6,16 +6,16 @@ const prefix = "?";
 const respLimit = new Map();
 const samePerson = new Set();
 const reactions = require('./reactions.js');
-const msgCount = require('./msgCount.js');
+const msgCount = require('./level.js');
 const emotes = require('./emotes.js');
-
+const assets = require('./local/assets.js')
 const mongoose = require('mongoose');
 const uri = process.env.uri 
 const addSchema1 = require('./addSchema.js');
 const timedPost = require('./timedPost.js');
 const colorName = ['hotpink1', 'babyblue1', 'russet1','jade1','bumblebee1','mint1','fossil1','pitchblack1','palewhite1','ferrari1','tiger1','grape1','azure1'];
 const resRole = ['Malaysia', 'Singapore'];
-
+const config = require('./config.json')
 const { inspect } = require('util');
 const joinChannel = new Map();
 
@@ -25,7 +25,7 @@ const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('
 
 const token = process.env.BOT_TOKEN
 
-mongoose.connect(uri, {useNewUrlParser: true});
+mongoose.connect(config.uri, {useNewUrlParser: true});
 //connect with mongoDB database
 
 for(const file of commandFiles){
@@ -269,7 +269,7 @@ bot.on('message', async msg =>{
     }
 
     try{
-        command.execute(msg, args, memberInfo, avatarInfo, bot, thisChannel, avatarInfo, addSchema1, mongoose, samePerson, respLimit);
+        command.execute(msg, args, memberInfo, avatarInfo, bot, thisChannel, avatarInfo, addSchema1, mongoose, samePerson, respLimit, assets);
         //executes commands
     }catch(err){
         console.log(err)
@@ -280,5 +280,5 @@ bot.on('message', async msg =>{
 
 
 
-bot.login(token);
+bot.login(config.token);
 
