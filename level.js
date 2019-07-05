@@ -2,7 +2,7 @@ const addSchema1 = require('./addSchema.js');
 
 module.exports = (msg) => {
 
-    var newValue = { $set: { msg: 1, level: 1 } }
+    var newValue = { $set: { msg: 0, level: 0 } }
 
 
 
@@ -29,14 +29,18 @@ module.exports = (msg) => {
             .catch(err => console.log(err))
         }
         var currLvl = await myUser.level;
-        var nextLvl = await myUser.level * 150;
+        var nextLvl = await myUser.level * 100;
         
         if(myUser.msgSent == nextLvl){
             var newLvl = currLvl + 1;
             msg.channel.send(`Congrats! you have ranked up to ${newLvl}!`)
             
+        }else if(!currLvl){
+            var newLvl = currLvl + 1;
+            myUser.level = newLvl
         }
-        myUser.level = newLvl
+       
+        console.log(newLvl)
         myUser.msgSent = myUser.msgSent + 1
         //adds 1 to current messages sent by the user
         myUser.username = msg.author.username
