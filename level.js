@@ -2,7 +2,9 @@ const addSchema1 = require('./addSchema.js');
 
 module.exports = (msg) => {
 
-    var newValue = { $set: { level: 1 } }
+    var newValue = { $set: { msg: 1, level: 1 } }
+
+
 
     addSchema1.findOneAndUpdate({ userID: msg.author.id }, newValue,['username','msgSent','birthday','respect','mood','msgSent'], async function(err, myUser){
         //find data in mongoDB based on member ID

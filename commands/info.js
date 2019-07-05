@@ -222,7 +222,7 @@ module.exports = {
         .addField('Stats', `💬: ${messages} messages \n ${convert(time)}`, true)
         .addField('Roles', `${roles}`)
         .addField('User info', ` \` Joined since: ${dformat} (${memberPeriod}) \n Account created on: ${d1format} (${userPeriod}) \` `)
-        .addField('Level', `Lvl: ${level} | ${percent} to level ${level + 1} \n ${progress(percent)}`)
+        .addField('Level', `Lvl: ${level} | ${percent}% to level ${level + 1} \n ${progress(percent)}`)
         .setThumbnail(`${pfp}`)
         .setFooter(assets.trademark, assets.defaultImg)
         .setTimestamp()
