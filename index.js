@@ -45,7 +45,7 @@ bot.on('ready', () =>{
 
     
     console.log('This bot is alive!');
-    bot.user.setActivity('Habbo | use ?help');
+    bot.user.setActivity('Moonlight by Ali gatie', {type: 'LISTENING'});
     //sets the status of the bot
     
     

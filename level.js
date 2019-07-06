@@ -8,30 +8,43 @@ module.exports = (msg) => {
             member.addRole('577456261906300938')
         }else if(a == 10){
             member.addRole('577456355271770112')
+            member.removeRole('577456261906300938')
         }else if(a == 10){
             member.addRole('577456355271770112')
+            member.removeRole('577456355271770112')
         }else if(a == 15){
             member.addRole('577456646381502464')
+            member.removeRole('577456355271770112')
         }else if(a == 20){
             member.addRole('577461890037579777')
+            member.removeRole('577456646381502464')
         }else if(a == 25){
             member.addRole('577462562140979202')
+            member.removeRole('577461890037579777')
         }else if(a == 30){
             member.addRole('577462667430723584')
+            member.removeRole('577462562140979202')
         }else if(a == 35){
             member.addRole('577462847035015169')
+            member.removeRole('577462667430723584')
         }else if(a == 50){
             member.addRole('583222341719425024')
+            member.removeRole('577462847035015169')
         }else if(a == 60){
             member.addRole('591949236426375169')
+            member.removeRole('583222341719425024')
         }else if(a == 70){
             member.addRole('591950386814779403')
+            member.removeRole('591949236426375169')
         }else if(a == 80){
             member.addRole('591949681723047936')
+            member.removeRole('591950386814779403')
         }else if(a == 90){
             member.addRole('591951311331917826')
+            member.removeRole('591949681723047936')
         }else if(a == 100){
             member.addRole('591952361132523532')
+            member.removeRole('591951311331917826')
         }
     }
 

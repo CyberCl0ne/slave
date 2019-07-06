@@ -25,7 +25,7 @@ module.exports = (msg) => {
         }
         
      
-        var xp = await Math.floor(Math.random() * 15) + 1;
+        var xp = await Math.floor(Math.random() * 3) + 1;
         let currXp = await myUser.xp;
 
         if(myUser.xp = NaN){
