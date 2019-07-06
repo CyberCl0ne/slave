@@ -1,35 +1,30 @@
 # UN[SG-MY] Discord Bot (discord.js)
 
+<img src="https://user-images.githubusercontent.com/50593529/60682921-c5757300-9ec7-11e9-9e75-a931cfcfb761.png" width="250">
 
-**Introduction**
+# **Introduction**
 
 A discord bot that is developed in JavaScript using discord.js library. This bot is mainly focuses on a single server and still in beta development. Not intended to use in any other server.
 
-## __Features__  
-* Team profile 
+## Key Features  
 
 * User profile
-  * VC time
-  * Messages sent
+  * VC time, messages sent
+  * Cool profile looking
 
 * Announces when new user joined a specifed role (*when user joined team role*)
 
-* Reacts to certain keyword
 
 * Reaction role (*for colour role and team role*)
 
-* Respect features
+* Respect other member
 
 * Emotes
 
-* Sets "mood" , "birthday"
-
 * Fetch random image (cats, memes, food)
 
-* Messages sent board data
+* Statistics
 
-
-### In Development
 
 * Team leader
 
@@ -37,5 +32,11 @@ A discord bot that is developed in JavaScript using discord.js library. This bot
 
 * Mini-game
 
+* Streak
 
+* Integrate with PUBG api
+
+### License & Copyright
+
+Licensed under [MIT License](LICENSE).
 
