@@ -6,7 +6,9 @@ const prefix = "?";
 const respLimit = new Map();
 const samePerson = new Set();
 const reactions = require('./reactions.js');
-const msgCount = require('./level.js');
+const msgCount = require('./msgcount.js');
+const level = require('./level.js');
+const xp = require('./xp.js');
 const emotes = require('./emotes.js');
 const assets = require('./local/assets.js')
 const mongoose = require('mongoose');
@@ -25,7 +27,7 @@ const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('
 
 const token = process.env.BOT_TOKEN
 
-mongoose.connect(config.uri, {useNewUrlParser: true});
+mongoose.connect(uri, {useNewUrlParser: true});
 //connect with mongoDB database
 
 for(const file of commandFiles){
@@ -119,13 +121,14 @@ bot.on('voiceStateUpdate', (oldMember, newMember) => {
                     mood: 0,
                     msgSent: 0,
                     vcTime: timeStamp,
+                    level: 1,
                     time: new Date()
                 })
                 upScheme.save()
                 .catch(err => console.log(err))
             }
             var vcTime1 = await res.vcTime
-            console.log(vcTime1)
+           
             var add = vcTime1 + timeStamp;
             res.vcTime =  add
             
@@ -257,6 +260,11 @@ bot.on('message', async msg =>{
 
     emotes(msg, args, memberInfo, Discord);
 
+    level(msg);
+
+    xp(msg);
+
+
     if(!msg.content.startsWith(prefix)) return;
     
     if(!command) return;
@@ -275,10 +283,12 @@ bot.on('message', async msg =>{
         console.log(err)
         msg.channel.send('There was an error trying to execute the command!');
     }
+
+   
     
 })
 
 
 
-bot.login(config.token);
+bot.login(token);
 

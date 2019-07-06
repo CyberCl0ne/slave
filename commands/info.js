@@ -167,7 +167,7 @@ module.exports = {
       
           
     try{
-      addSchema1.findOne({ userID : user.id },['userID','birthday','respect','mood','msgSent','vcTime','level'],async function(err, myUser){
+      addSchema1.findOne({ userID : user.id },['birthday','respect','mood','msgSent','vcTime','level','xp'],async function(err, myUser){
         if(err) return console.log(err);
         
         if(!myUser){
@@ -205,10 +205,11 @@ module.exports = {
 
         var time = await myUser.vcTime;
         let level = await myUser.level;
+        let xp = await myUser.xp;
         let respect = await myUser.respect;
         let messages = await myUser.msgSent;
-        
-        let percent = await Math.floor((messages / ((level + 1) * 100)) * 100)
+        console.log(xp)
+        let percent = await Math.floor((((xp - ((level - 1) * 100)) / 100) * 100));
 
         const embed = new Discord.RichEmbed()
         

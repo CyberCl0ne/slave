@@ -11,6 +11,7 @@
         msgSent: Number,
         vcTime: Number,
         level: Number,
+        xp: Number,
         time: String
     });
 

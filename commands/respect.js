@@ -64,6 +64,7 @@ module.exports = {
                         msgSent: 0,
                         vcTime: 0,
                         level: 1,
+                        xp: 0,
                         time: msg.createdAt
                     })
                     await upScheme.save()
