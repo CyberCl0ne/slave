@@ -4,14 +4,14 @@ module.exports = (msg) => {
 
     var newValue = { $set: { xp: 1 } }
 
-    addSchema1.findOneAndUpdate({ userID: msg.author.id },newValue,["xp"], async function(err, myUser){
+    addSchema1.findOneAndUpdate({ userID: msg.author.id }, newValue,["xp"], async function(err, myUser){
         //find data in mongoDB based on member ID
         //the whole purpose of this structure is for counting the number of messages sent by the user and upload it in database
         if(err) return console.log(err)
         if(!myUser){
             //if there's no data, it creates new data
             const upSchema = new addSchema1({
-            _id: mongoose.Types.ObjectId(),
+                _id: mongoose.Types.ObjectId(),
                 username: msg.author.username,
                 userID: msg.author.id,
                 birthday: 0,
@@ -23,7 +23,7 @@ module.exports = (msg) => {
                 xp: 0,
                 time: msg.createdAt
             })
-            await upSchema.save()
+            upSchema.save()
             .catch(err => console.log(err))
             
            
@@ -37,7 +37,7 @@ module.exports = (msg) => {
         }
         myUser.xp = myUser.xp + xp
 
-        await myUser.save()
+        myUser.save()
         .catch(err => console.log(err))
 
     }).catch(err => console.log(err))    

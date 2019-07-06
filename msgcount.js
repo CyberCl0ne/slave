@@ -6,7 +6,7 @@ module.exports = (msg) => {
    
 
 
-    addSchema1.findOneAndUpdate({ userID: msg.author.id },newValue,['username','msgSent','birthday','respect','mood','msgSent','level'], async function(err, myUser){
+    addSchema1.findOneAndUpdate({ userID: msg.author.id },newValue,['username','msgSent'], async function(err, myUser){
         //find data in mongoDB based on member ID
         //the whole purpose of this structure is for counting the number of messages sent by the user and upload it in database
         if(err) return console.log(err)
@@ -36,7 +36,7 @@ module.exports = (msg) => {
         //adds 1 to current messages sent by the user
         myUser.username = msg.author.username
         //updates the username
-        await myUser.save()
+        myUser.save()
         .catch(err => console.log(err))
     }).catch(err => console.log(err))
 

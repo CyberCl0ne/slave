@@ -12,6 +12,7 @@ const xp = require('./xp.js');
 const emotes = require('./emotes.js');
 const assets = require('./local/assets.js')
 const mongoose = require('mongoose');
+const config = require('./config.json')
 const uri = process.env.uri 
 const addSchema1 = require('./addSchema.js');
 const timedPost = require('./timedPost.js');
@@ -27,7 +28,7 @@ const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('
 
 const token = process.env.BOT_TOKEN
 
-mongoose.connect(uri, {useNewUrlParser: true});
+mongoose.connect(config.uri, {useNewUrlParser: true});
 //connect with mongoDB database
 
 for(const file of commandFiles){
@@ -122,6 +123,7 @@ bot.on('voiceStateUpdate', (oldMember, newMember) => {
                     msgSent: 0,
                     vcTime: timeStamp,
                     level: 1,
+                    xp: 1,
                     time: new Date()
                 })
                 upScheme.save()
@@ -132,7 +134,7 @@ bot.on('voiceStateUpdate', (oldMember, newMember) => {
             var add = vcTime1 + timeStamp;
             res.vcTime =  add
             
-            console.log(add)
+            
             res.save()
 
 
@@ -290,5 +292,5 @@ bot.on('message', async msg =>{
 
 
 
-bot.login(token);
+bot.login(config.token);
 

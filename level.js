@@ -37,7 +37,7 @@ module.exports = (msg) => {
             
         }
       
-       await myUser.save()
+       myUser.save()
         .catch(err => console.log(err))
         
 

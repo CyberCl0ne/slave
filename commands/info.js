@@ -138,23 +138,23 @@ module.exports = {
     }
 
     function progress(a){
-      if(a > 90){
+      if(a >= 90){
         return ('⏹️⏹️⏹️⏹️⏹️⏹️⏹️⏹️⏹️➖')
-      }else if(a > 80){
+      }else if(a >= 80){
         return ('⏹️⏹️⏹️⏹️⏹️⏹️⏹️⏹️➖➖')
-      }else if(a > 70){
+      }else if(a >= 70){
         return ('⏹️⏹️⏹️⏹️⏹️⏹️⏹️➖➖➖')
-      }else if(a > 60){
+      }else if(a >= 60){
         return ('⏹️⏹️⏹️⏹️⏹️⏹️➖➖➖➖')
-      }else if(a > 50){
+      }else if(a >= 50){
         return ('⏹️⏹️⏹️⏹️⏹️➖➖➖➖➖')
-      }else if(a > 40){
+      }else if(a >= 40){
         return ('⏹️⏹️⏹️⏹️➖➖➖➖➖➖')
-      }else if(a > 30){
+      }else if(a >= 30){
         return ('⏹️⏹️⏹️➖➖➖➖➖➖➖')
-      }else if(a > 20){
+      }else if(a >= 20){
         return ('⏹️⏹️➖➖➖➖➖➖➖➖')
-      }else if(a > 10){
+      }else if(a >= 10){
         return ('⏹️➖➖➖➖➖➖➖➖➖')
       }else{
         return ('➖➖➖➖➖➖➖➖➖➖')
