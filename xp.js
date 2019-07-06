@@ -31,11 +31,11 @@ module.exports = (msg) => {
         
      
         var xp = await Math.floor(Math.random() * 15) + 1;
-        var currXp = await myUser.xp
-        if(!currXp){
-            var currXp = 0
+        
+        if(myUser.xp = NaN){
+            myUser.xp = 0
         }
-        myUser.xp = currXp + xp
+        myUser.xp = myUser.xp + xp
 
         await myUser.save()
         .catch(err => console.log(err))
