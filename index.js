@@ -12,7 +12,7 @@ const xp = require('./xp.js');
 const emotes = require('./emotes.js');
 const assets = require('./local/assets.js')
 const mongoose = require('mongoose');
-const config = require('./config.json')
+
 const uri = process.env.uri 
 const addSchema1 = require('./addSchema.js');
 const timedPost = require('./timedPost.js');
@@ -28,7 +28,7 @@ const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('
 
 const token = process.env.BOT_TOKEN
 
-mongoose.connect(config.uri, {useNewUrlParser: true});
+mongoose.connect(uri, {useNewUrlParser: true});
 //connect with mongoDB database
 
 for(const file of commandFiles){
@@ -242,6 +242,7 @@ bot.on('message', async msg =>{
     if(msg.author.bot) return;
     //if the command from bot return
 
+   
 
    
     const command = bot.commands.get(args[0]) || bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(args[0]));
@@ -254,43 +255,32 @@ bot.on('message', async msg =>{
     var thisChannel = await msg.guild.channels.find(channel => channel.name === "🤖bot-commands");
   
 
-    msgCount(msg);
-   
-    timedPost(msg);
+    if(msg.content.startsWith(prefix) && command) {
+        try{
+            command.execute(msg, args, memberInfo, avatarInfo, bot, thisChannel, avatarInfo, addSchema1, mongoose, samePerson, respLimit, assets);
+            //executes commands
+        }catch(err){
+            console.log(err)
+            msg.channel.send('There was an error trying to execute the command!');
+        }
+    }else{
+        level(msg);
+
+        xp(msg);
+
+        msgCount(msg);
+
+        timedPost(msg);
     
-    reactions(msg);
+        reactions(msg);
 
-    emotes(msg, args, memberInfo, Discord);
-
-    level(msg);
-
-    xp(msg);
-
-
-    if(!msg.content.startsWith(prefix)) return;
+        emotes(msg, args, memberInfo, Discord);
+    };
     
-    if(!command) return;
 
-    
-    
-    if(msg.mentions.everyone){
-        msg.reply("OWowowow slow down mate. That's illegal");
-        //shout at member who mass mentions
-    }
-
-    try{
-        command.execute(msg, args, memberInfo, avatarInfo, bot, thisChannel, avatarInfo, addSchema1, mongoose, samePerson, respLimit, assets);
-        //executes commands
-    }catch(err){
-        console.log(err)
-        msg.channel.send('There was an error trying to execute the command!');
-    }
-
-   
-    
 })
 
 
 
-bot.login(config.token);
+bot.login(token);
 

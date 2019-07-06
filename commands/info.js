@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 const assets = require('../local/assets.js')
 const Discord = require('discord.js');
-
+const lvlSchema = require('../levelSchema.js');
 const addSchema1 = require('../addSchema.js');
 
 module.exports = {
@@ -25,7 +25,7 @@ module.exports = {
       var avatar = avatarInfo;
     }
 
-    
+    var rank = {};
     
         
     if (args[1] == myRole.name ){
@@ -165,77 +165,100 @@ module.exports = {
       var pfp = avatar.defaultAvatarURL
     }
       
+    lvlSchema.findOne({ userID : user.id },['xp','level'], async function(err, myUser){
+      if(err) return console.log(err);
+      if(!myUser){
+        //if there's no data, it creates new data
+        const upScheme = new lvlSchema({
+          _id: mongoose.Types.ObjectId(),
+          username: msg.author.username,
+          userID: msg.author.id,
+          xp: 0,
+          level: 1,
+          guild: msg.guild.id
+        })
+        await upScheme.save()
+        //saving the data
+        .catch(err => console.log(err))
+      }else{
+        rank.xp = myUser.xp;
+        rank.level = myUser.level;
+
+      }
+    }).catch(err => console.log(err));
           
-    try{
-      addSchema1.findOne({ userID : user.id },['birthday','respect','mood','msgSent','vcTime','level','xp'],async function(err, myUser){
-        if(err) return console.log(err);
-        
-        if(!myUser){
-          const upSchema = new addSchema1({
-            _id: mongoose.Types.ObjectId(),
-            username: user.displayName,
-            userID: user.id,
-            birthday: 0,
-            respect: 0,
-            mood: 0,
-            msgSent: 0,
-            vcTime: 0,
-            level: 1,
-            time: msg.createdAt
-          });
-          await upSchema.save()
-          .then(result => console.log(result))
-          .catch(err => console.log(err));
-          msg.channel.send("For first time, it'll be like this. Give it another shot 🍷")
-        };
-        
-        if(err) return console.log(err);
-        if (user.roles.has(myRole.id)){
-        var team = myRole
-        }else if (user.roles.has(sgRole.id)){
-        var team = sgRole
-        }else return;
-        var userPeriod = formatTime1(msgCreated, d1)   
-        var memberPeriod = formatTime(msgCreated, d)
-        
-        let birthday = await myUser.birthday;
-        let mood = await myUser.mood;
-        
-        let roles = await user.roles.filter(r => r.name != "@everyone").map(r => r).join("|");
+    
+    addSchema1.findOne({ userID : user.id },['birthday','respect','mood','msgSent','vcTime','level','xp',],async function(err, myUser){
+      if(err) return console.log(err);
+      
+      if(!myUser){
+        const upSchema = new addSchema1({
+          _id: mongoose.Types.ObjectId(),
+          username: user.displayName,
+          userID: user.id,
+          birthday: 0,
+          respect: 0,
+          mood: 0,
+          msgSent: 0,
+          vcTime: 0,
+          level: 1,
+          xp: 1,
+          time: msg.createdAt
+        });
+        await upSchema.save()
+        .then(result => console.log(result))
+        .catch(err => console.log(err));
+        msg.channel.send("For first time, it'll be like this. Give it another shot 🍷")
+      };
+      
+      if(err) return console.log(err);
+      if (user.roles.has(myRole.id)){
+      var team = myRole
+      }else if (user.roles.has(sgRole.id)){
+      var team = sgRole
+      }else return;
+      var userPeriod = formatTime1(msgCreated, d1)   
+      var memberPeriod = formatTime(msgCreated, d)
+      
+      let birthday = await myUser.birthday;
+      let mood = await myUser.mood;
+      
+      let roles = await user.roles.filter(r => r.name != "@everyone").map(r => r).join("|");
 
-        var time = await myUser.vcTime;
-        let level = await myUser.level;
-        let xp = await myUser.xp;
-        let respect = await myUser.respect;
-        let messages = await myUser.msgSent;
-        console.log(xp)
-        let percent = await Math.floor((((xp - ((level - 1) * 100)) / 100) * 100));
+      let time = await myUser.vcTime;
+      
+      
+      
+      let respect = await myUser.respect;
+      let messages = await myUser.msgSent;
+      let converted = await convert(time);
+      let percent = Math.floor((((rank.xp - ((rank.level - 1) * 100)) / 100) * 100));
 
-        const embed = new Discord.RichEmbed()
-        
-        .setTitle('Member Information')
-        .setColor(`${user.displayHexColor}`)
-        .addField('Name', `${user.displayName}`, true)
-        .addField('Team', `${team}`, true)
-        .addField('Birthday', `${birthday}`, true)
-        .addField('Mood', `${mood}`, true)
-        .addField('Respects', `${respect} 🥇`, true)
-        .addField('Stats', `💬: ${messages} messages \n ${convert(time)}`, true)
-        .addField('Roles', `${roles}`)
-        .addField('User info', ` \` Joined since: ${dformat} (${memberPeriod}) \n Account created on: ${d1format} (${userPeriod}) \` `)
-        .addField('Level', `Lvl: ${level} | ${percent}% to level ${level + 1} \n ${progress(percent)}`)
-        .setThumbnail(`${pfp}`)
-        .setFooter(assets.trademark, assets.defaultImg)
-        .setTimestamp()
+      const embed = new Discord.RichEmbed()
+      
+      .setTitle('Member Information')
+      .setColor(`${user.displayHexColor}`)
+      .addField('Name', `${user.displayName}`, true)
+      .addField('Team', `${team}`, true)
+      .addField('Birthday', `${birthday}`, true)
+      .addField('Mood', `${mood}`, true)
+      .addField('Respects', `${respect} 🥇`, true)
+      .addField('Stats', `💬: ${messages} messages \n ${converted}`, true)
+      .addField('Roles', `${roles}`)
+      .addField('User info', ` \` Joined since: ${dformat} (${memberPeriod}) \n Account created on: ${d1format} (${userPeriod}) \` `)
+      .addField('Level', `Lvl: ${rank.level} | ${percent}% to level ${rank.level + 1} \n ${progress(percent)}`)
+      .setThumbnail(`${pfp}`)
+      .setFooter(assets.trademark, assets.defaultImg)
+      .setTimestamp()
 
-        
-        return msg.channel.send(embed);
-            
-            
-            
-        }).catch(err => console.log(err));
-      }catch(err){
-      console.log(err)
-    }
+      
+      return msg.channel.send(embed);
+          
+          
+          
+    }).catch(err => console.log(err));
+     
+    delete rank.level;
+    delete rank.xp;
   },
 };
