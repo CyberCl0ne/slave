@@ -11,7 +11,7 @@ module.exports = {
         const Discord = require('discord.js');
         var samePerson = new Set();
 
-        const addSchema1 = require('../addSchema.js');
+        const addSchema1 = require('../models/addSchema.js');
 
         //A feature to give respect to other members
     

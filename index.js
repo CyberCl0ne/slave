@@ -243,7 +243,7 @@ bot.on('message', async msg =>{
     //if the command from bot return
 
    
-    
+   
    
     const command = bot.commands.get(args[0]) || bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(args[0]));
 

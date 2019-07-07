@@ -78,7 +78,7 @@ module.exports = (msg) => {
             myUser.level = myUser.level + 1;
             giveRole(myUser.level, member);
            
-            msg.channel.send(`Congrats! you have ranked up to level ${newLvl}!`)
+            msg.channel.send(`Congrats! ${member.nickname} you have ranked up to level ${newLvl}!`)
             
         }
       
