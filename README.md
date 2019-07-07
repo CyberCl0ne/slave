@@ -26,15 +26,17 @@ A discord bot that is developed in JavaScript using discord.js library. This bot
 * Statistics
 
 
-* Team leader
-
 * Rank system and gives role 
+
+
+## In development
+* Team leader
 
 * Mini-game
 
 * Streak
 
-* Integrate with PUBG api
+
 
 ### License & Copyright
 
