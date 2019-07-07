@@ -14,10 +14,11 @@ const assets = require('./local/assets.js')
 const mongoose = require('mongoose');
 
 const uri = process.env.uri 
-const addSchema1 = require('./addSchema.js');
+const addSchema1 = require('./models/addSchema.js');
 const timedPost = require('./timedPost.js');
 const colorName = ['hotpink1', 'babyblue1', 'russet1','jade1','bumblebee1','mint1','fossil1','pitchblack1','palewhite1','ferrari1','tiger1','grape1','azure1'];
 const resRole = ['Malaysia', 'Singapore'];
+
 
 const { inspect } = require('util');
 const joinChannel = new Map();
@@ -204,8 +205,7 @@ bot.on('messageReactionAdd', (messageReaction, user) => {
     var member = messageReaction.message.guild.members.find(member => member.id == user.id);
     //get the id of member that reacted to the message
    
-   
-    
+ 
     
     async function giveRole(member){
        
@@ -243,7 +243,7 @@ bot.on('message', async msg =>{
     //if the command from bot return
 
    
-
+    
    
     const command = bot.commands.get(args[0]) || bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(args[0]));
 

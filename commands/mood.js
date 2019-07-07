@@ -1,4 +1,4 @@
-const addSchema1 = require('../addSchema.js');
+const addSchema1 = require('../models/addSchema.js');
 
 module.exports = {
     name: 'mood',

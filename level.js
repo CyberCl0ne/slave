@@ -1,4 +1,4 @@
-const lvlSchema = require('./levelSchema.js');
+const lvlSchema = require('./models/levelSchema.js');
 const mongoose = require('mongoose');
 
 module.exports = (msg) => {
@@ -68,7 +68,7 @@ module.exports = (msg) => {
 
 
         }
-        var nextLvl = await myUser.level * 100;
+        var nextLvl = await myUser.level * 300;
 
        
         

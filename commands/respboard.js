@@ -1,11 +1,13 @@
-module.exports = {
-    name: 'leaderboard',
-    description: 'sends respect leaderboard',
-    aliases: ['rl','respl'],
-    execute(msg){
-        const Discord = require('discord.js');
-        const addSchema1 = require('../addSchema.js');
+const Discord = require('discord.js');
+const addSchema1 = require('../models/addSchema.js');
+const assets = require('../local/assets.js')
 
+module.exports = {
+    name: 'respectboard',
+    description: 'sends respect leaderboard',
+    aliases: ['rb','respb'],
+    execute(msg){
+       
         addSchema1.find({
             __v : 0
         }).sort([
@@ -14,11 +16,10 @@ module.exports = {
             if(err) console.log(err)
 
             let embed = new Discord.RichEmbed()
-           
             .setTimestamp()
-            .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
-            .setColor('FFD700')
-            .setThumbnail('https://i.redd.it/06hdr24vpiuy.png')
+            .setFooter(assets.trademark, assets.defaultImg)
+            .setColor(assets.respColor)
+            .setThumbnail(assets.respImg)
            
             if(res.length === 0){
                 embed.setColor('RED')

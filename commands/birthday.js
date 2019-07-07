@@ -3,7 +3,7 @@ module.exports = {
     description: "updates birthday to database",
     aliases: ['birthdate', 'b'],
     execute(msg, args){
-       const addSchema1 = require('../addSchema.js')
+       const addSchema1 = require('../models/addSchema.js')
 
        
 

@@ -1,4 +1,4 @@
-const lvlSchema = require('./levelSchema.js');
+const lvlSchema = require('./models/levelSchema.js');
 
 module.exports = (msg) => {
 

@@ -1,10 +1,11 @@
+const assets = require('../local/assets.js');
 module.exports = {
     name: 'vcboard',
     description: 'shows data of vc time',
     aliases: ['vcb', 'voiceboard'],
     execute(msg){
         const Discord = require('discord.js');
-        const addSchema1 = require('../addSchema.js');
+        const addSchema1 = require('../models/addSchema.js');
 
         addSchema1.find({ __v : 0 }).sort([
             ['vcTime','descending']
@@ -12,8 +13,9 @@ module.exports = {
             if(err) console.log(err);
 
             let embed = new Discord.RichEmbed()
-            .setColor('24E2E7')
-            .setFooter('UN[SG-MY]©', 'https://i.imgur.com/TnNIYK6.png')
+            .setColor(assets.defaultColor)
+            .setFooter(assets.trademark, assets.defaultImg)
+            .setTimestamp()
 
             var periods = {
                 year: 12 * 30 * 24 * 60 * 60 * 1000,

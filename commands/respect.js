@@ -1,3 +1,5 @@
+const assets = require('../local/assets.js')
+
 module.exports = {
     name: 'respect',
     description: 'give respect to other user',
@@ -81,8 +83,8 @@ module.exports = {
                     const embed = new Discord.RichEmbed()
                     .setTitle('Respect Award')
                     .addField(`**${memberInfo1.displayName}** has been respected!🔱`, `${randomCompliments}`)
-                    .setColor('FFD700')
-                    .setThumbnail('https://i.redd.it/06hdr24vpiuy.png')
+                    .setColor(assets.respColor)
+                    .setThumbnail(assets.respImg)
                     .setTimestamp()
                     .setFooter(`Respected by ${author}`, `${msg.author.avatarURL}`)
                     msg.channel.send(embed);

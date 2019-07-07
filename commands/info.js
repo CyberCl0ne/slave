@@ -3,8 +3,8 @@
 const mongoose = require('mongoose');
 const assets = require('../local/assets.js')
 const Discord = require('discord.js');
-const lvlSchema = require('../levelSchema.js');
-const addSchema1 = require('../addSchema.js');
+const lvlSchema = require('../models/levelSchema.js');
+const addSchema1 = require('../models/addSchema.js');
 
 module.exports = {
   name: 'info',
@@ -181,8 +181,8 @@ module.exports = {
         //saving the data
         .catch(err => console.log(err))
       }else{
-        rank.xp = myUser.xp;
-        rank.level = myUser.level;
+        rank.xp = await myUser.xp;
+        rank.level = await myUser.level;
 
       }
     }).catch(err => console.log(err));
@@ -232,7 +232,7 @@ module.exports = {
       let respect = await myUser.respect;
       let messages = await myUser.msgSent;
       let converted = await convert(time);
-      let percent = Math.floor((((rank.xp - ((rank.level - 1) * 100)) / 100) * 100));
+      let percent = Math.floor((((rank.xp - ((rank.level - 1) * 300)) / 300) * 100));
 
       const embed = new Discord.RichEmbed()
       

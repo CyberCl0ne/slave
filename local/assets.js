@@ -9,8 +9,8 @@ module.exports = {
     "You're more helpful than you realize","Your kindness is a balm to all who encounter it",
     "You're even more beautiful in the inside than you're on the outside","You're a candle in the darkness",
     "You're a gift to those who are around you","You're breathtaking"],
-    myImg : "https://i.imgur.com/TnNIYK6.png",
-    sgImg : "https://i.imgur.com/TnNIYK6.png",
+    myImg : "https://i.imgur.com/0ZK52WE.png",
+    sgImg : "https://i.imgur.com/x3KTH7M.png",
     myColor: "003cb3",
     sgColor: "ff2121",
     trademark : "UN[SG-MY]©"
