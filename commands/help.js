@@ -5,8 +5,8 @@ module.exports = {
     execute(msg){
         const Discord = require('discord.js');
         var bot = new Discord.Client();
-        let myEmoji = bot.emojis.find(emoji => emoji.name === "malaysia");
-        let sgEmoji = bot.emojis.find(emoji => emoji.name === "singapore");
+        let myEmoji = bot.emojis.find(emoji => emoji.name === "Malaysia");
+        let sgEmoji = bot.emojis.find(emoji => emoji.name === "Singapore");
        
 
         const embed = new Discord.RichEmbed()

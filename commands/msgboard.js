@@ -18,6 +18,7 @@ module.exports = {
             .setTimestamp()
             .setColor(assets.defaultColor)
             .setFooter(assets.trademark, assets.defaultImg)
+            .setThumbnail(assets.msgImg)
             
             var list = [];
             for(i = 0; i < 10; i++){

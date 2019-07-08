@@ -1,5 +1,5 @@
-const addSchema1 = require('./models/addSchema.js');
-
+const addSchema1 = require('../models/addSchema.js');
+const mongoose = require('mongoose');
 module.exports = (msg) => {
 
     var newValue = { $set: { msg: 0 } }

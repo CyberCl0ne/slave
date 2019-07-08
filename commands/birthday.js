@@ -1,10 +1,12 @@
+const mongoose = require('mongoose');
+const addSchema1 = require('../models/addSchema.js')
+
 module.exports = {
     name: "birthday",
     description: "updates birthday to database",
     aliases: ['birthdate', 'b'],
     execute(msg, args){
-       const addSchema1 = require('../models/addSchema.js')
-
+      
        
 
         if(!args[1] || !args[2] || !args[3]) return msg.reply("Invalid input! Please use dd mm yyyy format ");

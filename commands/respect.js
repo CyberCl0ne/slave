@@ -1,4 +1,6 @@
 const assets = require('../local/assets.js')
+const storage = require('../local/storage.js')
+const mongoose = require('mongoose')
 
 module.exports = {
     name: 'respect',
@@ -7,9 +9,9 @@ module.exports = {
     execute(msg){
        
         
-        var respLimit = new Map();
+        
         const Discord = require('discord.js');
-        var samePerson = new Set();
+        
 
         const addSchema1 = require('../models/addSchema.js');
 
@@ -27,27 +29,25 @@ module.exports = {
         if(msg.author.id === memberInfo1.id){
             return msg.reply("You can't give respect to yourself 😜");                                                                       
         }; //prevent users from giving respect to themselves
+
+        if(memberInfo1.user.bot){
+            return msg.reply("You can't do that!")
+        };
          
-        
-        let compliments = ["You've proved your worthiness","A knight with shining armour","What an honor!","King Arthur himself bows down to you","May your day blessed",
-             "With the highest regard","It ain't much but it honest work","You should be proud of yourself","You have impeccable manners",
-             "You're more helpful than you realize","Your kindness is a balm to all who encounter it",
-             "You're even more beautiful in the inside than you're on the outside","You're a candle in the darkness",
-             "You're a gift to those who are around you","You're breathtaking"]
+   
+        let compliments = assets.randomCompliment;
         var randomCompliments = compliments[Math.floor(Math.random() * compliments.length)];                                           
         //randomize compliments
  
-        if(!respLimit.has(msg.author.id)){
-            respLimit.set(msg.author.id, 0);
-        }else{
-            respLimit.set(msg.author.id, respLimit.get(msg.author.id) + 1)
+        if(!storage.respLimit.has(msg.author.id)){
+          storage.respLimit.set(msg.author.id, 0)
         }
-
-        if(respLimit.get(msg.author.id) > 3){
-            msg.channel.send('You have used up all your respects for today')
+        
+        if(storage.respLimit.get(msg.author.id) > 2){
+          return  msg.channel.send('You have used up all your respects for today')
             //respect cooldown                                                                        
-        }else if(samePerson.has(memberInfo1.id)){
-            msg.channel.send("Didn't you just respect the user? 🤔")
+        }else if(storage.samePerson.get(msg.author.id) === memberInfo1.id){
+          return  msg.channel.send("Didn't you just respect the user? 🤔")
             //restrict from giving respect to same person for two consecutive days
         }else{
         
@@ -56,7 +56,7 @@ module.exports = {
                 if(err) return console.log(err)
                 if(!myUser){
                     //creates default data for user
-                    const upScheme = new addScheme1({
+                    const upScheme = new addSchema1({
                         _id: mongoose.Types.ObjectId(),
                         username: memberInfo1.displayName,
                         userID: memberInfo1.id,
@@ -72,7 +72,7 @@ module.exports = {
                     await upScheme.save()
                     .then(result => console.log(result))
                     .catch(err => console.log(err))
-                    
+                    msg.channel.send("It'll be like this sometimes. Give it another shot 🍷")
                 }else{
                     
                     myUser.respect = myUser.respect + 1;
@@ -94,19 +94,19 @@ module.exports = {
                 }
             })
         
-        
+            storage.respLimit.set(msg.author.id, storage.respLimit.get(msg.author.id) + 1)
 
-            samePerson.add(memberInfo1.id);
+            storage.samePerson.set(msg.author.id, memberInfo1.id);
             //add user ID in variable
             setTimeout(() => {
-                samePerson.delete(memberInfo1.id);
+                storage.samePerson.delete(memberInfo1.id);
             }, 2 * 24 * 60 * 60 * 1000);
-            //24 hours
+            //2 days
             //sets timeout to clear the userID
 
             
             setTimeout(() => {                                         
-                respLimit.delete(msg.author.id);
+                storage.respLimit.delete(msg.author.id);
             }, 86400000);
             //24hrs    
             //3 respects per day                                           

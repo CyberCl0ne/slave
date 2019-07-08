@@ -1,8 +1,10 @@
-const lvlSchema = require('./models/levelSchema.js');
+const lvlSchema = require('../models/levelSchema.js');
+const mongoose = require('mongoose');
+const cooldown = require('../local/storage')
 
 module.exports = (msg) => {
 
-   
+    if(cooldown.xpCooldown.has(msg.author.id)) return;
 
     lvlSchema.findOne({ userID: msg.author.id },["xp"], async function(err, myUser){
         //find data in mongoDB based on member ID
@@ -37,4 +39,10 @@ module.exports = (msg) => {
         .catch(err => console.log(err))
 
     }).catch(err => console.log(err))    
+
+    cooldown.xpCooldown.add(msg.author.id)
+    setTimeout(() => {
+        cooldown.xpCooldown.delete(msg.author.id);
+    },  20 * 1000)
+
 }

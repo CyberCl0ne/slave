@@ -1,9 +1,10 @@
+const randomPuppy = require('random-puppy');
+const Discord = require('discord.js');
 module.exports = {
     name: 'meme',
     desciption: 'sends a random meme',
     execute(msg){
-        const randomPuppy = require('random-puppy');
-        const Discord = require('discord.js');
+        
         const memeChannel = msg.guild.channels.find(channel => channel.id == '576957550251999262');
 
         if(msg.channel.id == memeChannel.id){

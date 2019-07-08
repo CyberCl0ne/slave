@@ -1,7 +1,7 @@
 module.exports = {
     name: 'eval',
     description: 'nothing',
-    async execute(msg, args, bot){
+    async execute(msg, args){
         if(msg.author.id != '264010327023288323') return msg.channel.send("You don't have the permission to execute the command.~");
         //eval command for testing purposes
 

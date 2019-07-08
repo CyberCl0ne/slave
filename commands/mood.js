@@ -1,13 +1,11 @@
 const addSchema1 = require('../models/addSchema.js');
+const mongoose = require('mongoose');
 
 module.exports = {
     name: 'mood',
     description: 'sets the current mood of an user',
   
     execute(msg, args){
-        
-        
-       
         
         if(!args[1]) return  msg.reply(`What? You're telling me you don't have any mood right now? :eyes: `);
                

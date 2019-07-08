@@ -3,22 +3,20 @@ const Discord = require('discord.js');
 const bot = new Discord.Client();
 bot.commands = new Discord.Collection();
 const prefix = "?";
-const respLimit = new Map();
-const samePerson = new Set();
-const reactions = require('./reactions.js');
-const msgCount = require('./msgcount.js');
-const level = require('./level.js');
-const xp = require('./xp.js');
-const emotes = require('./emotes.js');
+
+const reactions = require('./src/reactions.js');
+const msgCount = require('./src/msgcount.js');
+const level = require('./src/level.js');
+const xp = require('./src/xp.js');
+const emotes = require('./src/emotes.js');
 const assets = require('./local/assets.js')
 const mongoose = require('mongoose');
-const config = require('config.json')
+const config = require('./config.json')
 const uri = process.env.uri 
 const addSchema1 = require('./models/addSchema.js');
-const timedPost = require('./timedPost.js');
+const timedPost = require('./src/timedPost.js');
 const colorName = ['hotpink1', 'babyblue1', 'russet1','jade1','bumblebee1','mint1','fossil1','pitchblack1','palewhite1','ferrari1','tiger1','grape1','azure1'];
 const resRole = ['Malaysia', 'Singapore'];
-
 
 const { inspect } = require('util');
 const joinChannel = new Map();
@@ -242,7 +240,7 @@ bot.on('message', async msg =>{
     if(msg.author.bot) return;
     //if the command from bot return
 
-   
+  
    
    
     const command = bot.commands.get(args[0]) || bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(args[0]));
@@ -253,11 +251,11 @@ bot.on('message', async msg =>{
     //fetch user property
 
     var thisChannel = await msg.guild.channels.find(channel => channel.name === "🤖bot-commands");
-  
+    
 
     if(msg.content.startsWith(prefix) && command) {
         try{
-            command.execute(msg, args, memberInfo, avatarInfo, bot, thisChannel, avatarInfo, addSchema1, mongoose, samePerson, respLimit, assets);
+            command.execute(msg, args, memberInfo, avatarInfo, bot, thisChannel, avatarInfo, addSchema1, mongoose, assets);
             //executes commands
         }catch(err){
             console.log(err)
