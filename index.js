@@ -11,7 +11,7 @@ const xp = require('./src/xp.js');
 const emotes = require('./src/emotes.js');
 const assets = require('./local/assets.js')
 const mongoose = require('mongoose');
-const config = require('./config.json')
+
 const uri = process.env.uri 
 const addSchema1 = require('./models/addSchema.js');
 const timedPost = require('./src/timedPost.js');
@@ -27,7 +27,7 @@ const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('
 
 const token = process.env.BOT_TOKEN
 
-mongoose.connect(config.uri, {useNewUrlParser: true});
+mongoose.connect(uri, {useNewUrlParser: true});
 //connect with mongoDB database
 
 for(const file of commandFiles){
@@ -280,5 +280,5 @@ bot.on('message', async msg =>{
 
 
 
-bot.login(config.token);
+bot.login(token);
 
