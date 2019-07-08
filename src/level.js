@@ -52,22 +52,7 @@ module.exports = (msg) => {
         //find data in mongoDB based on member ID
         //the whole purpose of this structure is for counting the number of messages sent by the user and upload it in database
         if(err) return console.log(err)
-        if(!myUser){
-            //if there's no data, it creates new data
-            const upScheme = new lvlSchema({
-                _id: mongoose.Types.ObjectId(),
-                username: msg.author.username,
-                userID: msg.author.id,
-                xp: 0,
-                level: 1,
-                guild: msg.guild.id
-            })
-            await upScheme.save()
-            //saving the data
-            .catch(err => console.log(err))
-
-
-        }
+       
         var nextLvl = await myUser.level * 300;
 
        

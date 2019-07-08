@@ -232,8 +232,11 @@ module.exports = {
       let respect = await myUser.respect;
       let messages = await myUser.msgSent;
       let converted = await convert(time);
-      let percent = Math.floor((((rank.xp - ((rank.level - 1) * 300)) / 300) * 100));
+      
+      let level = await rank.level;
+      let xp = await rank.xp;
 
+      let percent = await Math.floor((((xp - ((level - 1) * 300)) / 300) * 100));
       const embed = new Discord.RichEmbed()
       
       .setTitle('Member Information')
@@ -246,7 +249,7 @@ module.exports = {
       .addField('Stats', `💬: ${messages} messages \n ${converted}`, true)
       .addField('Roles', `${roles}`)
       .addField('User info', ` \` Joined since: ${dformat} (${memberPeriod}) \n Account created on: ${d1format} (${userPeriod}) \` `)
-      .addField('Level', `Lvl: ${rank.level} | ${percent}% to level ${rank.level + 1} \n ${progress(percent)}`)
+      .addField('Level', `Lvl: ${level} | ${percent}% to level ${level + 1} \n ${progress(percent)}`)
       .setThumbnail(`${pfp}`)
       .setFooter(assets.trademark, assets.defaultImg)
       .setTimestamp()

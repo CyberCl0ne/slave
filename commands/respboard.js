@@ -3,7 +3,7 @@ const addSchema1 = require('../models/addSchema.js');
 const assets = require('../local/assets.js')
 
 module.exports = {
-    name: 'respectboard',
+    name: 'respboard',
     description: 'sends respect leaderboard',
     aliases: ['rb','respb'],
     execute(msg){
