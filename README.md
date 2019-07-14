@@ -25,8 +25,11 @@ A discord bot that is developed in JavaScript using discord.js library. This bot
 
 * Statistics
 
-
 * Rank system and gives role 
+
+* Fetch urban dictionary
+
+
 
 
 ## In development
