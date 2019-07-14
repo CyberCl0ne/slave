@@ -14,7 +14,7 @@ const mongoose = require('mongoose');
 
 const uri = process.env.uri 
 const addSchema1 = require('./models/addSchema.js');
-const timedPost = require('./src/timedPost.js');
+
 const colorName = ['hotpink1', 'babyblue1', 'russet1','jade1','bumblebee1','mint1','fossil1','pitchblack1','palewhite1','ferrari1','tiger1','grape1','azure1'];
 const resRole = ['Malaysia', 'Singapore'];
 
@@ -22,6 +22,7 @@ const { inspect } = require('util');
 const joinChannel = new Map();
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+const rpgFiles = fs.readdirSync('./commands/rpg').filter(f => f.endsWith('.js'));
 
 
 
@@ -33,9 +34,14 @@ mongoose.connect(uri, {useNewUrlParser: true});
 for(const file of commandFiles){
     const command = require(`./commands/${file}`);
 
-    //set a new item in collection
+    //sets a new item in collection
     //with the key as command name and the value as the exported module
     bot.commands.set(command.name, command);
+}
+
+for(const file1 of rpgFiles){
+    const command1 = require(`./commands/rpg/${file1}`);
+    bot.commands.set(command1.name, command1)
 }
 
 
@@ -98,6 +104,7 @@ bot.on('voiceStateUpdate', (oldMember, newMember) => {
     var newUserChannel = newMember.voiceChannel
     var oldUserChannel = oldMember.voiceChannel
 
+    if(oldMember.deaf !== newMember.deaf) return;
     if(newMember.user.bot) return;
 
     if(oldUserChannel === undefined && newUserChannel !== undefined){
@@ -250,12 +257,12 @@ bot.on('message', async msg =>{
     var avatarInfo = msg.mentions.users.first();
     //fetch user property
 
-    var thisChannel = await msg.guild.channels.find(channel => channel.name === "🤖bot-commands");
+   
     
 
     if(msg.content.startsWith(prefix) && command) {
         try{
-            command.execute(msg, args, memberInfo, avatarInfo, bot, thisChannel, avatarInfo, addSchema1, mongoose, assets);
+            command.execute(msg, args, memberInfo, avatarInfo, bot, assets);
             //executes commands
         }catch(err){
             console.log(err)
@@ -267,8 +274,6 @@ bot.on('message', async msg =>{
         xp(msg);
 
         msgCount(msg);
-
-        timedPost(msg);
     
         reactions(msg);
 

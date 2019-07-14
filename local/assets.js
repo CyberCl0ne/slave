@@ -15,6 +15,9 @@ module.exports = {
     sgColor: "ff2121",
     trademark : "UN[SG-MY]©",
     vcImg: "http://icons.iconarchive.com/icons/google/noto-emoji-objects/96/62790-speaker-high-volume-icon.png",
-    msgImg: "http://icons.iconarchive.com/icons/grafikartes/flat-retro-modern/256/messages-icon.png"
+    msgImg: "http://icons.iconarchive.com/icons/grafikartes/flat-retro-modern/256/messages-icon.png",
+    udImg: "https://i.imgur.com/BRBPpab.png",
+    red: "FF0000",
+    green: "008000"
 
 }

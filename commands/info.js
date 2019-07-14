@@ -8,10 +8,11 @@ const addSchema1 = require('../models/addSchema.js');
 
 module.exports = {
   name: 'info',
-  description: 'sends info',
+  description: 'Displays user info. Commands : \`?info ?i ?info @user\`',
   aliases: ['i', 'profile', 'p'],
   execute(msg, args, memberInfo, avatarInfo){
    
+
         
     var myRole = msg.guild.roles.find(role => role.name == "Malaysia");
     var sgRole = msg.guild.roles.find(role => role.name == "Singapore");
@@ -188,7 +189,7 @@ module.exports = {
     }).catch(err => console.log(err));
           
     
-    addSchema1.findOne({ userID : user.id },['birthday','respect','mood','msgSent','vcTime','level','xp',],async function(err, myUser){
+    addSchema1.findOne({ userID : user.id },['birthday','respect','mood','msgSent','vcTime'],async function(err, myUser){
       if(err) return console.log(err);
       
       if(!myUser){

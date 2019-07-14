@@ -4,9 +4,10 @@ const assets = require('../local/assets.js');
 
 module.exports = {
     name: "msgboard",
-    description: "displays the leaderboard of messages sent",
+    description: "Displays the leaderboard of messages sent",
     aliases: ['mb', 'msgb'],
     execute(msg){
+
         
         addSchema1.find({ __v : 0}).sort([
             ['msgSent','descending']

@@ -1,12 +1,15 @@
 const assets = require('../local/assets.js');
+const Discord = require('discord.js');
+const addSchema1 = require('../models/addSchema.js');
 
 module.exports = {
   name: 'vcboard',
-  description: 'shows data of vc time',
+  description: 'Shows data of vc time',
   aliases: ['vcb', 'voiceboard'],
   execute(msg){
-    const Discord = require('discord.js');
-    const addSchema1 = require('../models/addSchema.js');
+
+
+
 
     addSchema1.find({ __v : 0 }).sort([
     ['vcTime','descending']

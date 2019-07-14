@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 
 module.exports = {
     name: 'respect',
-    description: 'give respect to other user',
+    description: 'Give respect to other user. Limit 3x respect per day. Use \` ?respect @user \` to respect a user.',
     aliases: ['r', 'resp'],
     execute(msg){
        

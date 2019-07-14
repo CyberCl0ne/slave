@@ -3,11 +3,11 @@ const addSchema1 = require('../models/addSchema.js')
 
 module.exports = {
     name: "birthday",
-    description: "updates birthday to database",
+    description: "Updates your birthday by using this format \`?birthday dd mm yyyy\`",
     aliases: ['birthdate', 'b'],
     execute(msg, args){
       
-       
+    
 
         if(!args[1] || !args[2] || !args[3]) return msg.reply("Invalid input! Please use dd mm yyyy format ");
 

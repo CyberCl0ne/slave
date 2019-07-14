@@ -2,7 +2,7 @@ const randomPuppy = require('random-puppy');
 const Discord = require('discord.js');
 module.exports = {
   name: 'food',
-  description: 'sends random image of food',
+  description: 'Sends random image of food at food channel',
   execute(msg){
     
     const foodChannel = msg.guild.channels.find(channel => channel.name == '🍗food');

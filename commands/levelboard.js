@@ -7,6 +7,8 @@ module.exports = {
     aliases: ['lvlb', 'lvlboard'],
     execute(msg){
 
+      
+
         lvlSchema.find({ guild: msg.guild.id }).sort([
             ['level', 'descending']
         ]).exec((err, res) => {

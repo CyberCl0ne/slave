@@ -1,6 +1,6 @@
 module.exports = {
     name: 'cat',
-    description: 'sends random cat image',
+    description: 'Sends random cat image at cats channel',
     execute(msg){
         const randomPuppy = require('random-puppy');
         const Discord = require('discord.js');

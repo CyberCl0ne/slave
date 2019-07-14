@@ -4,9 +4,10 @@ const assets = require('../local/assets.js')
 
 module.exports = {
     name: 'respboard',
-    description: 'sends respect leaderboard',
+    description: 'Shows respect leaderboard',
     aliases: ['rb','respb'],
     execute(msg){
+
        
         addSchema1.find({
             __v : 0
