@@ -17,7 +17,7 @@ const addSchema1 = require('./models/addSchema.js');
 
 const colorName = ['hotpink1', 'babyblue1', 'russet1','jade1','bumblebee1','mint1','fossil1','pitchblack1','palewhite1','ferrari1','tiger1','grape1','azure1'];
 const resRole = ['Malaysia', 'Singapore'];
-
+const config = require('./config.json')
 const { inspect } = require('util');
 const joinChannel = new Map();
 
@@ -28,7 +28,7 @@ const rpgFiles = fs.readdirSync('./commands/rpg').filter(f => f.endsWith('.js'))
 
 const token = process.env.BOT_TOKEN
 
-mongoose.connect(uri, {useNewUrlParser: true});
+mongoose.connect(config.uri, {useNewUrlParser: true});
 //connect with mongoDB database
 
 for(const file of commandFiles){
@@ -285,5 +285,5 @@ bot.on('message', async msg =>{
 
 
 
-bot.login(token);
+bot.login(config.token);
 

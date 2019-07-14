@@ -8,11 +8,15 @@ const addSchema1 = require('../models/addSchema.js');
 
 module.exports = {
   name: 'info',
-  description: 'Displays user info. Commands : \`?info ?i ?info @user\`',
+  description: 'Displays user profile. Commands : \`?info , ?info @user , ?info list\` \n You now can check other user profile without mentioning them, just use \`?info list\`',
   aliases: ['i', 'profile', 'p'],
   execute(msg, args, memberInfo, avatarInfo){
    
+    var list = []
 
+    var select = parseInt(args[1], 10);
+
+    var member = msg.guild.members.filter(m => !m.user.bot).map(m => m);
         
     var myRole = msg.guild.roles.find(role => role.name == "Malaysia");
     var sgRole = msg.guild.roles.find(role => role.name == "Singapore");
@@ -24,6 +28,7 @@ module.exports = {
     } else {
       var user = memberInfo;
       var avatar = avatarInfo;
+      msg.channel.send("Instead of mentioning user, why don't you just use \`?info list\`")
     }
 
     var rank = {};
@@ -57,9 +62,26 @@ module.exports = {
       return msg.channel.send(embed);
     };
 
-    
-      
+    if(args[1] === 'list'){
+     
+      for(i = 0; i < member.length; i++){
+        list.push(`${i + 1}.  ${member[i].displayName}`)
+      }
+      return msg.channel.send('**List of members:** \n' + list.join('\n') + '\n\nTo check user profile just use \`?info <number>\`')
+    }
 
+    if(typeof select === 'number'){
+      let index = select - 1;
+      var user = member[index]
+      var avatar = user.user
+     
+
+    }else if(typeof select === 'number' && select > member.size){
+      return msg.channel.send('It seems like the user you trynna find is not there.')
+    }
+      
+    
+  
 
     var pfp = avatar.avatarURL
     var d = new Date(user.joinedAt)
