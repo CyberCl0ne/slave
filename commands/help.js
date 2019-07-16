@@ -21,14 +21,14 @@ module.exports = {
             }else{
                 msg.channel.send('It looks like there are no aliases for that command')
             }
-            if(args[1] === emotes){
-                msg.channel.send('Try it some.')
+            if(args[1] == emotes){
+                msg.channel.send(`Try it. \`?${args[1]}\``)
             }
             msg.channel.send(data)
         }else{
             const embed = new Discord.RichEmbed()
             .addField('Bot Commands', `To use UN[SG-MY] bot just use the prefix '?' for every command. Some commands have "options".`)
-            .addField('info', `Displays info about team Malaysia or Singapore or user \n **Options:** \n • @username \n • Malaysia \n • Singapore \n *For self profile just type info*`, true )
+            .addField('info', `Displays info about team Malaysia or Singapore or user \n **Options:** \n • @username \n • list \n • Malaysia \n • Singapore \n *For self profile just type info*`, true )
             .addField('birthday', 'Sets your birthday \n using this format dd/mm/yyyy ', true)     
             .addField('mood', 'Sets your current mood', true)
             .addField('ping', 'Gives you ping result for the bot', true)

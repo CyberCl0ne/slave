@@ -5,7 +5,7 @@ module.exports = {
     execute(msg, bot,){
         if(msg.author.id === '264010327023288323'){
             msg.channel.send('logging out from discord')
-            bot.destroy()
+            process.exit()
             .then(console.log("Logged out successfully"))
             .catch(err => console.log(err))
         }else{

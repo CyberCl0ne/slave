@@ -11,7 +11,7 @@ const xp = require('./src/xp.js');
 const emotes = require('./src/emotes.js');
 const assets = require('./local/assets.js')
 const mongoose = require('mongoose');
-
+const config = require('./config.json')
 const uri = process.env.uri 
 const addSchema1 = require('./models/addSchema.js');
 
@@ -28,7 +28,9 @@ const rpgFiles = fs.readdirSync('./commands/rpg').filter(f => f.endsWith('.js'))
 
 const token = process.env.BOT_TOKEN
 
-mongoose.connect(uri, {useNewUrlParser: true});
+process.on('unhandledRejection', error => console.error('Uncaught Promise Rejection', error));
+
+mongoose.connect(config.uri, {useNewUrlParser: true});
 //connect with mongoDB database
 
 for(const file of commandFiles){
@@ -58,9 +60,14 @@ bot.on('ready', () =>{
 
 bot.on('guildMemberAdd', member =>{
 
+    const memberBot = member.guild.members.get('582222069308194818')
     const channel = member.guild.channels.find(channel => channel.name === "📣announcements");
     if(!channel) return;
 
+    member.send(`Hello ${member.user.username}! I am bot to help you in joining [UN]SG-MY server.
+     To access all other channel, you need to assign yourself a team. Team represents your country which is Malaysia or Singapore.
+     To join a team, all you have to do is go to #choose-side channel and react on the emoji that represents your country`,
+     {files: ['https://i.imgur.com/GvxblKK.png','https://i.imgur.com/gICrqs0.png']})
     channel.send(`Let us welcome to our new member, hang tight! ${member.user} is choosing a side right now `)
 
 });
@@ -68,7 +75,7 @@ bot.on('guildMemberAdd', member =>{
 bot.on('guildMemberRemove', member =>{
     const channel =  member.guild.channels.find(channel => channel.name === "📣announcements");
     if(!channel) return;
-    channel.send(`Goodbye ${member.user}, it's hard to say goodbye `)
+    channel.send(`Goodbye ${member.user},eventhough it's hard to say`)
 })
 
 bot.on('guildMemberUpdate',(oldMember, newMember) =>{
@@ -285,5 +292,5 @@ bot.on('message', async msg =>{
 
 
 
-bot.login(token);
+bot.login(config.token);
 

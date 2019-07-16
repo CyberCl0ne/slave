@@ -76,17 +76,19 @@ module.exports = {
             return embed
         }
       
-       function delay(){ {setTimeout(() => {
-           console.log(1)
-       }, 3000)}}
+        function delay(m, toEdit, time){
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    m.edit(toEdit).then(m => resolve(m))
+                }, time)
+            });
+        }
 
         msg.channel.send(firstCard(a,b))
-        .then(delay(5000))
-        .then(m => m.edit(secCard(a,b)))
-        .then(delay(5000))
-        .then(m => m.edit(thirdCard(a,b)))
-        .then(delay(5000))
-        .then(lastCard(result))
+        .then(m => delay(m, secCard(a,b), 2000))
+        .then(m => delay(m, thirdCard(a,b), 2000))
+        .then(m => delay(m, lastCard(result), 2000))
+
      
 
        

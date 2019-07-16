@@ -9,6 +9,7 @@
   "author": "terra",
   "license": "ISC",
   "dependencies": {
+    "battlegrounds": "^1.5.2",
     "discord.js": "^11.5.1",
     "express": "^4.17.1",
     "fetch-subreddit": "^3.0.0",
