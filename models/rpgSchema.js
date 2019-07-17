@@ -6,17 +6,15 @@ const schema = mongoose.Schema({
     userID: String,
     name: String,
     class: String,
-    stats: [
-        {
-            win: Number,
-            loss: Number,
-            money: Number,
-            health: Number,
-            attack: Number,
-            defense: Number,
-            level: Number
-        }
-    ]
+    win: Number,
+    loss: Number,
+    money: Number,
+    health: Number,
+    attack: Number,
+    defense: Number,
+    xp: Number,
+    level: Number
+    
 })
 
 module.exports = mongoose.model('rpgSchema', schema);

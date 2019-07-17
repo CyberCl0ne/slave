@@ -4,15 +4,15 @@ module.exports = {
         first : {
             name: "Taintpaw",
             health: 100,
-            defense: 70,
-            attack: 50,
+            defense: 110,
+            attack: 90,
             loot: 20
         },
         second : {
             name: "Cavernmouth",
             health: 80,
-            defense: 95,
-            attack: 85,
+            defense: 105,
+            attack: 100,
             loot: 25
         }
         
@@ -22,8 +22,8 @@ module.exports = {
         first : {
             name: "Auraghoul",
             health: 100,
-            defense: 90,
-            attack: 60,
+            defense: 120,
+            attack: 110,
             loot: 38
         }
     }
