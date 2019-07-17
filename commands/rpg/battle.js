@@ -117,7 +117,7 @@ module.exports = {
         function lastCard(result, a, b){
             var embed = new Discord.RichEmbed()
 
-            if(result == `${a.name} slained ${b.name}`){
+            if(result == `${a.name} has slained ${b.name}`){
                 var color = assets.respColor
                 var text = "You have won the battle"
             }else if(result ==  `${a.name} was killed by ${b.name}`){
