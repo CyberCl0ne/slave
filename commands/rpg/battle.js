@@ -1,9 +1,11 @@
 const Discord = require('discord.js');
-const assets = require('../../local/assets.js')
+const assets = require('../../local/assets.js');
+const monster = require('../../local/monster.js');
+const rpgSchema = require('../../models/rpgSchema.js');
 module.exports = {
     name: "battle",
     description: "fight another user",
-    execute(msg){
+    execute(msg, args){
         var a = {
             name: 'Superman',
             health: 100,
@@ -17,8 +19,25 @@ module.exports = {
         attack: 20,
         sword: 120
         }
+
+        var playerStats = {}
+        
+
+        var monsterStats = {}
+
+        rpgSchema.findOne({ userID: msg.author.id }, async (err, res) => {
+            if(err) console.log(err);
+           
+           await playerStats.push(res)
+        })
           
-          
+        //summons monster
+        if(args[1] == 1){
+            const keys = Object.keys(monster.level1)
+            let ranIndex = keys[Math.floor(Math.random() * keys.length)];
+            let ranMonster = list[ranIndex];
+            monsterStats.push(ranMonster)
+        }
           
         //repeats the value a and b 
         function fillArray(value, len) { 
@@ -31,8 +50,8 @@ module.exports = {
           
         function random(a, b){
         
-            let totalA = a.health + a.attack + a.sword;
-            let totalB = b.health + b.attack + b.sword;
+            let totalA = a.health + a.attack + a.defense;
+            let totalB = b.health + b.attack + b.defense;
             var a1 = fillArray("a", totalA);
             var b1 = fillArray("b", totalB);
             
@@ -46,7 +65,7 @@ module.exports = {
             }
         }
 
-        var result = random(a, b)
+        var result = random(playerStats, monsterStats)
 
         function firstCard(a, b,){
             var embed = new Discord.RichEmbed()
@@ -84,13 +103,16 @@ module.exports = {
             });
         }
 
-        msg.channel.send(firstCard(a,b))
-        .then(m => delay(m, secCard(a,b), 2000))
-        .then(m => delay(m, thirdCard(a,b), 2000))
+        msg.channel.send(firstCard(playerStats, monsterStats))
+        .then(m => delay(m, secCard(playerStats, monsterStats), 2000))
+        .then(m => delay(m, thirdCard(playerStats, monsterStats), 2000))
         .then(m => delay(m, lastCard(result), 2000))
 
-     
+        console.log(playerStats.name)
 
+     
+        playerStats = []
+        monsterStats = []
        
           
     }

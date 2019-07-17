@@ -4,8 +4,8 @@ const schema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     username: String,
     userID: String,
-    charName: String,
-    land: String,
+    name: String,
+    class: String,
     stats: [
         {
             win: Number,
@@ -13,9 +13,10 @@ const schema = mongoose.Schema({
             money: Number,
             health: Number,
             attack: Number,
-            defense: Number
+            defense: Number,
+            level: Number
         }
     ]
 })
 
-module.exports = mongoose.model('rpgSchema', schema)
+module.exports = mongoose.model('rpgSchema', schema);

@@ -20,7 +20,7 @@ const resRole = ['Malaysia', 'Singapore'];
 
 const { inspect } = require('util');
 const joinChannel = new Map();
-
+const config = require('./config.json')
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 const rpgFiles = fs.readdirSync('./commands/rpg').filter(f => f.endsWith('.js'));
 
@@ -30,7 +30,7 @@ const token = process.env.BOT_TOKEN
 
 process.on('unhandledRejection', error => console.error('Uncaught Promise Rejection', error));
 
-mongoose.connect(uri, {useNewUrlParser: true});
+mongoose.connect(config.uri, {useNewUrlParser: true});
 //connect with mongoDB database
 
 for(const file of commandFiles){
@@ -292,5 +292,5 @@ bot.on('message', async msg =>{
 
 
 
-bot.login(token);
+bot.login(config.token);
 
