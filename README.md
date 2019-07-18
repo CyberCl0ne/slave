@@ -29,13 +29,21 @@ A discord bot that is developed in JavaScript using discord.js library. This bot
 
 * Fetch urban dictionary
 
-
+## RPG-based game
+- [ ] Skills
+- [x] Battle
+- [x] Class
+- [x] Start
+- [ ] Duel
+- [ ] AFKdungeon
+- [ ] Boss
+- [ ] Profile
+- [ ] Monster database
 
 
 ## In development
 * Team leader
 
-* Mini-game
 
 * Streak
 
