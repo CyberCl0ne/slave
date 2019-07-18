@@ -1,26 +1,18 @@
-const assets = require('../local/assets.js')
-const storage = require('../local/storage.js')
-const mongoose = require('mongoose')
+const assets = require('../local/assets.js');
+const storage = require('../local/storage.js');
+const mongoose = require('mongoose');
+const Discord = require('discord.js');
+const addSchema1 = require('../models/addSchema.js');
 
 module.exports = {
     name: 'respect',
     description: 'Give respect to other user. Limit 3x respect per day. Use \` ?respect @user \` to respect a user.',
     aliases: ['r', 'resp'],
     execute(msg){
-       
-        
-        
-        const Discord = require('discord.js');
-        
-
-        const addSchema1 = require('../models/addSchema.js');
-
         //A feature to give respect to other members
     
         let memberInfo1 = msg.mentions.members.first();
-
        
-                
         let author = msg.guild.members.get(msg.author.id).displayName;
         const respBoard = msg.guild.channels.find( channel => channel.name == '🏅respect-board');
      

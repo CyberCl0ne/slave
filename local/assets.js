@@ -18,6 +18,12 @@ module.exports = {
     msgImg: "http://icons.iconarchive.com/icons/grafikartes/flat-retro-modern/256/messages-icon.png",
     udImg: "https://i.imgur.com/BRBPpab.png",
     red: "FF0000",
-    green: "008000"
+    green: "008000",
+    winRPG: "https://i.imgur.com/NseiBls.jpg",
+    fightingRPG: "https://i.imgur.com/pkUo0xZ.jpg",
+    archerRPG: "https://i.imgur.com/BUMZKa9.jpg",
+    swordsmenRPG: "https://i.imgur.com/f2xurhV.jpg",
+    rogueRPG: "https://i.imgur.com/mPrPPer.jpg",
+    
 
 }
